@@ -12,49 +12,50 @@ io.on("connection", socket => {
     
     client.connect({
       host: 'irc.rizon.net',
-      port: 6667,
+      port: 6697,
       nick: username,
       username: username,
-      gecos: username
+      gecos: username,
+      ssl: true
     });
-    
-    client.on('socket connected', () => {
-      console.log("Socket connected Registering...");
-    });
+  });
 
-    client.on('connected', e => {
-      console.log("Connected: \n", e);
-      console.log("joining channel...");
-      client.join("#horriblesubs");
-    });
+  client.on('socket connected', () => {
+    console.log("Socket connected Registering...");
+  });
 
-    client.on('debug', e => {
-      console.log("debug: ", e);
-    });
+  client.on('connected', e => {
+    console.log("Connected: \n", e);
+    console.log("joining channel...");
+    client.join("#horriblesubs");
+  });
 
-    client.on('join', e => {
-      if(e.nick === client.options.nick){
-        console.log("JOINED CHANNEL: ", e);
-        socket.emit("irc connection", e);
-      }
-    });
+  client.on('debug', e => {
+    console.log("debug: ", e);
+  });
 
-    client.on('action', e => {
-      console.log("action: ", e);
-    });
+  client.on('join', e => {
+    if(e.nick === client.options.nick){
+      console.log("JOINED CHANNEL: ", e);
+      socket.emit("irc connection", e);
+    }
+  });
 
-    client.on('raw', e => {
-      // console.log(e.line.replace('\n', ''));
-      socket.emit("irc connection", e.line);
-    });
+  client.on('action', e => {
+    console.log("action: ", e);
+  });
 
-    client.on('reconnecting', () => {
-      console.log("reconnecting...");
-    });
+  client.on('raw', e => {
+    // console.log(e.line.replace('\n', ''));
+    socket.emit("irc connection", e.line);
+  });
 
-    client.on('socket close', () => {
-      console.log("irc client disconected");
-    });
+  client.on('reconnecting', () => {
+    console.log("reconnecting...");
+  });
+
+  client.on('socket close', () => {
+    console.log("irc client disconected");
   });
   
   socket.on("disconnect", reason => {
