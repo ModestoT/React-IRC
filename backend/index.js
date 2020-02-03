@@ -2,6 +2,7 @@ const server = require("http").createServer();
 const io = require("socket.io")(server);
 const createIrcClient = require("./ircClient.js");
 
+const port = proccess.env.PORT || 3001;
 
 io.on("connection", socket => {
   console.log("connection made to server socket!");
@@ -36,8 +37,8 @@ io.on("connection", socket => {
   });
 });
 
-server.listen(3001, () => {
-  console.log("listening for request to port 3001")
+server.listen(port, () => {
+  console.log(`listening for request to port ${port}`);
 });
 
 // let net = require("net");
