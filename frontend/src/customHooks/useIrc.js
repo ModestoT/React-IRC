@@ -1,6 +1,6 @@
 import {useReducer,useEffect} from "react";
 
-import {createIrcConnection,parseForChannelName} from "../helpers/IrcHelpers.js";
+import {createIrcConnection,parseForChannelName,grabServerName} from "../helpers/IrcHelpers.js";
 // const channel = {
 //   channelName: '',
 //   hostname: '',
@@ -19,21 +19,23 @@ const ircReducer = (state, action) => {
       return {
         ...state,
         serverMsgs: [...state.serverMsgs, action.payload]
-      }
+      };
     case 'channel notice': 
       return {
         ...state,
         channels: state.channels.map(channel => channel.channelName === action.payload.channelName ? {...channel, messages: [...channel.messages, `-${action.payload.nick}- ${action.payload.message}`]} : channel)
       };
-    case 'channel':
+    case 'channel message':
       const channel = state.channels.find(({ channelName }) => channelName === action.payload.channel);
       if(channel){
+        const {nick, ident, hostname, status, channel, message} = action.payload;
         return {
           ...state,
-          channels: state.channels.map(channel => 
-            channel.channelName === action.payload.channel ? 
-              {...channel, messages: [...channel.messages, `${action.payload.nick} [${action.payload.ident}@${action.payload.hostname}] has joined ${action.payload.channel}`]}
-            : channel)
+          channels: state.channels.map(c => 
+            c.channelName === channel ? 
+              {...c, messages: [...c.messages, `${nick} [${ident}@${hostname}] has ${status} ${channel} ${status === 'left' ? `[${message}]` : ''}`]}
+            : c
+          )
         };
       } else {
         return {
@@ -67,21 +69,14 @@ const ircReducer = (state, action) => {
         } else{
           dispatch({ type: 'channel notice', payload: {...notice, channelName}});
         }
-
       }).on("joined channel", e => {
-        dispatch({ type: 'channel', payload: e });
-
+        dispatch({ type: 'channel message', payload: {...e, status: 'joined' } });
+      }).on("left channel", e => {
+        dispatch({ type: 'channel message', payload: {...e, status: 'left' } });
       }).on("server motd", motd => {
         dispatch({ type: 'motd', payload: motd });
-
       })
     },[ircOptions]);
 
   return state;
-}
-
-const grabServerName = serverUrl => {
-  const servername = serverUrl.split('.');
-
-  return servername[1];
 }
