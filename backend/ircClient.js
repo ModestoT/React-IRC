@@ -7,8 +7,8 @@ module.exports = createIrcClient = socket => {
     console.log("IRC Socket connected Registering...");
   }).on('connected', e => {
     console.log("Connected: \n", e);
-    // console.log("joining channel...");
-    // client.join("#horriblesubs");
+    console.log("joining channel...");
+    client.join("#horriblesubs");
   }).on('debug', e => {
     console.log("debug: ", e);
   }).on('join', e => {
@@ -26,7 +26,15 @@ module.exports = createIrcClient = socket => {
     console.log("Invite event: ", e);
   }).on('notice', e => {
     console.log("Notice event: ", e);
-    socket.emit("irc connection", `-${e.nick}- ${e.message}`);
+    let newData = e.message;
+    if(newData.includes("\u0002")){
+      const tempData = newData.replace(/\u0002/g, "").replace(/\u0003/g, "").replace(/11/g, "");
+      newData = tempData;
+    }
+    socket.emit("irc notice", {
+      nick: e.nick,
+      message: newData
+    });
   }).on('privmsg', e => {
     console.log("Private message event: ", e);
   }).on('tagmsg', e => {
@@ -42,7 +50,7 @@ module.exports = createIrcClient = socket => {
       const tempData = newData.replace(/\u0002/g, "").replace(/\u0003/g, "").replace(/11/g, "");
       newData = tempData;
     }
-    socket.emit("irc connection", newData);
+    socket.emit("server motd", newData);
   }).on('raw', e => {
     // console.log("Raw event:", e);
     // console.log(e.line.replace('\n', ''));
