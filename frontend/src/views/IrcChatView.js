@@ -1,44 +1,39 @@
-import React, {useState,useEffect,useRef} from "react";
-import io from "socket.io-client";
+import React, {useEffect,useRef} from "react";
 
+import { useIrc } from "../customHooks/useIrc.js";
 
 const IrcChatView = ({ ircOptions }) => {
-  const [data, setData] = useState([]);
   const divRef = useRef(null);
-  
+  const {serverName, serverMsgs, channels} = useIrc(ircOptions);
+
   useEffect(() => {
-    const connectToServer = () => {
-      const socket = io.connect("http://localhost:3001");
-      console.log("connecting to irc client")
-      socket.emit("connect to irc", {
-        ...ircOptions,
-        username: ircOptions.nick,
-        gecos: ircOptions.nick,
-        port: Number(ircOptions.port)
-      });
-      socket.on("irc connection", newData => {
-        console.log(typeof newData);
-        if(typeof newData === 'string'){
-          setData(d => [...d, newData]);
-          divRef.current.scrollTop = divRef.current.scrollHeight;
-        } else {
-          console.log(newData)
-        }
-      });
-    
-      socket.on("disconnect", reason => {
-        console.log(reason);
-        socket.connect();
-      });
-    }
-    connectToServer();
-  },[ircOptions]);
+    divRef.current.scrollTop = divRef.current.scrollHeight;
+  },[channels])
 
   return(
-    <div className="irc-chat" style={{width:'50%', height:'300px', overflow:'auto', wordBreak:'break-word', margin:'5% auto', border:'1px solid', padding:'1%'}} ref={divRef}>
-      {data.map(line => {
-        return <p>{line}</p>
-      })}
+    <div>
+      <div className="irc-channels">
+        <div className="server-tab">
+          <h2>{serverName}</h2>
+          <div className="irc-chat" style={{width:'50%', height:'300px', overflow:'auto', wordBreak:'break-word', margin:'5% auto', border:'1px solid', padding:'1%'}} ref={divRef}>
+            {serverMsgs.map(msg => {
+              return <p style={{whiteSpace: "pre-wrap", margin: "5px"}}>{msg}</p>
+            })}
+          </div>
+        </div>
+        {channels.map(channel => {
+          return(
+            <div className={`${channel.channelName}-tab`}>
+              <h2>{channel.channelName}</h2>
+              <div className="irc-chat" style={{width:'50%', height:'300px', overflow:'auto', wordBreak:'break-word', margin:'5% auto', border:'1px solid', padding:'1%'}}>
+                {channel.messages.map(msg => {
+                  return <p style={{whiteSpace: "pre-wrap", margin: "5px"}}>{msg}</p>
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };
