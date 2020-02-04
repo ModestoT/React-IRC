@@ -8,7 +8,7 @@ const IrcChatView = ({ ircOptions }) => {
 
   useEffect(() => {
     divRef.current.scrollTop = divRef.current.scrollHeight;
-  },[channels])
+  },[channels, serverMsgs])
 
   return(
     <div>
