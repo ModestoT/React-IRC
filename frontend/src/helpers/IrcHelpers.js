@@ -28,3 +28,9 @@ export const parseForChannelName = message => {
     return null;
   }
 }
+
+export const grabServerName = serverUrl => {
+  const servername = serverUrl.split('.');
+
+  return servername[1];
+}
