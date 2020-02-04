@@ -1,8 +1,10 @@
+require('dotenv').config();
+
 const server = require("http").createServer();
 const io = require("socket.io")(server);
 const createIrcClient = require("./ircClient.js");
 
-const port = proccess.env.PORT || 3001;
+const port = process.env.PORT || 3001;
 
 io.on("connection", socket => {
   console.log("connection made to server socket!");
@@ -29,9 +31,9 @@ io.on("connection", socket => {
     //   gecos: username,
     //   ssl: true
     // }
-  });
-  
-  socket.on("disconnect", reason => {
+  }).on("join channel", channel_name => {
+    ircClient.join(channel_name);
+  }).on("disconnect", reason => {
     console.log('disconection: ', reason);
     ircClient.quit();
   });
