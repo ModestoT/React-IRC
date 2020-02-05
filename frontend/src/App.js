@@ -1,21 +1,19 @@
 import React from 'react';
 
-import { useFormInput } from "./customHooks/useFormInput.js";
+import { useIrc } from "./customHooks/ircHook/useIrc.js";
 import IrcChatView from './views/IrcChatView.js';
+import IrcLoginView from './views/IrcLoginView.js';
+
 import './App.css';
-// import IrcLoginView from './views/IrcLoginView.js';
 
 function App() {
-  const [ircOptions, handleInput] = useFormInput({
-    host: 'irc.rizon.net',
-    port: 6697,
-    nick: 'drol',
-    ssl: true
-  });
+  const { state, connectToIrc } = useIrc();
   return (
     <div className="App">
-      {/* <IrcLoginView ircOptions={ircOptions} handleInput={handleInput}/> */}
-      <IrcChatView ircOptions={ircOptions}/>
+      {state.isConnected ? 
+        <IrcChatView state={state}/> 
+      : <IrcLoginView connectToIrc={connectToIrc}/>
+      }
     </div>
   );
 }
