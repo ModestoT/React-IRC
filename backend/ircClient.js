@@ -7,14 +7,14 @@ module.exports = CreateIrcClient = socket => {
 
   client.on('socket connected', () => {
     console.log("IRC Socket connected Registering...");
+    socket.emit("connected");
   }).on('connected', e => {
     console.log("Connected: \n", e);
-    socket.emit("connected");
-    console.log("joining channel...");
-    channel = client.channel('#Rizon');
-    channel.updateUsers(channel => {
-      socket.emit("users list", {channelName: channel.name, users: channel.users});
-    })
+    // console.log("joining channel...");
+    // channel = client.channel('#Rizon');
+    // channel.updateUsers(channel => {
+    //   socket.emit("users list", {channelName: channel.name, users: channel.users});
+    // })
   }).on('channel list', list => {
     console.log('Channel list: ', list);
   }).on('debug', e => {
