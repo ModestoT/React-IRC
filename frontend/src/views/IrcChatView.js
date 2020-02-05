@@ -1,14 +1,12 @@
-import React, {useEffect,useRef} from "react";
+import React, { useEffect, useRef} from "react";
 
-import { useIrc } from "../customHooks/useIrc.js";
-
-const IrcChatView = ({ ircOptions }) => {
+const IrcChatView = ({ state }) => {
   const divRef = useRef(null);
-  const {serverName, serverMsgs, channels} = useIrc(ircOptions);
+  const {serverName, serverMsgs, channels} = state;
 
   useEffect(() => {
     divRef.current.scrollTop = divRef.current.scrollHeight;
-  },[channels, serverMsgs])
+  },[serverMsgs])
 
   return(
     <div>
