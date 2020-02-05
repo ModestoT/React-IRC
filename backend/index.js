@@ -2,13 +2,13 @@ require('dotenv').config();
 
 const server = require("http").createServer();
 const io = require("socket.io")(server);
-const createIrcClient = require("./ircClient.js");
+const CreateIrcClient = require("./ircClient.js");
 
 const port = process.env.PORT || 3001;
 
 io.on("connection", socket => {
   console.log("connection made to server socket!");
-  const ircClient = createIrcClient(socket);
+  const ircClient = CreateIrcClient(socket);
 
   // options param structure : 
   // {
@@ -21,16 +21,8 @@ io.on("connection", socket => {
   // }
   socket.on("connect to irc", options => {
     console.log("connecting to the irc client", options);
-    
     ircClient.connect(options);
-    // {
-    //   host: 'irc.rizon.net',
-    //   port: 6697,
-    //   nick: username,
-    //   username: username,
-    //   gecos: username,
-    //   ssl: true
-    // }
+
   }).on("join channel", channel_name => {
     ircClient.join(channel_name);
   }).on("disconnect", reason => {
@@ -67,5 +59,3 @@ server.listen(port, () => {
 // client.on('end', function() { 
 //   console.log('disconnected from server');
 // });
-
-

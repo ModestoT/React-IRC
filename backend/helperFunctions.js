@@ -1,3 +1,4 @@
+// function that removes the channel the quit/part message is being sent to
 const formatQuitMessage = message => {
   if(message === '' || message[0] !== '#') return message;
   let cutOffPoint = 0;

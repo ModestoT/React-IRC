@@ -1,7 +1,7 @@
 const IRC = require("irc-framework");
-const {formatQuitMessage} = require("./helperFunctions.js");
+const { formatQuitMessage } = require("./helperFunctions.js");
 
-module.exports = createIrcClient = socket => {
+module.exports = CreateIrcClient = socket => {
   const client = new IRC.Client();
   let channel;
 
@@ -19,17 +19,17 @@ module.exports = createIrcClient = socket => {
   }).on('debug', e => {
     console.log("debug: ", e);
   }).on('join', e => {
-      console.log("JOINED CHANNEL: ", e);
+      // console.log("JOINED CHANNEL: ", e);
       socket.emit("joined channel", e);
   }).on('action', e => {
     console.log("action: ", e);
   }).on('topic', e => {
     console.log("Topic event: ", e);
   }).on('part', e => {
-    console.log("Part Event: ", e);
+    // console.log("Part Event: ", e);
     socket.emit("left channel", {...e, message: formatQuitMessage(e.message)});
   }).on('quit', e => {
-    console.log("Quit event", e);
+    // console.log("Quit event", e);
     // let channelList = []; for keeping track of what channels the user is in when they quit the server
     // loop through all the channels the user is apart of and if the user that quit the server is
     // in a channel append it to the list and send the list of channels to the frontend
@@ -38,7 +38,7 @@ module.exports = createIrcClient = socket => {
   }).on('invited', e => {
     console.log("Invite event: ", e);
   }).on('notice', e => {
-    console.log("Notice event: ", e);
+    // console.log("Notice event: ", e);
     //do this on front end to properly display BOLD and color assignments /u00002 = bold /u0003 = blue
     let newData = e.message;
     if(newData.includes("\u0002")){
