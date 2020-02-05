@@ -5,9 +5,9 @@ import InputField from "../components/InputField.js";
 
 const IrcLoginView = ({ connectToIrc }) => {
   const [ircOptions, handleInput] = useFormInput({
-    host: 'irc.rizon.net',
+    host: "irc.rizon.net",
     port: 6697,
-    nick: 'drol',
+    nick: "drol",
     ssl: true
   });
   return(

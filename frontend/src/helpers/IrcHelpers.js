@@ -16,10 +16,10 @@ export const createIrcConnection = ircOptions => {
 };
 
 export const parseForChannelName = message => {
-  if(message[0] === '['){
-    let channelName = '';
+  if(message[0] === "["){
+    let channelName = "";
     for(let i = 1; i < message.length; i++){
-      if(message[i] === ']') break;
+      if(message[i] === "]") break;
       channelName += message[i];
     }
     
@@ -30,7 +30,7 @@ export const parseForChannelName = message => {
 }
 
 export const grabServerName = serverUrl => {
-  const servername = serverUrl.split('.');
+  const servername = serverUrl.split(".");
 
   return servername[1];
 }

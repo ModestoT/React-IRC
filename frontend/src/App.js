@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 
 import { useIrc } from "./customHooks/ircHook/useIrc.js";
-import IrcChatView from './views/IrcChatView.js';
-import IrcLoginView from './views/IrcLoginView.js';
+import IrcChatView from "./views/IrcChatView.js";
+import IrcLoginView from "./views/IrcLoginView.js";
 
-import './App.css';
+import "./App.css";
 
 function App() {
   const { state, connectToIrc } = useIrc();

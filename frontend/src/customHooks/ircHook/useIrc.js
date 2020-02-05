@@ -13,14 +13,14 @@ import {
 } from "./IrcReducer.js";
 
 // const channel = {
-//   channelName: '',
-//   hostname: '',
+//   channelName: "",
+//   hostname: "",
 //   messages: [],
 //   userList: []
 // }
 export const useIrc = () => {
   const [state, dispatch] = useReducer(IrcReducer,{
-    serverName: '',
+    serverName: "",
     serverMsgs: [],
     channels: [],
     isConnected: false,
@@ -38,15 +38,15 @@ export const useIrc = () => {
       }).on("irc notice", notice => {
         const channelName = parseForChannelName(notice.message);
         
-        if(!channelName || channelName[0] !== '#'){
+        if(!channelName || channelName[0] !== "#"){
           dispatch({ type: NOTICE_MESSAGE, payload: notice });
         } else{
           dispatch({ type: CHANNEL_NOTICE, payload: {...notice, channelName}});
         }
       }).on("joined channel", e => {
-        dispatch({ type: CHANNEL_MESSAGE, payload: {...e, status: 'joined' } });
+        dispatch({ type: CHANNEL_MESSAGE, payload: {...e, status: "joined" } });
       }).on("left channel", e => {
-        dispatch({ type: CHANNEL_MESSAGE, payload: {...e, status: 'left' } });
+        dispatch({ type: CHANNEL_MESSAGE, payload: {...e, status: "left" } });
       }).on("server motd", motd => {
         dispatch({ type: MOTD_MESSAGE, payload: motd });
       });

@@ -1,12 +1,12 @@
 import { createIrcConnection, grabServerName } from "../../helpers/IrcHelpers.js";
 
-export const CONNECTION_ESTABLISHED = 'CONNECTION_ESTABLISHED';
-export const CONNECTION_LOST = 'CONNECTION_LOST';
-export const NOTICE_MESSAGE = 'NOTICE_MESSAGE';
-export const MOTD_MESSAGE = 'MOTD_MESSAGE';
-export const CHANNEL_NOTICE = 'CHANNEL_NOTICE';
-export const CHANNEL_MESSAGE = 'CHANNEL_MESSAGE';
-export const MAKING_CONNECTION = 'MAKING_CONNECTION';
+export const CONNECTION_ESTABLISHED = "CONNECTION_ESTABLISHED";
+export const CONNECTION_LOST = "CONNECTION_LOST";
+export const NOTICE_MESSAGE = "NOTICE_MESSAGE";
+export const MOTD_MESSAGE = "MOTD_MESSAGE";
+export const CHANNEL_NOTICE = "CHANNEL_NOTICE";
+export const CHANNEL_MESSAGE = "CHANNEL_MESSAGE";
+export const MAKING_CONNECTION = "MAKING_CONNECTION";
 
 export const IrcReducer = (state, action) => {
   switch(action.type){
@@ -52,7 +52,7 @@ export const IrcReducer = (state, action) => {
           ...state,
           channels: state.channels.map(c => 
             c.channelName === channel ? 
-              {...c, messages: [...c.messages, `${nick} [${ident}@${hostname}] has ${status} ${channel} ${status === 'left' ? `[${message}]` : ''}`]}
+              {...c, messages: [...c.messages, `${nick} [${ident}@${hostname}] has ${status} ${channel} ${status === "left" ? `[${message}]` : ""}`]}
             : c
           )
         };
