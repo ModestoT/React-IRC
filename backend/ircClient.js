@@ -16,12 +16,14 @@ module.exports = CreateIrcClient = socket => {
     //   socket.emit("users list", {channelName: channel.name, users: channel.users});
     // })
   }).on('channel list', list => {
-    console.log('Channel list: ', list);
+    console.log('Channel list: ', list.length);
+    socket.emit("available channels", list);
   }).on('debug', e => {
     console.log("debug: ", e);
   }).on('join', e => {
       // console.log("JOINED CHANNEL: ", e);
       socket.emit("joined channel", e);
+      console.log(client);
   }).on('action', e => {
     console.log("action: ", e);
   }).on('topic', e => {
@@ -35,7 +37,7 @@ module.exports = CreateIrcClient = socket => {
     // loop through all the channels the user is apart of and if the user that quit the server is
     // in a channel append it to the list and send the list of channels to the frontend
 
-    socket.emit("left channel", {...e, channel: channel.name});
+    channel && socket.emit("left channel", {...e, channel: channel.name});
   }).on('invited', e => {
     console.log("Invite event: ", e);
   }).on('notice', e => {
@@ -74,6 +76,7 @@ module.exports = CreateIrcClient = socket => {
     console.log("reconnecting...");
   }).on('socket close', () => {
     console.log("irc client disconected");
+    socket.disconnect(true);
   });
 
   return client;

@@ -25,6 +25,10 @@ io.on("connection", socket => {
 
   }).on("join channel", channel_name => {
     ircClient.join(channel_name);
+
+  }).on("grab channel list", () => {
+    ircClient.list();
+
   }).on("disconnect", reason => {
     console.log('disconection: ', reason);
     ircClient.quit();
