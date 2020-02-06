@@ -7,6 +7,7 @@ export const MOTD_MESSAGE = "MOTD_MESSAGE";
 export const CHANNEL_NOTICE = "CHANNEL_NOTICE";
 export const CHANNEL_MESSAGE = "CHANNEL_MESSAGE";
 export const MAKING_CONNECTION = "MAKING_CONNECTION";
+export const GRABBING_CHANNEL_LIST = 'GRABBING_CHANNEL_LIST';
 
 export const IrcReducer = (state, action) => {
   switch(action.type){
@@ -26,9 +27,25 @@ export const IrcReducer = (state, action) => {
       };
     case CONNECTION_LOST:
       return {
-        ...state,
-        isConnected: false
+        serverName: "",
+        serverMsgs: [],
+        userChannels: [],
+        joinableChannels: {
+          pages: 0,
+          channels:[]
+        },
+        isConnected: false,
+        ircSocket: null
       };
+    case GRABBING_CHANNEL_LIST:
+      return {
+        ...state,
+        joinableChannels: {
+          channels: [...state.joinableChannels.channels, action.payload],
+          pages: state.joinableChannels.pages + 1,
+          channelCount: state.joinableChannels.channelCount + action.payload.length
+        }
+      }
     case NOTICE_MESSAGE:
       return {
         ...state,
@@ -42,15 +59,15 @@ export const IrcReducer = (state, action) => {
     case CHANNEL_NOTICE: 
       return {
         ...state,
-        channels: state.channels.map(channel => channel.channelName === action.payload.channelName ? {...channel, messages: [...channel.messages, `-${action.payload.nick}- ${action.payload.message}`]} : channel)
+        userChannels: state.userChannels.map(channel => channel.channelName === action.payload.channelName ? {...channel, messages: [...channel.messages, `-${action.payload.nick}- ${action.payload.message}`]} : channel)
       };
     case CHANNEL_MESSAGE:
-      const channel = state.channels.find(({ channelName }) => channelName === action.payload.channel);
+      const channel = state.userChannels.find(({ channelName }) => channelName === action.payload.channel);
       if(channel){
         const {nick, ident, hostname, status, channel, message} = action.payload;
         return {
           ...state,
-          channels: state.channels.map(c => 
+          userChannels: state.userChannels.map(c => 
             c.channelName === channel ? 
               {...c, messages: [...c.messages, `${nick} [${ident}@${hostname}] has ${status} ${channel} ${status === "left" ? `[${message}]` : ""}`]}
             : c
@@ -59,7 +76,7 @@ export const IrcReducer = (state, action) => {
       } else {
         return {
           ...state,
-          channels: [...state.channels, {
+          userChannels: [...state.userChannels, {
             channelName: action.payload.channel,
             messages: [],
             userList: [],

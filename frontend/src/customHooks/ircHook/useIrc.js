@@ -9,7 +9,8 @@ import {
   MOTD_MESSAGE, 
   CONNECTION_ESTABLISHED, 
   CONNECTION_LOST,
-  MAKING_CONNECTION 
+  MAKING_CONNECTION, 
+  GRABBING_CHANNEL_LIST
 } from "./IrcReducer.js";
 
 // const channel = {
@@ -22,7 +23,12 @@ export const useIrc = () => {
   const [state, dispatch] = useReducer(IrcReducer,{
     serverName: "",
     serverMsgs: [],
-    channels: [],
+    userChannels: [],
+    joinableChannels: {
+      pages: 0,
+      channelCount: 0,
+      channels: []
+    },
     isConnected: false,
     ircSocket: null
   });
@@ -49,6 +55,8 @@ export const useIrc = () => {
         dispatch({ type: CHANNEL_MESSAGE, payload: {...e, status: "left" } });
       }).on("server motd", motd => {
         dispatch({ type: MOTD_MESSAGE, payload: motd });
+      }).on("available channels", channels => {
+        dispatch({ type: GRABBING_CHANNEL_LIST, payload: channels });
       });
     }  
   },[state.ircSocket]);
@@ -59,8 +67,18 @@ export const useIrc = () => {
     dispatch({ type: MAKING_CONNECTION, payload: ircOptions });
   };
 
+  const joinIrcChannel = channelName => {
+    state.ircSocket.emit("join channel", channelName);
+  };
+
+  const grabAvailableChannels = () => {
+    state.ircSocket.emit("grab channel list");
+  }
+
   return {
     state,
-    connectToIrc
+    connectToIrc,
+    joinIrcChannel,
+    grabAvailableChannels
   };
 }
