@@ -1,18 +1,18 @@
 import React, { useState } from "react";
+
 import IrcChatTab from "../components/irc/IrcChatTab";
 import Modal from "../components/Modal";
-import { useFormInput } from "../customHooks/useFormInput";
+import IrcJoinableChannels from "../components/irc/IrcJoinableChannels";
 
-const IrcChatView = ({ state, joinIrcChannel, grabAvailableChannels }) => {
+const IrcChatView = ({ state, joinIrcChannel, grabAvailableChannels, searchForChannel, resetSearchResArray }) => {
   const [isToggled, setIsToggled] = useState(false);
-  const [channelSearch, setChannelSearch] = useFormInput('');
-  const { serverName, serverMsgs, userChannels, joinableChannels } = state;
+  const { serverName, serverMsgs, userChannels, joinableChannels, isGrabbingChannels, searchRes } = state;
 
   const toggleModal = () => {
     if(joinableChannels.pages === 0 ){
       grabAvailableChannels();
     }
-    
+
     setIsToggled(true);
   }
 
@@ -26,14 +26,14 @@ const IrcChatView = ({ state, joinIrcChannel, grabAvailableChannels }) => {
       })}
       <button className="join-channel" onClick={() => toggleModal()}>+</button>
       <Modal showModal={isToggled} toggleModal={setIsToggled}>
-        <input type="text" value={channelSearch} onChange={e => setChannelSearch(e.target.value)} />
-        {joinableChannels.pages > 0 ? joinableChannels.channels[0].map(channel => {
-          return (
-            <div>
-              <h3>{channel.channel}</h3>
-            </div>
-          )
-        }): <div></div>}
+        <IrcJoinableChannels
+          joinableChannels={joinableChannels} 
+          joinIrcChannel={joinIrcChannel} 
+          isGrabbingChannels={isGrabbingChannels} 
+          searchRes={searchRes}
+          searchForChannel={searchForChannel}
+          resetSearchResArray={resetSearchResArray}
+        />
       </Modal>
     </div>
   );
