@@ -2,7 +2,7 @@ import React from "react";
 
 import IrcChannel from "./IrcChannel";
 
-const IrcChannelsTable = ({ channels, currentPage }) => {
+const IrcChannelsTable = ({ channels, currentPage, joinIrcchannel }) => {
   return (
     <table style={{width: "100%"}}>
       <tbody>
