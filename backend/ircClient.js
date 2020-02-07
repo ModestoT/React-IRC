@@ -63,7 +63,7 @@ module.exports = CreateIrcClient = (socket, userChannels) => {
 			// let channelList = []; for keeping track of what channels the user is in when they quit the server
 			// loop through all the channels the user is apart of and if the user that quit the server is
 			// in a channel append it to the list and send the list of channels to the frontend
-			// console.log("Quit event: ", e);
+
 			const channelsLeft = findChannelLeft(userChannels, e.nick.toLowerCase());
 
 			channelsLeft.forEach(channel => {
@@ -90,7 +90,7 @@ module.exports = CreateIrcClient = (socket, userChannels) => {
 			});
 		})
 		.on("privmsg", e => {
-			console.log("Private message event: ", e);
+			// console.log("Private message event: ", e);
 			socket.emit("channel prv msg", e);
 		})
 		.on("users online", e => {
