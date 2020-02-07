@@ -13,7 +13,7 @@ const IrcChatView = ({ state, joinIrcChannel, grabAvailableChannels, searchForCh
       grabAvailableChannels();
     }
 
-    setIsToggled(true);
+    setIsToggled(!isToggled);
   }
 
   return(
