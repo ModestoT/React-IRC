@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { SearchMatrix } from "../../helpers/IrcHelpers.js";
 import IrcChannelsTable from "./IrcChannelsTable.js";
 
-const IrcJoinableChannels = ({ joinableChannels, joinIrcchannel, isGrabbingChannels }) => {
+const IrcJoinableChannels = ({ joinableChannels, joinIrcChannel, isGrabbingChannels, toggleModal }) => {
   const { pages, channels } = joinableChannels;
 
   const [data, setData] = useState({
@@ -30,10 +30,10 @@ const IrcJoinableChannels = ({ joinableChannels, joinIrcchannel, isGrabbingChann
       return <p>Searching for channel...</p>
 
     } else if(searchRes.length > 0 && !isSearching){
-      return <IrcChannelsTable channels={searchRes} currentPage={currentPage} joinIrcchannel={joinIrcchannel}/>
+      return <IrcChannelsTable channels={searchRes} currentPage={currentPage} joinIrcChannel={joinIrcChannel} toggleModal={toggleModal}/>
 
     } else if(pages > 0 || channels.length > 0){
-      return <IrcChannelsTable channels={channels} currentPage={currentPage} joinIrcchannel={joinIrcchannel}/>
+      return <IrcChannelsTable channels={channels} currentPage={currentPage} joinIrcChannel={joinIrcChannel} toggleModal={toggleModal}/>
       
     } else {
       return <p>No channels available</p>
