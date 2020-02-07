@@ -1,13 +1,15 @@
 const IRC = require("irc-framework");
-const { formatQuitMessage } = require("./helperFunctions.js");
+const { formatQuitMessage, sortMatrix } = require("./helperFunctions.js");
 
 module.exports = CreateIrcClient = socket => {
   const client = new IRC.Client();
   let channel;
+  let availableChannels = [];
 
   client.on('socket connected', () => {
     console.log("IRC Socket connected Registering...");
     socket.emit("connected");
+
   }).on('connected', e => {
     console.log("Connected: \n", e);
     // console.log("joining channel...");
@@ -15,22 +17,37 @@ module.exports = CreateIrcClient = socket => {
     // channel.updateUsers(channel => {
     //   socket.emit("users list", {channelName: channel.name, users: channel.users});
     // })
+  }).on("channel list start", () => {
+    socket.emit("grabbing channel list");
+
   }).on('channel list', list => {
-    console.log('Channel list: ', list.length);
-    socket.emit("available channels", list);
+    availableChannels.push(list);
+    socket.emit("available channels", list.length);
+
+  }).on("channel list end", () => {
+    sortMatrix(availableChannels, (a, b) => {
+      return b.num_users - a.num_users;
+    });
+
+    socket.emit("grabbing channel list end", availableChannels);
   }).on('debug', e => {
     console.log("debug: ", e);
+
   }).on('join', e => {
       // console.log("JOINED CHANNEL: ", e);
       socket.emit("joined channel", e);
       console.log(client);
+
   }).on('action', e => {
     console.log("action: ", e);
+
   }).on('topic', e => {
     console.log("Topic event: ", e);
+
   }).on('part', e => {
     // console.log("Part Event: ", e);
     socket.emit("left channel", {...e, message: formatQuitMessage(e.message)});
+
   }).on('quit', e => {
     // console.log("Quit event", e);
     // let channelList = []; for keeping track of what channels the user is in when they quit the server
@@ -38,8 +55,10 @@ module.exports = CreateIrcClient = socket => {
     // in a channel append it to the list and send the list of channels to the frontend
 
     channel && socket.emit("left channel", {...e, channel: channel.name});
+
   }).on('invited', e => {
     console.log("Invite event: ", e);
+
   }).on('notice', e => {
     // console.log("Notice event: ", e);
     //do this on front end to properly display BOLD and color assignments /u00002 = bold /u0003 = blue
@@ -52,14 +71,19 @@ module.exports = CreateIrcClient = socket => {
       nick: e.nick,
       message: newData
     });
+
   }).on('privmsg', e => {
     console.log("Private message event: ", e);
+
   }).on('tagmsg', e => {
     console.log("Tag Msg event: ", e);
+
   }).on("wallops", e => {
     console.log("Wallop event: ", e);
+
   }).on('ctcp request', e => {
     console.log("CTCP Request event", e);
+
   }).on('motd', e => {
     // console.log("MOTD event: ", e);
     let newData = e.motd;
@@ -68,12 +92,14 @@ module.exports = CreateIrcClient = socket => {
       newData = tempData;
     }
     socket.emit("server motd", newData);
+
   }).on('raw', e => {
     // console.log("Raw event:", e);
     // console.log(e.line.replace('\n', ''));
     // socket.emit("irc connection", e.line);
   }).on('reconnecting', () => {
     console.log("reconnecting...");
+
   }).on('socket close', () => {
     console.log("irc client disconected");
     socket.disconnect(true);
