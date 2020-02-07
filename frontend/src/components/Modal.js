@@ -63,10 +63,10 @@ const Modal = ({ children, showModal, toggleModal, headerVal }) => {
           <ModalWrapper>
             <ModalHeader>
               {headerVal ? <h2>{headerVal}</h2> : null}
-              <button className="close-modal-btn" onClick={() => toggleModal(!showModal)}>X</button>
+              <button className="close-modal-btn" onClick={() => toggleModal()}>X</button>
             </ModalHeader>
             {React.Children.map(children, (child) => {
-              return React.cloneElement(child, {...child.props});
+              return React.cloneElement(child, {...child.props, toggleModal});
             })}
           </ModalWrapper>
         </OverlayWrapper>
