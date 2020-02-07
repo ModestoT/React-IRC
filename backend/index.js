@@ -8,7 +8,8 @@ const port = process.env.PORT || 3001;
 
 io.on("connection", socket => {
   console.log("connection made to server socket!");
-  const ircClient = CreateIrcClient(socket);
+  let userChannels = [];
+  const ircClient = CreateIrcClient(socket, userChannels);
 
   // options param structure : 
   // {
@@ -24,8 +25,8 @@ io.on("connection", socket => {
     ircClient.connect(options);
 
   }).on("join channel", channel_name => {
-    ircClient.join(channel_name);
-
+    userChannels.push(ircClient.channel(channel_name));
+    // ircClient.join(channel_name);
   }).on("grab channel list", () => {
     ircClient.list();
 

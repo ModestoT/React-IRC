@@ -34,9 +34,58 @@ const sortMatrix = (matrix, sortFn) => {
   }
   
   return matrix;
+};
+
+const strSortFn = (a,b) => {
+  if(a.nick.toLowerCase() > b.nick.toLowerCase()){
+    return 1;
+  }
+  if(a.nick.toLowerCase() < b.nick.toLowerCase()){
+    return -1;
+  }
+
+  return 0;
+};
+
+const strBinarySearch = (arr, tar) => {
+  let l = 0,
+    r = arr.length-1;
+
+  while(l <= r){
+    let mid = Math.floor(l + (r - l) / 2);
+    if(arr[mid].nick.toLowerCase() === tar){
+      return mid;
+    } else if(arr[mid].nick.toLowerCase() < tar){
+      l = mid + 1;
+    } else {
+      r = mid;
+    }
+  }
+
+  return -1;
+}
+
+const searchForUser = (arr, tar) => {
+  //sort array so we can run a binary search for the user
+  arr.sort(strSortFn);
+  
+  return strBinarySearch(arr, tar);
+};
+
+const findChannelLeft = (userChannels, tar) => {
+  let channelsLeft = [];
+  for(let i = 0; i < userChannels.length; i++){
+    let findUser = searchForUser(userChannels[i].users, tar);
+
+    if(findUser !== -1){
+      channelsLeft.push(userChannels[i]);
+    }
+  }
+  return channelsLeft;
 }
 
 module.exports = {
   formatQuitMessage,
   sortMatrix,
+  findChannelLeft
 }

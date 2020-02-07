@@ -1,9 +1,8 @@
 const IRC = require("irc-framework");
-const { formatQuitMessage, sortMatrix } = require("./helperFunctions.js");
+const { formatQuitMessage, sortMatrix, findChannelLeft } = require("./helperFunctions.js");
 
-module.exports = CreateIrcClient = socket => {
+module.exports = CreateIrcClient = (socket, userChannels )=> {
   const client = new IRC.Client();
-  let channel;
   let availableChannels = [];
 
   client.on('socket connected', () => {
@@ -30,13 +29,14 @@ module.exports = CreateIrcClient = socket => {
     });
 
     socket.emit("grabbing channel list end", availableChannels);
+    availableChannels = [];
   }).on('debug', e => {
     console.log("debug: ", e);
 
   }).on('join', e => {
-      // console.log("JOINED CHANNEL: ", e);
-      socket.emit("joined channel", e);
-      console.log(client);
+    // console.log("JOINED CHANNEL: ", e);
+    socket.emit("joined channel", e);
+    // console.log(userChannels);
 
   }).on('action', e => {
     console.log("action: ", e);
@@ -53,8 +53,12 @@ module.exports = CreateIrcClient = socket => {
     // let channelList = []; for keeping track of what channels the user is in when they quit the server
     // loop through all the channels the user is apart of and if the user that quit the server is
     // in a channel append it to the list and send the list of channels to the frontend
+    // console.log("Quit event: ", e);
+    const channelsLeft = findChannelLeft(userChannels, e.nick.toLowerCase());
 
-    channel && socket.emit("left channel", {...e, channel: channel.name});
+    channelsLeft.forEach(channel => {
+      socket.emit("left channel", {...e, channel: channel.name});
+    });
 
   }).on('invited', e => {
     console.log("Invite event: ", e);
@@ -74,7 +78,7 @@ module.exports = CreateIrcClient = socket => {
 
   }).on('privmsg', e => {
     console.log("Private message event: ", e);
-
+    socket.emit("channel prv msg", e);
   }).on('tagmsg', e => {
     console.log("Tag Msg event: ", e);
 
