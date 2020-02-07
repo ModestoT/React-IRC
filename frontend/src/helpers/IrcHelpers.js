@@ -34,3 +34,44 @@ export const grabServerName = serverUrl => {
 
   return servername[1];
 }
+
+export const SearchMatrix = (matrix, tar, limit) => {
+  let res = [];
+
+  for(let i = 0; i < matrix.length; i++){
+    let searchRes = matrix[i].filter(channel => {
+      return FormatChannelName(channel.channel).toLowerCase().indexOf(tar.toLowerCase()) !== -1
+    });
+    if(searchRes.length > 0){
+      res = [...res, ...searchRes];
+    }
+  }
+
+
+  return FormatIntoMatrix(res, limit);
+};
+
+const FormatIntoMatrix = (arr, limit) => {
+  if(arr.length <= limit) return [arr];
+
+  let res = [];
+  let temp = [];
+  for(let i = 0; i < arr.length; i++){
+    temp.push(arr[i])
+    if(temp.length >= limit){
+      res.push(temp);
+      temp = [];
+    } else {
+      res.push()
+    }
+  }
+  // console.log(res)
+  return res;
+};
+
+const FormatChannelName = str => {
+  if(str[0]!== '#') return str;
+  const regex = /(#)|(\/|\[)|(\])/gi;
+
+  return str.replace(regex, '');
+}
