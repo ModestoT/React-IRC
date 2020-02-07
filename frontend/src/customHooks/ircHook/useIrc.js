@@ -10,15 +10,11 @@ import {
   CONNECTION_ESTABLISHED, 
   CONNECTION_LOST,
   MAKING_CONNECTION, 
-  GRABBING_CHANNEL_LIST
+  GRABBING_CHANNEL_LIST,
+  UPDATE_CHANNELS_COUNT,
+  GRABBING_CHANNEL_LIST_END
 } from "./IrcReducer.js";
 
-// const channel = {
-//   channelName: "",
-//   hostname: "",
-//   messages: [],
-//   userList: []
-// }
 export const useIrc = () => {
   const [state, dispatch] = useReducer(IrcReducer,{
     serverName: "",
@@ -30,6 +26,7 @@ export const useIrc = () => {
       channels: []
     },
     isConnected: false,
+    isGrabbingChannels: false,
     ircSocket: null
   });
 
@@ -55,8 +52,12 @@ export const useIrc = () => {
         dispatch({ type: CHANNEL_MESSAGE, payload: {...e, status: "left" } });
       }).on("server motd", motd => {
         dispatch({ type: MOTD_MESSAGE, payload: motd });
-      }).on("available channels", channels => {
-        dispatch({ type: GRABBING_CHANNEL_LIST, payload: channels });
+      }).on("grabbing channel list", () => {
+        dispatch({ type: GRABBING_CHANNEL_LIST });
+      }).on("available channels", count => {
+        dispatch({ type: UPDATE_CHANNELS_COUNT, payload: count });
+      }).on("grabbing channel list end", channels => {
+        dispatch({ type: GRABBING_CHANNEL_LIST_END, payload: channels });
       });
     }  
   },[state.ircSocket]);

@@ -8,6 +8,8 @@ export const CHANNEL_NOTICE = "CHANNEL_NOTICE";
 export const CHANNEL_MESSAGE = "CHANNEL_MESSAGE";
 export const MAKING_CONNECTION = "MAKING_CONNECTION";
 export const GRABBING_CHANNEL_LIST = 'GRABBING_CHANNEL_LIST';
+export const UPDATE_CHANNELS_COUNT = 'UPDATE_CHANNELS_COUNT';
+export const GRABBING_CHANNEL_LIST_END = 'GRABBING_CHANNEL_LIST_END';
 
 export const IrcReducer = (state, action) => {
   switch(action.type){
@@ -32,20 +34,34 @@ export const IrcReducer = (state, action) => {
         userChannels: [],
         joinableChannels: {
           pages: 0,
-          channels:[]
+          channels:[],
+          channelCount: 0
         },
         isConnected: false,
         ircSocket: null
       };
-    case GRABBING_CHANNEL_LIST:
+    case GRABBING_CHANNEL_LIST: 
+      return {
+        ...state,
+        isGrabbingChannels: true
+      };
+    case UPDATE_CHANNELS_COUNT:
       return {
         ...state,
         joinableChannels: {
-          channels: [...state.joinableChannels.channels, action.payload],
           pages: state.joinableChannels.pages + 1,
-          channelCount: state.joinableChannels.channelCount + action.payload.length
+          channelCount: state.joinableChannels.channelCount + action.payload
         }
-      }
+      };
+    case GRABBING_CHANNEL_LIST_END:
+      return {
+        ...state,
+        isGrabbingChannels: false,
+        joinableChannels: {
+          ...state.joinableChannels,
+          channels: action.payload
+        }
+      };
     case NOTICE_MESSAGE:
       return {
         ...state,
