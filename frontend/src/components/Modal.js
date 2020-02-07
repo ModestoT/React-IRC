@@ -15,10 +15,12 @@ const OverlayWrapper = styled.div`
 `;
 
 const ModalWrapper = styled.div`
-  width: 50%;
+  width: 80%;
+  height: 90vh;
   background-color: white;
   border-radius: 3px;
-  
+  overflow: auto;
+
   @media @labtop {
     width: 70%;
   }
@@ -32,7 +34,6 @@ const ModalHeader = styled.header`
   display: flex;
   width: 100%;
   justify-content: space-between;
-  padding: 4%;
   border-bottom: 1px solid lightgrey;
 
   h2 {
@@ -44,7 +45,7 @@ const ModalHeader = styled.header`
     font-size: 2rem;
     background-color: inherit;
     border: none;
-    padding: 0;
+    padding: 1%;
 
     &:hover {
       transform: scale(1.5);
