@@ -12,7 +12,8 @@ import {
   MAKING_CONNECTION, 
   GRABBING_CHANNEL_LIST,
   UPDATE_CHANNELS_COUNT,
-  GRABBING_CHANNEL_LIST_END
+  GRABBING_CHANNEL_LIST_END,
+  CHANNEL_PRV_MSG
 } from "./IrcReducer.js";
 
 export const useIrc = () => {
@@ -58,6 +59,8 @@ export const useIrc = () => {
         dispatch({ type: UPDATE_CHANNELS_COUNT, payload: count });
       }).on("grabbing channel list end", channels => {
         dispatch({ type: GRABBING_CHANNEL_LIST_END, payload: channels });
+      }).on("channel prv msg", msg => {
+        dispatch({ type: CHANNEL_PRV_MSG, payload: msg });
       });
     }  
   },[state.ircSocket]);

@@ -10,6 +10,7 @@ export const MAKING_CONNECTION = "MAKING_CONNECTION";
 export const GRABBING_CHANNEL_LIST = 'GRABBING_CHANNEL_LIST';
 export const UPDATE_CHANNELS_COUNT = 'UPDATE_CHANNELS_COUNT';
 export const GRABBING_CHANNEL_LIST_END = 'GRABBING_CHANNEL_LIST_END';
+export const CHANNEL_PRV_MSG = 'CHANNEL_PRV_MSG';
 
 export const IrcReducer = (state, action) => {
   switch(action.type){
@@ -98,7 +99,16 @@ export const IrcReducer = (state, action) => {
             userList: [],
           }]
         }
-      }
+      };
+    case CHANNEL_PRV_MSG:
+      return {
+        ...state,
+        userChannels: state.userChannels.map(c => 
+          c.channelName === action.payload.target ? 
+            {...c, messages: [...c.messages, `<${action.payload.nick}> ${action.payload.message}`]}
+          : c
+        )
+      };
     default:
       return state;
   }
