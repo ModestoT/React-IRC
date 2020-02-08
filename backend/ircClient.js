@@ -46,7 +46,7 @@ module.exports = CreateIrcClient = (socket, userChannels) => {
 
 			socket.emit("users list", {
 				channelName: channel.name,
-				users: channel.users.sort(strSortFn)
+				users: channel.users
 			});
 		})
 		.on("action", e => {
@@ -57,18 +57,19 @@ module.exports = CreateIrcClient = (socket, userChannels) => {
 			// socket.emit("set channel topic", e);
 		})
 		.on("part", e => {
-			// console.log("Part Event: ", e);
-			socket.emit("left channel", {
-				...e,
-				message: formatQuitMessage(e.message)
-			});
-			// //assuming channel will be there since this listener does not fire unless user has joined a channel
-			const channel = userChannels.find(({ name }) => name === e.channel);
+			if (e.nick !== client.user.nick) {
+				socket.emit("left channel", {
+					...e,
+					message: formatQuitMessage(e.message)
+				});
+				//assuming channel will be there since this listener does not fire unless user has joined a channel
+				const channel = userChannels.find(({ name }) => name === e.channel);
 
-			socket.emit("users list", {
-				channelName: channel.name,
-				users: channel.users.sort(strSortFn)
-			});
+				socket.emit("users list", {
+					channelName: channel.name,
+					users: channel.users
+				});
+			}
 		})
 		.on("quit", e => {
 			// console.log("Quit event", e);

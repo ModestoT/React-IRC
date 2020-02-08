@@ -25,14 +25,20 @@ io.on("connection", socket => {
 			userChannels.push(channel);
 
 			channel.updateUsers(channel => {
+				channel.users.sort(strSortFn);
 				socket.emit("users list", {
 					channelName: channel.name,
-					users: channel.users.sort(strSortFn)
+					users: channel.users
 				});
 			});
 		})
 		.on("grab channel list", () => {
 			ircClient.list();
+		})
+		.on("leave channel", channelName => {
+			const channel = userChannels.find(({ name }) => name === channelName);
+
+			channel.part();
 		})
 		.on("error", err => {
 			console.log("Socket error: ", err);
