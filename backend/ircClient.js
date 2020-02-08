@@ -43,7 +43,14 @@ module.exports = CreateIrcClient = (socket, userChannels) => {
 		.on("join", e => {
 			// console.log("JOINED CHANNEL: ", e);
 			socket.emit("joined channel", e);
-			// console.log(userChannels);
+
+			//assuming channel will be there since this listener does not fire unless user has joined a channel
+			const channel = userChannels.find(({ name }) => name === e.channel);
+
+			socket.emit("users list", {
+				channelName: channel.name,
+				users: channel.users
+			});
 		})
 		.on("action", e => {
 			console.log("action: ", e);
@@ -57,17 +64,25 @@ module.exports = CreateIrcClient = (socket, userChannels) => {
 				...e,
 				message: formatQuitMessage(e.message)
 			});
+			//assuming channel will be there since this listener does not fire unless user has joined a channel
+			const channel = userChannels.find(({ name }) => name === e.channel);
+
+			socket.emit("users list", {
+				channelName: channel.name,
+				users: channel.users
+			});
 		})
 		.on("quit", e => {
 			// console.log("Quit event", e);
-			// let channelList = []; for keeping track of what channels the user is in when they quit the server
-			// loop through all the channels the user is apart of and if the user that quit the server is
-			// in a channel append it to the list and send the list of channels to the frontend
 
 			const channelsLeft = findChannelLeft(userChannels, e.nick.toLowerCase());
 
 			channelsLeft.forEach(channel => {
 				socket.emit("left channel", { ...e, channel: channel.name });
+				socket.emit("users list", {
+					channelName: channel.name,
+					users: channel.users
+				});
 			});
 		})
 		.on("invited", e => {

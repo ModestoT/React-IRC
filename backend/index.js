@@ -25,9 +25,17 @@ io.on("connection", socket => {
 			console.log("connecting to the irc client", options);
 			ircClient.connect(options);
 		})
-		.on("join channel", channel_name => {
-			userChannels.push(ircClient.channel(channel_name));
-			// ircClient.join(channel_name);
+		.on("join channel", channelName => {
+			const channel = ircClient.channel(channelName);
+
+			userChannels.push(channel);
+
+			channel.updateUsers(channel => {
+				socket.emit("users list", {
+					channelName: channel.name,
+					users: channel.users
+				});
+			});
 		})
 		.on("grab channel list", () => {
 			ircClient.list();
