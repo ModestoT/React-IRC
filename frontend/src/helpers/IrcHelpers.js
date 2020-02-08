@@ -1,6 +1,8 @@
 import io from "socket.io-client";
 
-export const createIrcConnection = ircOptions => {
+import { FormatIntoMatrix } from "./GeneralHelpers.js";
+
+export const CreateIrcConnection = ircOptions => {
 	const socket = io.connect("http://localhost:3001");
 
 	console.log("connecting to irc client");
@@ -14,7 +16,7 @@ export const createIrcConnection = ircOptions => {
 	return socket;
 };
 
-export const parseForChannelName = message => {
+export const ParseForChannelName = message => {
 	if (message[0] === "[") {
 		let channelName = "";
 		for (let i = 1; i < message.length; i++) {
@@ -28,13 +30,13 @@ export const parseForChannelName = message => {
 	}
 };
 
-export const grabServerName = serverUrl => {
+export const GrabServerName = serverUrl => {
 	const servername = serverUrl.split(".");
 
 	return servername[1];
 };
 
-export const SearchMatrix = (matrix, tar, limit) => {
+export const SearchChannelMatrix = (matrix, tar, limit) => {
 	let res = [];
 
 	for (let i = 0; i < matrix.length; i++) {
@@ -51,24 +53,6 @@ export const SearchMatrix = (matrix, tar, limit) => {
 	}
 
 	return FormatIntoMatrix(res, limit);
-};
-
-const FormatIntoMatrix = (arr, limit) => {
-	if (arr.length <= limit) return [arr];
-
-	let res = [];
-	let temp = [];
-	for (let i = 0; i < arr.length; i++) {
-		temp.push(arr[i]);
-		if (temp.length >= limit) {
-			res.push(temp);
-			temp = [];
-		} else {
-			res.push();
-		}
-	}
-
-	return res;
 };
 
 const FormatChannelName = str => {
