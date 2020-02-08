@@ -54,7 +54,7 @@ const strBinarySearch = (arr, tar) => {
 		loopCount = 0;
 
 	while (l < r) {
-		if (loopCount <= maxLoops)
+		if (loopCount >= maxLoops)
 			throw "Inifite loop detected in strBinarSearch function";
 
 		let mid = Math.floor(l + (r - l) / 2);
