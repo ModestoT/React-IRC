@@ -14,7 +14,8 @@ import {
 	UPDATE_CHANNELS_COUNT,
 	GRABBING_CHANNEL_LIST_END,
 	CHANNEL_PRV_MSG,
-	UPDATE_USERS_LIST
+	UPDATE_USERS_LIST,
+	LEAVE_CHANNEL
 } from "./IrcReducer.js";
 
 export const useIrc = () => {
@@ -94,6 +95,11 @@ export const useIrc = () => {
 		dispatch({ type: MAKING_CONNECTION, payload: ircOptions });
 	};
 
+	const disconnectFromIrc = () => {
+		state.ircSocket.close();
+		dispatch({ type: CONNECTION_LOST });
+	};
+
 	const joinIrcChannel = channelName => {
 		state.ircSocket.emit("join channel", channelName);
 	};
@@ -102,10 +108,17 @@ export const useIrc = () => {
 		state.ircSocket.emit("grab channel list");
 	};
 
+	const leaveIrcChannel = channelName => {
+		state.ircSocket.emit("leave channel", channelName);
+		dispatch({ type: LEAVE_CHANNEL, payload: channelName });
+	};
+
 	return {
 		state,
 		connectToIrc,
 		joinIrcChannel,
-		grabAvailableChannels
+		disconnectFromIrc,
+		grabAvailableChannels,
+		leaveIrcChannel
 	};
 };

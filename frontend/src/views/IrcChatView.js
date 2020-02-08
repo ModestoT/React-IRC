@@ -5,7 +5,13 @@ import IrcJoinableChannels from "../components/irc/IrcJoinableChannels";
 import IrcChatTabs from "../components/irc/IrcChatTabs";
 import IrcChat from "../components/irc/IrcChat";
 
-const IrcChatView = ({ state, joinIrcChannel, grabAvailableChannels }) => {
+const IrcChatView = ({
+	state,
+	joinIrcChannel,
+	grabAvailableChannels,
+	leaveIrcChannel,
+	disconnectFromIrc
+}) => {
 	const {
 		serverName,
 		serverMsgs,
@@ -39,17 +45,44 @@ const IrcChatView = ({ state, joinIrcChannel, grabAvailableChannels }) => {
 		}
 	};
 	const handleJoinIrcChannel = channelName => {
+		console.log("joining: ", channelName);
 		joinIrcChannel(channelName);
 		setCurrentTab(channelName);
+	};
+	const handleLeaveIrcChannel = (channel, isServerTab) => {
+		if (isServerTab) {
+			disconnectFromIrc();
+		} else {
+			//leave channel selected
+			leaveIrcChannel(channel);
+			//check if channel selected is the current tab or not
+			if (channel === currentTab) {
+				//if it is the current tab change it to the tab to the left of the channel exited
+				const channelExitedIndex = userChannels.findIndex(
+					({ channelName }) => channelName === channel
+				);
+				console.log(channelExitedIndex, userChannels[channelExitedIndex - 1]);
+
+				if (channelExitedIndex !== -1 && channelExitedIndex !== 0) {
+					setCurrentTab(userChannels[channelExitedIndex - 1].channelName);
+				} else {
+					console.log(serverName);
+					setCurrentTab("rizon");
+					console.log("updated current tab");
+				}
+			}
+			//else dont change the current tab
+		}
 	};
 	return (
 		<div>
 			<IrcChatTabs
-				tabs={[{ channelName: serverName }, ...userChannels]}
+				tabs={[{ channelName: serverName, isServerTab: true }, ...userChannels]}
 				serverName={serverName}
 				currentTab={currentTab}
 				setCurrentTab={setCurrentTab}
 				toggleModal={toggleModal}
+				leaveIrcChannel={handleLeaveIrcChannel}
 			/>
 			{getCurrentTabChat()}
 			<Modal showModal={isToggled} toggleModal={setIsToggled}>

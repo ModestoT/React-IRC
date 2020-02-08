@@ -9,16 +9,24 @@ const TabsWrapper = styled.div`
 	align-items: center;
 `;
 
-const IrcChatTabs = ({ tabs, currentTab, setCurrentTab, toggleModal }) => {
+const IrcChatTabs = ({
+	tabs,
+	currentTab,
+	setCurrentTab,
+	toggleModal,
+	leaveIrcChannel
+}) => {
 	return (
 		<TabsWrapper>
-			{tabs.map(({ channelName }) => {
+			{tabs.map(({ channelName, isServerTab }) => {
 				return (
 					<IrcChatTab
 						key={channelName}
 						channelName={channelName}
 						currentTab={currentTab}
 						setCurrentTab={setCurrentTab}
+						leaveIrcChannel={leaveIrcChannel}
+						isServerTab={isServerTab}
 					/>
 				);
 			})}

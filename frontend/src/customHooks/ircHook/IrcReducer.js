@@ -15,6 +15,7 @@ export const UPDATE_CHANNELS_COUNT = "UPDATE_CHANNELS_COUNT";
 export const GRABBING_CHANNEL_LIST_END = "GRABBING_CHANNEL_LIST_END";
 export const CHANNEL_PRV_MSG = "CHANNEL_PRV_MSG";
 export const UPDATE_USERS_LIST = "UPDATE_USERS_LIST";
+export const LEAVE_CHANNEL = "LEAVE_CHANNEL";
 
 export const IrcReducer = (state, action) => {
 	switch (action.type) {
@@ -159,6 +160,13 @@ export const IrcReducer = (state, action) => {
 					c.channelName === action.payload.channelName
 						? { ...c, userList: action.payload.users }
 						: c
+				)
+			};
+		case LEAVE_CHANNEL:
+			return {
+				...state,
+				userChannels: state.userChannels.filter(
+					c => c.channelName !== action.payload
 				)
 			};
 		default:

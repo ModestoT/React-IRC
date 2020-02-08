@@ -10,8 +10,10 @@ function App() {
 	const {
 		state,
 		connectToIrc,
+		disconnectFromIrc,
 		joinIrcChannel,
-		grabAvailableChannels
+		grabAvailableChannels,
+		leaveIrcChannel
 	} = useIrc();
 	return (
 		<div className="App">
@@ -19,7 +21,9 @@ function App() {
 				<IrcChatView
 					state={state}
 					joinIrcChannel={joinIrcChannel}
+					leaveIrcChannel={leaveIrcChannel}
 					grabAvailableChannels={grabAvailableChannels}
+					disconnectFromIrc={disconnectFromIrc}
 				/>
 			) : (
 				<IrcLoginView connectToIrc={connectToIrc} />
