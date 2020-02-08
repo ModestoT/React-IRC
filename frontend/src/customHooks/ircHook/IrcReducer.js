@@ -1,6 +1,6 @@
 import {
-	createIrcConnection,
-	grabServerName
+	CreateIrcConnection,
+	GrabServerName
 } from "../../helpers/IrcHelpers.js";
 
 export const CONNECTION_ESTABLISHED = "CONNECTION_ESTABLISHED";
@@ -19,11 +19,11 @@ export const UPDATE_USERS_LIST = "UPDATE_USERS_LIST";
 export const IrcReducer = (state, action) => {
 	switch (action.type) {
 		case MAKING_CONNECTION:
-			const ircSocket = createIrcConnection(action.payload);
+			const ircSocket = CreateIrcConnection(action.payload);
 
 			return {
 				...state,
-				serverName: grabServerName(action.payload.host),
+				serverName: GrabServerName(action.payload.host),
 				ircSocket
 			};
 		case CONNECTION_ESTABLISHED:

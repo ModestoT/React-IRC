@@ -1,6 +1,6 @@
 import { useReducer, useEffect } from "react";
 
-import { parseForChannelName } from "../../helpers/IrcHelpers.js";
+import { ParseForChannelName } from "../../helpers/IrcHelpers.js";
 import {
 	IrcReducer,
 	NOTICE_MESSAGE,
@@ -44,7 +44,7 @@ export const useIrc = () => {
 					state.ircSocket.close();
 				})
 				.on("irc notice", notice => {
-					const channelName = parseForChannelName(notice.message);
+					const channelName = ParseForChannelName(notice.message);
 
 					if (!channelName || channelName[0] !== "#") {
 						dispatch({ type: NOTICE_MESSAGE, payload: notice });
