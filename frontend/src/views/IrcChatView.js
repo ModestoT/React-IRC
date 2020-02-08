@@ -5,20 +5,13 @@ import IrcJoinableChannels from "../components/irc/IrcJoinableChannels";
 import IrcChatTabs from "../components/irc/IrcChatTabs";
 import IrcChat from "../components/irc/IrcChat";
 
-const IrcChatView = ({
-	state,
-	joinIrcChannel,
-	grabAvailableChannels,
-	searchForChannel,
-	resetSearchResArray
-}) => {
+const IrcChatView = ({ state, joinIrcChannel, grabAvailableChannels }) => {
 	const {
 		serverName,
 		serverMsgs,
 		userChannels,
 		joinableChannels,
-		isGrabbingChannels,
-		searchRes
+		isGrabbingChannels
 	} = state;
 	const [isToggled, setIsToggled] = useState(false);
 	const [currentTab, setCurrentTab] = useState(serverName);
@@ -32,16 +25,16 @@ const IrcChatView = ({
 	};
 	const getCurrentTabChat = () => {
 		if (currentTab === serverName) {
-			return <IrcChat chatMsgs={serverMsgs} />;
+			return <IrcChat channel={{ messages: serverMsgs, userList: [] }} />;
 		} else {
-			const chat = userChannels.find(
+			const channel = userChannels.find(
 				({ channelName }) => channelName === currentTab
 			);
 
-			if (chat) {
-				return <IrcChat chatMsgs={chat.messages} />;
+			if (channel) {
+				return <IrcChat channel={channel} />;
 			} else {
-				return <IrcChat chatMsgs={[]} />;
+				return <IrcChat channel={{ messages: [], userList: [] }} />;
 			}
 		}
 	};
@@ -56,19 +49,14 @@ const IrcChatView = ({
 				serverName={serverName}
 				currentTab={currentTab}
 				setCurrentTab={setCurrentTab}
+				toggleModal={toggleModal}
 			/>
 			{getCurrentTabChat()}
-			<button className="join-channel" onClick={() => toggleModal()}>
-				+
-			</button>
 			<Modal showModal={isToggled} toggleModal={setIsToggled}>
 				<IrcJoinableChannels
 					joinableChannels={joinableChannels}
 					joinIrcChannel={handleJoinIrcChannel}
 					isGrabbingChannels={isGrabbingChannels}
-					searchRes={searchRes}
-					searchForChannel={searchForChannel}
-					resetSearchResArray={resetSearchResArray}
 				/>
 			</Modal>
 		</div>

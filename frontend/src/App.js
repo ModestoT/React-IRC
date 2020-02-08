@@ -7,28 +7,25 @@ import IrcLoginView from "./views/IrcLoginView.js";
 import "./App.css";
 
 function App() {
-  const { 
-    state, 
-    connectToIrc, 
-    joinIrcChannel, 
-    grabAvailableChannels, 
-    searchForChannel, 
-    resetSearchResArray 
-  } = useIrc();
-  return (
-    <div className="App">
-      {state.isConnected ? 
-        <IrcChatView 
-          state={state} 
-          joinIrcChannel={joinIrcChannel} 
-          grabAvailableChannels={grabAvailableChannels}
-          searchForChannel={searchForChannel}
-          resetSearchResArray={resetSearchResArray}
-        /> 
-      : <IrcLoginView connectToIrc={connectToIrc}/>
-      }
-    </div>
-  );
+	const {
+		state,
+		connectToIrc,
+		joinIrcChannel,
+		grabAvailableChannels
+	} = useIrc();
+	return (
+		<div className="App">
+			{state.isConnected ? (
+				<IrcChatView
+					state={state}
+					joinIrcChannel={joinIrcChannel}
+					grabAvailableChannels={grabAvailableChannels}
+				/>
+			) : (
+				<IrcLoginView connectToIrc={connectToIrc} />
+			)}
+		</div>
+	);
 }
 
 export default App;
