@@ -51,7 +51,7 @@ const strBinarySearch = (arr, tar) => {
 	let l = 0,
 		r = arr.length - 1;
 
-	while (l <= r) {
+	while (l < r) {
 		let mid = Math.floor(l + (r - l) / 2);
 		if (arr[mid].nick.toLowerCase() === tar) {
 			return mid;
@@ -76,7 +76,6 @@ const findChannelLeft = (userChannels, tar) => {
 	let channelsLeft = [];
 	for (let i = 0; i < userChannels.length; i++) {
 		let findUser = searchForUser(userChannels[i].users, tar);
-
 		if (findUser !== -1) {
 			channelsLeft.push(userChannels[i]);
 		}
@@ -87,5 +86,6 @@ const findChannelLeft = (userChannels, tar) => {
 module.exports = {
 	formatQuitMessage,
 	sortMatrix,
-	findChannelLeft
+	findChannelLeft,
+	strSortFn
 };
