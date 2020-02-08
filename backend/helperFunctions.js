@@ -49,10 +49,16 @@ const strSortFn = (a, b) => {
 
 const strBinarySearch = (arr, tar) => {
 	let l = 0,
-		r = arr.length - 1;
+		r = arr.length - 1,
+		maxLoops = 1000,
+		loopCount = 0;
 
 	while (l < r) {
+		if (loopCount <= maxLoops)
+			throw "Inifite loop detected in strBinarSearch function";
+
 		let mid = Math.floor(l + (r - l) / 2);
+
 		if (arr[mid].nick.toLowerCase() === tar) {
 			return mid;
 		} else if (arr[mid].nick.toLowerCase() < tar) {
@@ -60,6 +66,7 @@ const strBinarySearch = (arr, tar) => {
 		} else {
 			r = mid;
 		}
+		loopCount++;
 	}
 
 	return -1;
