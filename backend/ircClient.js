@@ -2,11 +2,13 @@ const IRC = require("irc-framework");
 const {
 	formatQuitMessage,
 	sortMatrix,
-	findChannelLeft
+	strSortFn
 } = require("./helperFunctions.js");
+const QuitBuffer = require("./quitBuffer.js");
 
 module.exports = CreateIrcClient = (socket, userChannels) => {
 	const client = new IRC.Client();
+	const quitBuffer = new QuitBuffer({ socket, userChannels });
 	let availableChannels = [];
 
 	client
@@ -16,11 +18,6 @@ module.exports = CreateIrcClient = (socket, userChannels) => {
 		})
 		.on("connected", e => {
 			console.log("Connected: \n", e);
-			// console.log("joining channel...");
-			// channel = client.channel('#Rizon');
-			// channel.updateUsers(channel => {
-			//   socket.emit("users list", {channelName: channel.name, users: channel.users});
-			// })
 		})
 		.on("channel list start", () => {
 			socket.emit("grabbing channel list");
@@ -49,7 +46,7 @@ module.exports = CreateIrcClient = (socket, userChannels) => {
 
 			socket.emit("users list", {
 				channelName: channel.name,
-				users: channel.users
+				users: channel.users.sort(strSortFn)
 			});
 		})
 		.on("action", e => {
@@ -57,6 +54,7 @@ module.exports = CreateIrcClient = (socket, userChannels) => {
 		})
 		.on("topic", e => {
 			console.log("Topic event: ", e);
+			// socket.emit("set channel topic", e);
 		})
 		.on("part", e => {
 			// console.log("Part Event: ", e);
@@ -64,26 +62,17 @@ module.exports = CreateIrcClient = (socket, userChannels) => {
 				...e,
 				message: formatQuitMessage(e.message)
 			});
-			//assuming channel will be there since this listener does not fire unless user has joined a channel
+			// //assuming channel will be there since this listener does not fire unless user has joined a channel
 			const channel = userChannels.find(({ name }) => name === e.channel);
 
 			socket.emit("users list", {
 				channelName: channel.name,
-				users: channel.users
+				users: channel.users.sort(strSortFn)
 			});
 		})
 		.on("quit", e => {
 			// console.log("Quit event", e);
-
-			const channelsLeft = findChannelLeft(userChannels, e.nick.toLowerCase());
-
-			channelsLeft.forEach(channel => {
-				socket.emit("left channel", { ...e, channel: channel.name });
-				socket.emit("users list", {
-					channelName: channel.name,
-					users: channel.users
-				});
-			});
+			quitBuffer.addQuitEvent(e);
 		})
 		.on("invited", e => {
 			console.log("Invite event: ", e);
@@ -108,9 +97,6 @@ module.exports = CreateIrcClient = (socket, userChannels) => {
 			// console.log("Private message event: ", e);
 			socket.emit("channel prv msg", e);
 		})
-		.on("users online", e => {
-			console.log("Users online event: ", e);
-		})
 		.on("tagmsg", e => {
 			console.log("Tag Msg event: ", e);
 		})
@@ -131,15 +117,15 @@ module.exports = CreateIrcClient = (socket, userChannels) => {
 		})
 		.on("raw", e => {
 			// console.log("Raw event:", e);
-			// console.log(e.line.replace('\n', ''));
+			// console.log(e.line.replace("\n", ""));
 			// socket.emit("irc connection", e.line);
-		})
-		.on("reconnecting", () => {
-			console.log("reconnecting...");
 		})
 		.on("socket close", () => {
 			console.log("irc client disconected");
 			socket.disconnect(true);
+		})
+		.on("error", e => {
+			console.log("IRC error event: ", e);
 		});
 
 	return client;
