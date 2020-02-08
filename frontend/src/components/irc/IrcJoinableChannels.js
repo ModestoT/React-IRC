@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { SearchMatrix } from "../../helpers/IrcHelpers.js";
+import { SearchChannelMatrix } from "../../helpers/IrcHelpers.js";
 import IrcChannelsTable from "./IrcChannelsTable.js";
 
 const IrcJoinableChannels = ({
@@ -21,7 +21,7 @@ const IrcJoinableChannels = ({
 		if (searchTerm.length > 0) {
 			setData({ ...data, isSearching: true, currentPage: 0 });
 
-			const searchRes = SearchMatrix(channels, searchTerm, 200);
+			const searchRes = SearchChannelMatrix(channels, searchTerm, 200);
 			setData(d => ({ ...d, searchRes, isSearching: false }));
 		} else {
 			setData(d => ({ ...d, searchRes: [] }));
