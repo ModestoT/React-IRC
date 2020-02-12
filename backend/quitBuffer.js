@@ -1,4 +1,5 @@
-const { findChannelLeft, strSortFn } = require("./helperFunctions.js");
+const { findChannelLeft, strSortFn } = require("./helpers/helperFunctions.js");
+const { updateUsersList } = require("./helpers/ircHelperFunctions.js");
 
 module.exports = class QuitBuffer {
 	constructor(props) {
@@ -22,19 +23,17 @@ module.exports = class QuitBuffer {
 		let current = this;
 		let numOfEvents = 4;
 		let processedEvents = 0;
-		let quitEvent;
-		let channelsLeft;
 
 		this.processing_buffer = true;
 
 		while (processedEvents < numOfEvents && this.quitBuffer.length > 0) {
-			quitEvent = this.quitBuffer.shift();
+			let quitEvent = this.quitBuffer.shift();
 
 			if (!quitEvent) {
 				continue;
 			}
 
-			channelsLeft = findChannelLeft(
+			let channelsLeft = findChannelLeft(
 				this.userChannels,
 				quitEvent.nick.toLowerCase()
 			);
@@ -44,10 +43,7 @@ module.exports = class QuitBuffer {
 					...quitEvent,
 					channel: channel.name
 				});
-				this.socket.emit("users list", {
-					channelName: channel.name,
-					users: channel.users.sort(strSortFn)
-				});
+				updateUsersList(channel, this.socket);
 			});
 
 			processedEvents++;

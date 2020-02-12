@@ -2,8 +2,10 @@ const IRC = require("irc-framework");
 const {
 	formatQuitMessage,
 	sortMatrix,
-	strSortFn
-} = require("./helperFunctions.js");
+	strSortFn,
+	getErrMsg
+} = require("./helpers/helperFunctions.js");
+const { updateUsersList } = require("./helpers/ircHelperFunctions.js");
 const QuitBuffer = require("./quitBuffer.js");
 
 module.exports = CreateIrcClient = (socket, userChannels) => {
@@ -44,10 +46,7 @@ module.exports = CreateIrcClient = (socket, userChannels) => {
 			//assuming channel will be there since this listener does not fire unless user has joined a channel
 			const channel = userChannels.find(({ name }) => name === e.channel);
 
-			socket.emit("users list", {
-				channelName: channel.name,
-				users: channel.users
-			});
+			updateUsersList(channel, socket);
 		})
 		.on("action", e => {
 			console.log("action: ", e);
@@ -65,14 +64,11 @@ module.exports = CreateIrcClient = (socket, userChannels) => {
 				//assuming channel will be there since this listener does not fire unless user has joined a channel
 				const channel = userChannels.find(({ name }) => name === e.channel);
 
-				socket.emit("users list", {
-					channelName: channel.name,
-					users: channel.users
-				});
+				updateUsersList(channel, socket);
 			}
 		})
 		.on("quit", e => {
-			// console.log("Quit event", e);
+			console.log("Quit event", e);
 			quitBuffer.addQuitEvent(e);
 		})
 		.on("invited", e => {
@@ -116,9 +112,19 @@ module.exports = CreateIrcClient = (socket, userChannels) => {
 			}
 			socket.emit("server motd", newData);
 		})
+		.on("nick in use", err => {
+			socket.emit("errMsg", err.reason);
+		})
+		.on("nick invalid", err => {
+			socket.emit("errMsg", err.reason);
+		})
 		.on("raw", e => {
+			const line = /477\s/gi.exec(e.line);
+			if (line) {
+				console.log("Msg: ", getErrMsg(e.line.replace("\n", ""), line.index));
+				socket.emit("errMsg", getErrMsg(e.line.replace("\n", ""), line.index));
+			}
 			// console.log("Raw event:", e);
-			// console.log(e.line.replace("\n", ""));
 			// socket.emit("irc connection", e.line);
 		})
 		.on("socket close", () => {

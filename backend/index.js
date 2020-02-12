@@ -4,8 +4,7 @@ const server = require("http").createServer();
 const io = require("socket.io")(server);
 
 const CreateIrcClient = require("./ircClient.js");
-const { strSortFn } = require("./helperFunctions.js");
-
+const { updateUsersList } = require("./helpers/ircHelperFunctions.js");
 const port = process.env.PORT || 3001;
 
 io.on("connection", socket => {
@@ -23,14 +22,7 @@ io.on("connection", socket => {
 			const channel = ircClient.channel(channelName);
 
 			userChannels.push(channel);
-
-			channel.updateUsers(channel => {
-				channel.users.sort(strSortFn);
-				socket.emit("users list", {
-					channelName: channel.name,
-					users: channel.users
-				});
-			});
+			updateUsersList(channel, socket);
 		})
 		.on("grab channel list", () => {
 			ircClient.list();
@@ -39,6 +31,11 @@ io.on("connection", socket => {
 			const channel = userChannels.find(({ name }) => name === channelName);
 
 			channel.part();
+		})
+		.on("send message to channel", (channelName, message) => {
+			const channel = userChannels.find(({ name }) => name === channelName);
+
+			channel.say(message);
 		})
 		.on("error", err => {
 			console.log("Socket error: ", err);
