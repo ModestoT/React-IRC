@@ -4,20 +4,23 @@ import Modal from "../components/Modal";
 import IrcJoinableChannels from "../components/irc/IrcJoinableChannels";
 import IrcChatTabs from "../components/irc/IrcChatTabs";
 import IrcChat from "../components/irc/IrcChat";
+import IrcInputField from "../components/irc/IrcInputfield";
 
 const IrcChatView = ({
 	state,
 	joinIrcChannel,
 	grabAvailableChannels,
 	leaveIrcChannel,
-	disconnectFromIrc
+	disconnectFromIrc,
+	sendMessageToChannel
 }) => {
 	const {
 		serverName,
 		serverMsgs,
 		userChannels,
 		joinableChannels,
-		isGrabbingChannels
+		isGrabbingChannels,
+		nick
 	} = state;
 	const [isToggled, setIsToggled] = useState(false);
 	const [currentTab, setCurrentTab] = useState(serverName);
@@ -33,9 +36,7 @@ const IrcChatView = ({
 		if (currentTab === serverName) {
 			return <IrcChat channel={{ messages: serverMsgs, userList: [] }} />;
 		} else {
-			const channel = userChannels.find(
-				({ channelName }) => channelName === currentTab
-			);
+			const channel = userChannels.find(({ channelName }) => channelName === currentTab);
 
 			if (channel) {
 				return <IrcChat channel={channel} />;
@@ -45,7 +46,6 @@ const IrcChatView = ({
 		}
 	};
 	const handleJoinIrcChannel = channelName => {
-		console.log("joining: ", channelName);
 		joinIrcChannel(channelName);
 		setCurrentTab(channelName);
 	};
@@ -61,14 +61,11 @@ const IrcChatView = ({
 				const channelExitedIndex = userChannels.findIndex(
 					({ channelName }) => channelName === channel
 				);
-				console.log(channelExitedIndex, userChannels[channelExitedIndex - 1]);
 
-				if (channelExitedIndex !== -1 && channelExitedIndex !== 0) {
+				if (channelExitedIndex > 0) {
 					setCurrentTab(userChannels[channelExitedIndex - 1].channelName);
 				} else {
-					console.log(serverName);
-					setCurrentTab("rizon");
-					console.log("updated current tab");
+					setCurrentTab(serverName);
 				}
 			}
 			//else dont change the current tab
@@ -85,6 +82,11 @@ const IrcChatView = ({
 				leaveIrcChannel={handleLeaveIrcChannel}
 			/>
 			{getCurrentTabChat()}
+			<IrcInputField
+				currentChannel={currentTab}
+				sendMessageToChannel={sendMessageToChannel}
+				nick={nick}
+			/>
 			<Modal showModal={isToggled} toggleModal={setIsToggled}>
 				<IrcJoinableChannels
 					joinableChannels={joinableChannels}
