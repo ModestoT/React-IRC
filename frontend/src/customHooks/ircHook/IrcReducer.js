@@ -1,7 +1,5 @@
-import {
-	CreateIrcConnection,
-	GrabServerName
-} from "../../helpers/IrcHelpers.js";
+import { GrabServerName, CheckIfOverMessageLimit } from "../../helpers/IrcHelpers.js";
+import CreateIrcConnection from "../../irc/CreateIrcConnection.js";
 
 export const CONNECTION_ESTABLISHED = "CONNECTION_ESTABLISHED";
 export const CONNECTION_LOST = "CONNECTION_LOST";
@@ -24,6 +22,7 @@ export const IrcReducer = (state, action) => {
 
 			return {
 				...state,
+				nick: action.payload.nick,
 				serverName: GrabServerName(action.payload.host),
 				ircSocket
 			};
@@ -71,10 +70,7 @@ export const IrcReducer = (state, action) => {
 		case NOTICE_MESSAGE:
 			return {
 				...state,
-				serverMsgs: [
-					...state.serverMsgs,
-					`-${action.payload.nick}- ${action.payload.message}`
-				]
+				serverMsgs: [...state.serverMsgs, `-${action.payload.nick}- ${action.payload.message}`]
 			};
 		case MOTD_MESSAGE:
 			return {
@@ -84,48 +80,43 @@ export const IrcReducer = (state, action) => {
 		case CHANNEL_NOTICE:
 			return {
 				...state,
-				userChannels: state.userChannels.map(channel =>
-					channel.channelName === action.payload.channelName
+				userChannels: state.userChannels.map(c => {
+					let { messages, messagesCount } = CheckIfOverMessageLimit(c, 2000);
+					return c.channelName === action.payload.channelName
 						? {
-								...channel,
-								messages: [
-									...channel.messages,
-									`-${action.payload.nick}- ${action.payload.message}`
-								]
+								...c,
+								messages: [...messages, `-${action.payload.nick}- ${action.payload.message}`],
+								messagesCount: messagesCount++
 						  }
-						: channel
-				)
+						: c;
+				})
 			};
 		case CHANNEL_MESSAGE:
 			const channel = state.userChannels.find(
 				({ channelName }) => channelName === action.payload.channel
 			);
 			if (channel) {
-				const {
-					nick,
-					ident,
-					hostname,
-					status,
-					channel,
-					message
-				} = action.payload;
+				const { nick, ident, hostname, status, channel, message } = action.payload;
 				return {
 					...state,
-					userChannels: state.userChannels.map(c =>
-						c.channelName === channel
+					userChannels: state.userChannels.map(c => {
+						let { messages, messagesCount } = CheckIfOverMessageLimit(c, 2000);
+						return c.channelName === channel
 							? {
 									...c,
 									messages: [
-										...c.messages,
+										...messages,
 										`${nick} [${ident}@${hostname}] has ${status} ${channel} ${
 											status === "left" ? `[${message}]` : ""
 										}`
-									]
+									],
+									messagesCount: messagesCount++
 							  }
-							: c
-					)
+							: c;
+					})
 				};
 			} else {
+				//channel not in array yet so create a channel object for the new channel
 				return {
 					...state,
 					userChannels: [
@@ -133,7 +124,8 @@ export const IrcReducer = (state, action) => {
 						{
 							channelName: action.payload.channel,
 							messages: [],
-							userList: []
+							userList: [],
+							messagesCount: 0
 						}
 					]
 				};
@@ -141,17 +133,16 @@ export const IrcReducer = (state, action) => {
 		case CHANNEL_PRV_MSG:
 			return {
 				...state,
-				userChannels: state.userChannels.map(c =>
-					c.channelName === action.payload.target
+				userChannels: state.userChannels.map(c => {
+					let { messages, messagesCount } = CheckIfOverMessageLimit(c, 2000);
+					return c.channelName === action.payload.target
 						? {
 								...c,
-								messages: [
-									...c.messages,
-									`<${action.payload.nick}> ${action.payload.message}`
-								]
+								messages: [...messages, `<${action.payload.nick}> ${action.payload.message}`],
+								messagesCount: messagesCount++
 						  }
-						: c
-				)
+						: c;
+				})
 			};
 		case UPDATE_USERS_LIST:
 			return {
@@ -165,9 +156,7 @@ export const IrcReducer = (state, action) => {
 		case LEAVE_CHANNEL:
 			return {
 				...state,
-				userChannels: state.userChannels.filter(
-					c => c.channelName !== action.payload
-				)
+				userChannels: state.userChannels.filter(c => c.channelName !== action.payload)
 			};
 		default:
 			return state;
