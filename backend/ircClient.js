@@ -5,7 +5,7 @@ const {
 	strSortFn,
 	getErrMsg
 } = require("./helpers/helperFunctions.js");
-const { updateUsersList } = require("./helpers/ircHelperFunctions.js");
+const { updateUsersList, formatNick } = require("./helpers/ircHelperFunctions.js");
 const QuitBuffer = require("./quitBuffer.js");
 
 module.exports = CreateIrcClient = (socket, userChannels) => {
@@ -91,8 +91,16 @@ module.exports = CreateIrcClient = (socket, userChannels) => {
 			});
 		})
 		.on("privmsg", e => {
-			// console.log("Private message event: ", e);
-			socket.emit("channel prv msg", e);
+			client.who(e.nick, res => {
+				if (res.users[0].nick === e.nick) {
+					socket.emit("channel prv msg", {
+						...e,
+						nick: formatNick(res.users[0].nick, res.users[0].channel_modes)
+					});
+				} else {
+					console.log("incorrect nick", res, e);
+				}
+			});
 		})
 		.on("tagmsg", e => {
 			console.log("Tag Msg event: ", e);

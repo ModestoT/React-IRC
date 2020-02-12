@@ -1,5 +1,20 @@
 const { strSortFn } = require("./helperFunctions.js");
 
+const formatNick = (nick, modes) => {
+	if (modes[0] === "q" && nick[0] !== "~") {
+		return `~${nick}`;
+	} else if (modes[0] === "a" && nick[0] !== "&") {
+		return `&${nick}`;
+	} else if (modes[0] === "o" && nick[0] !== "@") {
+		return `@${nick}`;
+	} else if (modes[0] === "h" && nick[0] !== "%") {
+		return `%${nick}`;
+	} else if (modes[0] === "v" && nick[0] !== "+") {
+		return `+${nick}`;
+	} else {
+		return nick;
+	}
+};
 const formattedNicks = usersList => {
 	//storing the nicks with modes sorted based on their rank
 	let formattedNicks = {
@@ -65,5 +80,6 @@ const updateUsersList = (channel, socket) => {
 };
 
 module.exports = {
-	updateUsersList
+	updateUsersList,
+	formatNick
 };
