@@ -1,5 +1,12 @@
 import { FormatIntoMatrix } from "./GeneralHelpers.js";
 
+export const FixChannelName = channel => {
+	if (channel[0] !== "#") {
+		return `#${channel}`;
+	}
+	return channel;
+};
+
 export const CheckIfOverMessageLimit = (channel, limit) => {
 	if (channel.messagesCount < limit) return channel;
 	console.log(`Trimming ${channel.channelName}'s messages`);
