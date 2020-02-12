@@ -82,7 +82,7 @@ export const IrcReducer = (state, action) => {
 				...state,
 				userChannels: state.userChannels.map(c => {
 					let { messages, messagesCount } = CheckIfOverMessageLimit(c, 2000);
-					return c.channelName === action.payload.channelName
+					return c.channelName.toLowerCase() === action.payload.channelName.toLowerCase()
 						? {
 								...c,
 								messages: [...messages, `-${action.payload.nick}- ${action.payload.message}`],
@@ -93,7 +93,7 @@ export const IrcReducer = (state, action) => {
 			};
 		case CHANNEL_MESSAGE:
 			const channel = state.userChannels.find(
-				({ channelName }) => channelName === action.payload.channel
+				({ channelName }) => channelName.toLowerCase() === action.payload.channel.toLowerCase()
 			);
 			if (channel) {
 				const { nick, ident, hostname, status, channel, message } = action.payload;
@@ -101,7 +101,7 @@ export const IrcReducer = (state, action) => {
 					...state,
 					userChannels: state.userChannels.map(c => {
 						let { messages, messagesCount } = CheckIfOverMessageLimit(c, 2000);
-						return c.channelName === channel
+						return c.channelName.toLowerCase() === channel.toLowerCase()
 							? {
 									...c,
 									messages: [
@@ -135,7 +135,7 @@ export const IrcReducer = (state, action) => {
 				...state,
 				userChannels: state.userChannels.map(c => {
 					let { messages, messagesCount } = CheckIfOverMessageLimit(c, 2000);
-					return c.channelName === action.payload.target
+					return c.channelName.toLowerCase() === action.payload.target.toLowerCase()
 						? {
 								...c,
 								messages: [...messages, `<${action.payload.nick}> ${action.payload.message}`],
@@ -148,7 +148,7 @@ export const IrcReducer = (state, action) => {
 			return {
 				...state,
 				userChannels: state.userChannels.map(c =>
-					c.channelName === action.payload.channelName
+					c.channelName.toLowerCase() === action.payload.channelName.toLowerCase()
 						? { ...c, userList: action.payload.users }
 						: c
 				)
@@ -156,7 +156,9 @@ export const IrcReducer = (state, action) => {
 		case LEAVE_CHANNEL:
 			return {
 				...state,
-				userChannels: state.userChannels.filter(c => c.channelName !== action.payload)
+				userChannels: state.userChannels.filter(
+					c => c.channelName.toLowerCase() !== action.payload.toLowerCase()
+				)
 			};
 		default:
 			return state;
