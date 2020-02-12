@@ -32,8 +32,9 @@ io.on("connection", socket => {
 
 			channel.part();
 		})
-		.on("send message to channel", (channelName, message) => {
-			const channel = userChannels.find(({ name }) => name === channelName);
+		.on("msgChannel", data => {
+			const { target, message } = data;
+			const channel = userChannels.find(({ name }) => name === target);
 
 			channel.say(message);
 		})
