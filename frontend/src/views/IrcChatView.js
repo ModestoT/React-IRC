@@ -36,7 +36,9 @@ const IrcChatView = ({
 		if (currentTab === serverName) {
 			return <IrcChat channel={{ messages: serverMsgs, userList: [] }} />;
 		} else {
-			const channel = userChannels.find(({ channelName }) => channelName === currentTab);
+			const channel = userChannels.find(
+				({ channelName }) => channelName.toLowerCase() === currentTab.toLowerCase()
+			);
 
 			if (channel) {
 				return <IrcChat channel={channel} />;
@@ -85,6 +87,7 @@ const IrcChatView = ({
 			<IrcInputField
 				currentChannel={currentTab}
 				sendMessageToChannel={sendMessageToChannel}
+				joinIrcChannel={handleJoinIrcChannel}
 				nick={nick}
 			/>
 			<Modal showModal={isToggled} toggleModal={setIsToggled}>
