@@ -14,17 +14,11 @@ const ChannelTab = styled.h2`
 	color: ${props => (props.isCurrentTab ? "white" : "black")};
 `;
 
-const IrcChatTab = ({
-	channelName,
-	currentTab,
-	setCurrentTab,
-	leaveIrcChannel,
-	isServerTab
-}) => {
+const IrcChatTab = ({ channelName, currentTab, setCurrentTab, leaveIrcChannel, isServerTab }) => {
 	return (
 		<TabWrapper>
 			<ChannelTab
-				isCurrentTab={currentTab === channelName}
+				isCurrentTab={currentTab.toLowerCase() === channelName.toLowerCase()}
 				onClick={() => setCurrentTab(channelName)}
 			>
 				{channelName}
