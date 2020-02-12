@@ -53,18 +53,17 @@ const strBinarySearch = (arr, tar) => {
 		maxLoops = 1000,
 		loopCount = 0;
 
-	while (l < r) {
+	while (l <= r) {
 		if (loopCount >= maxLoops)
 			throw "Inifite loop detected in strBinarSearch function";
 
 		let mid = Math.floor(l + (r - l) / 2);
-
 		if (arr[mid].nick.toLowerCase() === tar) {
 			return mid;
 		} else if (arr[mid].nick.toLowerCase() < tar) {
 			l = mid + 1;
 		} else {
-			r = mid;
+			r = mid - 1;
 		}
 		loopCount++;
 	}
@@ -90,9 +89,20 @@ const findChannelLeft = (userChannels, tar) => {
 	return channelsLeft;
 };
 
+const getErrMsg = (msg, s_index) => {
+	let cutOffPoint = s_index;
+	for (let i = cutOffPoint; i < msg.length; i++) {
+		if (msg[i] === ":") break;
+		cutOffPoint++;
+	}
+
+	return msg.slice(cutOffPoint + 1);
+};
+
 module.exports = {
 	formatQuitMessage,
 	sortMatrix,
 	findChannelLeft,
-	strSortFn
+	strSortFn,
+	getErrMsg
 };
