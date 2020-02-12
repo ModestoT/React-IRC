@@ -1,25 +1,17 @@
 import { useReducer, useEffect } from "react";
 
-import { ParseForChannelName } from "../../helpers/IrcHelpers.js";
 import {
 	IrcReducer,
-	NOTICE_MESSAGE,
-	CHANNEL_NOTICE,
-	CHANNEL_MESSAGE,
-	MOTD_MESSAGE,
-	CONNECTION_ESTABLISHED,
 	CONNECTION_LOST,
 	MAKING_CONNECTION,
-	GRABBING_CHANNEL_LIST,
-	UPDATE_CHANNELS_COUNT,
-	GRABBING_CHANNEL_LIST_END,
-	CHANNEL_PRV_MSG,
-	UPDATE_USERS_LIST,
-	LEAVE_CHANNEL
+	LEAVE_CHANNEL,
+	CHANNEL_PRV_MSG
 } from "./IrcReducer.js";
+import { IrcEventListeners } from "../../irc/IrcEventListeners.js";
 
 export const useIrc = () => {
 	const [state, dispatch] = useReducer(IrcReducer, {
+		nick: "",
 		serverName: "",
 		serverMsgs: [],
 		userChannels: [],
@@ -35,57 +27,7 @@ export const useIrc = () => {
 
 	useEffect(() => {
 		if (state.ircSocket) {
-			state.ircSocket
-				.on("connected", () => {
-					dispatch({ type: CONNECTION_ESTABLISHED });
-				})
-				.on("disconnect", reason => {
-					dispatch({ type: CONNECTION_LOST });
-					console.log("Diconnected from irc: ", reason);
-					state.ircSocket.close();
-				})
-				.on("irc notice", notice => {
-					const channelName = ParseForChannelName(notice.message);
-
-					if (!channelName || channelName[0] !== "#") {
-						dispatch({ type: NOTICE_MESSAGE, payload: notice });
-					} else {
-						dispatch({
-							type: CHANNEL_NOTICE,
-							payload: { ...notice, channelName }
-						});
-					}
-				})
-				.on("joined channel", e => {
-					dispatch({
-						type: CHANNEL_MESSAGE,
-						payload: { ...e, status: "joined" }
-					});
-				})
-				.on("left channel", e => {
-					dispatch({
-						type: CHANNEL_MESSAGE,
-						payload: { ...e, status: "left" }
-					});
-				})
-				.on("users list", data => {
-					dispatch({ type: UPDATE_USERS_LIST, payload: data });
-				})
-				.on("server motd", motd => {
-					dispatch({ type: MOTD_MESSAGE, payload: motd });
-				})
-				.on("grabbing channel list", () => {
-					dispatch({ type: GRABBING_CHANNEL_LIST });
-				})
-				.on("available channels", count => {
-					dispatch({ type: UPDATE_CHANNELS_COUNT, payload: count });
-				})
-				.on("grabbing channel list end", channels => {
-					dispatch({ type: GRABBING_CHANNEL_LIST_END, payload: channels });
-				})
-				.on("channel prv msg", msg => {
-					dispatch({ type: CHANNEL_PRV_MSG, payload: msg });
-				});
+			IrcEventListeners(state.ircSocket, dispatch);
 		}
 	}, [state.ircSocket]);
 
@@ -113,12 +55,18 @@ export const useIrc = () => {
 		dispatch({ type: LEAVE_CHANNEL, payload: channelName });
 	};
 
+	const sendMessageToChannel = (target, message, nick) => {
+		state.ircSocket.emit("msgChannel", { target, message });
+		dispatch({ type: CHANNEL_PRV_MSG, payload: { target, nick, message } });
+	};
+
 	return {
 		state,
 		connectToIrc,
 		joinIrcChannel,
 		disconnectFromIrc,
 		grabAvailableChannels,
-		leaveIrcChannel
+		leaveIrcChannel,
+		sendMessageToChannel
 	};
 };
