@@ -14,7 +14,9 @@ function App() {
 		joinIrcChannel,
 		grabAvailableChannels,
 		leaveIrcChannel,
-		sendMessageToChannel
+		sendMessageToChannel,
+		setUserAsAway,
+		setUserAsBack
 	} = useIrc();
 	return (
 		<div className="App">
@@ -26,6 +28,8 @@ function App() {
 					grabAvailableChannels={grabAvailableChannels}
 					disconnectFromIrc={disconnectFromIrc}
 					sendMessageToChannel={sendMessageToChannel}
+					setUserAsAway={setUserAsAway}
+					setUserAsBack={setUserAsBack}
 				/>
 			) : (
 				<IrcLoginView connectToIrc={connectToIrc} />

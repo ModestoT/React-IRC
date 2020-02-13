@@ -12,7 +12,9 @@ const IrcChatView = ({
 	grabAvailableChannels,
 	leaveIrcChannel,
 	disconnectFromIrc,
-	sendMessageToChannel
+	sendMessageToChannel,
+	setUserAsAway,
+	setUserAsBack
 }) => {
 	const {
 		serverName,
@@ -89,6 +91,8 @@ const IrcChatView = ({
 				sendMessageToChannel={sendMessageToChannel}
 				joinIrcChannel={handleJoinIrcChannel}
 				nick={nick}
+				setUserAsAway={setUserAsAway}
+				setUserAsBack={setUserAsBack}
 			/>
 			<Modal showModal={isToggled} toggleModal={setIsToggled}>
 				<IrcJoinableChannels
