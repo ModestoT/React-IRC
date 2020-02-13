@@ -47,48 +47,6 @@ const strSortFn = (a, b) => {
 	return 0;
 };
 
-const strBinarySearch = (arr, tar) => {
-	let l = 0,
-		r = arr.length - 1,
-		maxLoops = 1000,
-		loopCount = 0;
-
-	while (l <= r) {
-		if (loopCount >= maxLoops)
-			throw "Inifite loop detected in strBinarSearch function";
-
-		let mid = Math.floor(l + (r - l) / 2);
-		if (arr[mid].nick.toLowerCase() === tar) {
-			return mid;
-		} else if (arr[mid].nick.toLowerCase() < tar) {
-			l = mid + 1;
-		} else {
-			r = mid - 1;
-		}
-		loopCount++;
-	}
-
-	return -1;
-};
-
-const searchForUser = (arr, tar) => {
-	//sort array so we can run a binary search for the user
-	arr.sort(strSortFn);
-
-	return strBinarySearch(arr, tar);
-};
-
-const findChannelLeft = (userChannels, tar) => {
-	let channelsLeft = [];
-	for (let i = 0; i < userChannels.length; i++) {
-		let findUser = searchForUser(userChannels[i].users, tar);
-		if (findUser !== -1) {
-			channelsLeft.push(userChannels[i]);
-		}
-	}
-	return channelsLeft;
-};
-
 const getErrMsg = (msg, s_index) => {
 	let cutOffPoint = s_index;
 	for (let i = cutOffPoint; i < msg.length; i++) {
@@ -100,9 +58,8 @@ const getErrMsg = (msg, s_index) => {
 };
 
 module.exports = {
+	strSortFn,
 	formatQuitMessage,
 	sortMatrix,
-	findChannelLeft,
-	strSortFn,
 	getErrMsg
 };
