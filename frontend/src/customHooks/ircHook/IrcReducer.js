@@ -14,8 +14,10 @@ export const GRABBING_CHANNEL_LIST_END = "GRABBING_CHANNEL_LIST_END";
 export const CHANNEL_PRV_MSG = "CHANNEL_PRV_MSG";
 export const UPDATE_USERS_LIST = "UPDATE_USERS_LIST";
 export const LEAVE_CHANNEL = "LEAVE_CHANNEL";
+export const PERSONAL_MSG = "PERSONAL_MSG";
 
 export const IrcReducer = (state, action) => {
+	let channel;
 	switch (action.type) {
 		case MAKING_CONNECTION:
 			const ircSocket = CreateIrcConnection(action.payload);
@@ -92,7 +94,7 @@ export const IrcReducer = (state, action) => {
 				})
 			};
 		case CHANNEL_MESSAGE:
-			const channel = state.userChannels.find(
+			channel = state.userChannels.find(
 				({ channelName }) => channelName.toLowerCase() === action.payload.channel.toLowerCase()
 			);
 			if (channel) {
@@ -161,6 +163,40 @@ export const IrcReducer = (state, action) => {
 					c => c.channelName.toLowerCase() !== action.payload.toLowerCase()
 				)
 			};
+		case PERSONAL_MSG:
+			channel = state.userChannels.find(
+				({ channelName }) => channelName.toLowerCase() === action.payload.sentFrom.toLowerCase()
+			);
+
+			if (channel) {
+				return {
+					...state,
+					userChannels: state.userChannels.map(c => {
+						let { messages, messagesCount } = CheckIfOverMessageLimit(c, 2000);
+						return c.channelName.toLowerCase() === action.payload.sentFrom.toLowerCase()
+							? {
+									...c,
+									messages: [...messages, `<${action.payload.sentFrom}> ${action.payload.message}`],
+									messagesCount: messagesCount + 1
+							  }
+							: c;
+					})
+				};
+			} else {
+				return {
+					...state,
+					userChannels: [
+						...state.userChannels,
+						{
+							channelName: action.payload.sentFrom,
+							messages: [`<${action.payload.sentFrom}> ${action.payload.message}`],
+							userList: [],
+							messagesCount: 1
+						}
+					]
+				};
+			}
+
 		default:
 			return state;
 	}

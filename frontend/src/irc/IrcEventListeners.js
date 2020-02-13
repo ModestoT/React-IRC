@@ -9,7 +9,8 @@ import {
 	UPDATE_CHANNELS_COUNT,
 	GRABBING_CHANNEL_LIST_END,
 	CHANNEL_PRV_MSG,
-	UPDATE_USERS_LIST
+	UPDATE_USERS_LIST,
+	PERSONAL_MSG
 } from "../customHooks/ircHook/IrcReducer.js";
 import { ParseForChannelName } from "../helpers/IrcHelpers.js";
 
@@ -64,5 +65,8 @@ export const IrcEventListeners = (socket, dispatch) => {
 		})
 		.on("channel prv msg", msg => {
 			dispatch({ type: CHANNEL_PRV_MSG, payload: msg });
+		})
+		.on("personal msg", data => {
+			dispatch({ type: PERSONAL_MSG, payload: data });
 		});
 };
