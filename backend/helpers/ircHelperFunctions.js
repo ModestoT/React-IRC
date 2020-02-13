@@ -1,5 +1,13 @@
 const { strSortFn } = require("./helperFunctions.js");
 
+const baseNick = nick => {
+	if (/[~]|[&]|[@]|[%]|[+]/g.test(nick)) {
+		return nick.slice(1);
+	} else {
+		return nick;
+	}
+};
+
 const formatNick = (nick, modes) => {
 	if (modes[0] === "q" && nick[0] !== "~") {
 		return `~${nick}`;
@@ -56,5 +64,6 @@ const formattedNicks = usersList => {
 
 module.exports = {
 	formatNick,
-	formattedNicks
+	formattedNicks,
+	baseNick
 };
