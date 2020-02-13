@@ -3,7 +3,14 @@ import React from "react";
 import { useFormInput } from "../../customHooks/useFormInput.js";
 import { FixChannelName } from "../../helpers/IrcHelpers.js";
 
-const IrcInputField = ({ currentChannel, sendMessageToChannel, joinIrcChannel, nick }) => {
+const IrcInputField = ({
+	currentChannel,
+	sendMessageToChannel,
+	joinIrcChannel,
+	nick,
+	setUserAsAway,
+	setUserAsBack
+}) => {
 	const [message, setMessage] = useFormInput("");
 
 	const handleMessageToChannel = e => {
@@ -18,8 +25,10 @@ const IrcInputField = ({ currentChannel, sendMessageToChannel, joinIrcChannel, n
 					}
 					break;
 				case "/away":
+					setUserAsAway();
 					break;
 				case "/back":
+					setUserAsBack();
 					break;
 				default:
 					return null;
@@ -30,8 +39,7 @@ const IrcInputField = ({ currentChannel, sendMessageToChannel, joinIrcChannel, n
 
 		setMessage("");
 	};
-	//TODO: Add checks for / commands, ex: /join, /message to user(look into this)
-	//Implement ability to join server/channels from localstorage, add previously joined config to localstorage
+	//TODO: Implement ability to join server/channels from localstorage, add previously joined config to localstorage
 	//afterwords begin work on UI
 	return (
 		<form onSubmit={e => handleMessageToChannel(e)}>

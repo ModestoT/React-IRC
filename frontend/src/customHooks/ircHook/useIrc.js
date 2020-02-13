@@ -60,6 +60,14 @@ export const useIrc = () => {
 		dispatch({ type: CHANNEL_PRV_MSG, payload: { target, nick, message } });
 	};
 
+	const setUserAsAway = () => {
+		state.ircSocket.emit("set away");
+	};
+
+	const setUserAsBack = () => {
+		state.ircSocket.emit("set back");
+	};
+
 	return {
 		state,
 		connectToIrc,
@@ -67,6 +75,8 @@ export const useIrc = () => {
 		disconnectFromIrc,
 		grabAvailableChannels,
 		leaveIrcChannel,
-		sendMessageToChannel
+		sendMessageToChannel,
+		setUserAsAway,
+		setUserAsBack
 	};
 };
