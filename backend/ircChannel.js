@@ -1,5 +1,5 @@
 const { formatQuitMessage } = require("./helpers/helperFunctions.js");
-const { formattedNicks } = require("./helpers/ircHelperFunctions.js");
+const { formattedNicks, baseNick, formatNick } = require("./helpers/ircHelperFunctions.js");
 
 module.exports = class IrcChannel {
 	constructor(ircClient, channelName, webSocket, key) {
@@ -15,7 +15,7 @@ module.exports = class IrcChannel {
 						this.webSocket.emit("joined channel", { ...event, users: this.users });
 					} else {
 						this.ircClient.who(event.nick, ({ users }) => {
-							this.users.push(users[0]);
+							this.users.push({ ...users[0], channel: this.channelName });
 
 							this.webSocket.emit("joined channel", {
 								...users[0],
@@ -32,7 +32,7 @@ module.exports = class IrcChannel {
 					event.nick.toLowerCase() !== this.ircClient.user.nick.toLowerCase()
 				) {
 					this.users = this.users.filter(
-						({ nick }) => nick.toLowerCase() !== event.nick.toLowerCase()
+						({ nick }) => baseNick(nick.toLowerCase()) !== event.nick.toLowerCase()
 					);
 
 					this.webSocket.emit("left channel", {
@@ -45,7 +45,7 @@ module.exports = class IrcChannel {
 			.on("kick", event => {
 				if (event.channel.toLowerCase() === this.channelName.toLowerCase()) {
 					this.users = this.users.filter(
-						({ nick }) => nick.toLowerCase() !== event.kicked.toLowerCase()
+						({ nick }) => baseNick(nick.toLowerCase()) !== event.kicked.toLowerCase()
 					);
 
 					this.webSocket.emit("left channel", {
@@ -55,15 +55,29 @@ module.exports = class IrcChannel {
 					});
 				}
 			})
+			.on("nick", event => {
+				const foundUser = this.users.find(user => {
+					if (baseNick(user.nick.toLowerCase()) === event.nick.toLowerCase()) {
+						user.nick = formatNick(event.new_nick, user.channel_modes);
+						return true;
+					}
+				});
+				if (foundUser) {
+					this.webSocket.emit("users list", {
+						channelName: this.channelName,
+						users: this.users
+					});
+				}
+			})
 			.on("quit", event => {
 				let isThisChannel = false;
 
 				this.users = this.users.filter(({ nick }) => {
-					if (nick.toLowerCase() === event.nick.toLowerCase()) {
+					if (baseNick(nick.toLowerCase()) === event.nick.toLowerCase()) {
 						isThisChannel = true;
 					}
 
-					return nick.toLowerCase() !== event.nick.toLowerCase();
+					return baseNick(nick.toLowerCase()) !== event.nick.toLowerCase();
 				});
 
 				if (isThisChannel) {
@@ -74,6 +88,58 @@ module.exports = class IrcChannel {
 					});
 					isThisChannel = false;
 				}
+			})
+			.on("away", event => {
+				const foundUser = this.users.find(user => {
+					if (baseNick(user.nick.toLowerCase()) === event.nick.toLowerCase()) {
+						user.away = true;
+						return true;
+					}
+				});
+				if (foundUser) {
+					this.webSocket.emit("users list", {
+						channelName: this.channelName,
+						users: this.users
+					});
+				}
+			})
+			.on("back", event => {
+				const foundUser = this.users.find(user => {
+					if (baseNick(user.nick.toLowerCase()) === event.nick.toLowerCase()) {
+						user.away = false;
+						return true;
+					}
+				});
+				if (foundUser) {
+					this.webSocket.emit("users list", {
+						channelName: this.channelName,
+						users: this.users
+					});
+				}
+			})
+			.on("privmsg", event => {
+				if (event.target.toLowerCase() === this.channelName.toLowerCase()) {
+					const foundUser = this.users.find(
+						user => baseNick(user.nick.toLowerCase()) === event.nick.toLowerCase()
+					);
+
+					if (foundUser) {
+						this.webSocket.emit("channel prv msg", {
+							...event,
+							nick: foundUser.nick
+						});
+					}
+				}
+				// client.who(e.nick, res => {
+				// 	if (res.users[0].nick === e.nick) {
+				// 		socket.emit("channel prv msg", {
+				// 			...e,
+				// 			nick: formatNick(res.users[0].nick, res.users[0].channel_modes)
+				// 		});
+				// 	} else {
+				// 		console.log("incorrect nick", res, e);
+				// 	}
+				// });
 			});
 
 		this.ircClient.join(channelName, key);
