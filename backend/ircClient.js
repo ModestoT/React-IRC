@@ -59,16 +59,11 @@ module.exports = CreateIrcClient = socket => {
 			});
 		})
 		.on("privmsg", e => {
-			client.who(e.nick, res => {
-				if (res.users[0].nick === e.nick) {
-					socket.emit("channel prv msg", {
-						...e,
-						nick: formatNick(res.users[0].nick, res.users[0].channel_modes)
-					});
-				} else {
-					console.log("incorrect nick", res, e);
-				}
-			});
+			if (e.target.toLowerCase() === client.user.nick.toLowerCase()) {
+				console.log("private message to you :", e);
+
+				socket.emit("personal msg", { sentFrom: e.nick, message: e.message });
+			}
 		})
 		.on("tagmsg", e => {
 			console.log("Tag Msg event: ", e);
