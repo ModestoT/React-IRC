@@ -86,7 +86,7 @@ export const IrcReducer = (state, action) => {
 						? {
 								...c,
 								messages: [...messages, `-${action.payload.nick}- ${action.payload.message}`],
-								messagesCount: messagesCount++
+								messagesCount: messagesCount + 1
 						  }
 						: c;
 				})
@@ -96,7 +96,7 @@ export const IrcReducer = (state, action) => {
 				({ channelName }) => channelName.toLowerCase() === action.payload.channel.toLowerCase()
 			);
 			if (channel) {
-				const { nick, ident, hostname, status, channel, message } = action.payload;
+				const { nick, ident, hostname, status, channel, message, users } = action.payload;
 				return {
 					...state,
 					userChannels: state.userChannels.map(c => {
@@ -110,7 +110,8 @@ export const IrcReducer = (state, action) => {
 											status === "left" ? `[${message}]` : ""
 										}`
 									],
-									messagesCount: messagesCount++
+									messagesCount: messagesCount + 1,
+									userList: users
 							  }
 							: c;
 					})
@@ -124,7 +125,7 @@ export const IrcReducer = (state, action) => {
 						{
 							channelName: action.payload.channel,
 							messages: [],
-							userList: [],
+							userList: action.payload.users,
 							messagesCount: 0
 						}
 					]
@@ -139,7 +140,7 @@ export const IrcReducer = (state, action) => {
 						? {
 								...c,
 								messages: [...messages, `<${action.payload.nick}> ${action.payload.message}`],
-								messagesCount: messagesCount++
+								messagesCount: messagesCount + 1
 						  }
 						: c;
 				})
