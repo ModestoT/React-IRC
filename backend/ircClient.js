@@ -1,16 +1,9 @@
 const IRC = require("irc-framework");
-const {
-	formatQuitMessage,
-	sortMatrix,
-	strSortFn,
-	getErrMsg
-} = require("./helpers/helperFunctions.js");
-const { updateUsersList, formatNick } = require("./helpers/ircHelperFunctions.js");
-const QuitBuffer = require("./quitBuffer.js");
+const { sortMatrix, getErrMsg } = require("./helpers/helperFunctions.js");
+const { formatNick } = require("./helpers/ircHelperFunctions.js");
 
-module.exports = CreateIrcClient = (socket, userChannels) => {
+module.exports = CreateIrcClient = socket => {
 	const client = new IRC.Client();
-	const quitBuffer = new QuitBuffer({ socket, userChannels });
 	let availableChannels = [];
 
 	client
@@ -39,15 +32,6 @@ module.exports = CreateIrcClient = (socket, userChannels) => {
 		.on("debug", e => {
 			console.log("debug: ", e);
 		})
-		.on("join", e => {
-			// console.log("JOINED CHANNEL: ", e);
-			socket.emit("joined channel", e);
-
-			//assuming channel will be there since this listener does not fire unless user has joined a channel
-			const channel = userChannels.find(({ name }) => name === e.channel);
-
-			updateUsersList(channel, socket);
-		})
 		.on("action", e => {
 			console.log("action: ", e);
 		})
@@ -55,27 +39,11 @@ module.exports = CreateIrcClient = (socket, userChannels) => {
 			console.log("Topic event: ", e);
 			// socket.emit("set channel topic", e);
 		})
-		.on("part", e => {
-			if (e.nick !== client.user.nick) {
-				socket.emit("left channel", {
-					...e,
-					message: formatQuitMessage(e.message)
-				});
-				//assuming channel will be there since this listener does not fire unless user has joined a channel
-				const channel = userChannels.find(({ name }) => name === e.channel);
-
-				updateUsersList(channel, socket);
-			}
-		})
-		.on("quit", e => {
-			console.log("Quit event", e);
-			quitBuffer.addQuitEvent(e);
-		})
 		.on("invited", e => {
 			console.log("Invite event: ", e);
 		})
 		.on("notice", e => {
-			// console.log("Notice event: ", e);
+			console.log("Notice event: ", e);
 			//do this on front end to properly display BOLD and color assignments /u00002 = bold /u0003 = blue
 			let newData = e.message;
 			if (newData.includes("\u0002")) {
