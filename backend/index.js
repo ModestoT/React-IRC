@@ -4,14 +4,14 @@ const server = require("http").createServer();
 const io = require("socket.io")(server);
 
 const CreateIrcClient = require("./ircClient.js");
-const { updateUsersList } = require("./helpers/ircHelperFunctions.js");
+const IrcChannel = require("./ircChannel.js");
 const port = process.env.PORT || 3001;
 
 io.on("connection", socket => {
 	console.log("connection made to server socket!");
 	let userChannels = [];
 
-	const ircClient = CreateIrcClient(socket, userChannels);
+	const ircClient = CreateIrcClient(socket);
 
 	socket
 		.on("connect to irc", options => {
@@ -19,24 +19,21 @@ io.on("connection", socket => {
 			ircClient.connect(options);
 		})
 		.on("join channel", channelName => {
-			const channel = ircClient.channel(channelName);
+			const channel = new IrcChannel(ircClient, channelName, socket);
 
-			userChannels.push(channel);
-			updateUsersList(channel, socket);
+			channel.updateUsers(updated => {
+				userChannels.push(updated);
+			});
 		})
 		.on("grab channel list", () => {
 			ircClient.list();
 		})
-		.on("leave channel", channelName => {
-			const channel = userChannels.find(({ name }) => name === channelName);
-
-			channel.part();
+		.on("leave channel", channel => {
+			ircClient.part(channel);
 		})
 		.on("msgChannel", data => {
 			const { target, message } = data;
-			const channel = userChannels.find(({ name }) => name === target);
-
-			channel.say(message);
+			ircClient.say(target, message);
 		})
 		.on("error", err => {
 			console.log("Socket error: ", err);
