@@ -24,16 +24,29 @@ io.on("connection", socket => {
 			channel.updateUsers(updated => {
 				userChannels.push(updated);
 			});
+			console.log(userChannels.length);
 		})
 		.on("grab channel list", () => {
 			ircClient.list();
 		})
 		.on("leave channel", channel => {
 			ircClient.part(channel);
+
+			for (let i = 0; i < userChannels.length; i++) {
+				if (userChannels[i].channelName.toLowerCase() === channel.toLowerCase()) {
+					userChannels.splice(i, 1);
+				}
+			}
 		})
 		.on("msgChannel", data => {
 			const { target, message } = data;
 			ircClient.say(target, message);
+		})
+		.on("set away", () => {
+			ircClient.emit("away", { nick: ircClient.user.nick });
+		})
+		.on("set back", () => {
+			ircClient.emit("back", { nick: ircClient.user.nick });
 		})
 		.on("error", err => {
 			console.log("Socket error: ", err);
