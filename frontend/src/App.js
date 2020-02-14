@@ -5,6 +5,7 @@ import IrcChatView from "./views/IrcChatView.js";
 import IrcLoginView from "./views/IrcLoginView.js";
 
 import "./App.css";
+import PastConfigsList from "./components/PastConfigsList.js";
 
 function App() {
 	const {
@@ -21,6 +22,7 @@ function App() {
 	} = useIrc();
 	return (
 		<div className="App">
+			<PastConfigsList connectToIrc={connectToIrc} currentServer={state.serverName} />
 			{state.isConnected ? (
 				<IrcChatView
 					state={state}
