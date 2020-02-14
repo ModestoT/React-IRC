@@ -14,7 +14,8 @@ const IrcChatView = ({
 	disconnectFromIrc,
 	sendMessageToChannel,
 	setUserAsAway,
-	setUserAsBack
+	setUserAsBack,
+	createPrvMsgTab
 }) => {
 	const {
 		serverName,
@@ -52,6 +53,10 @@ const IrcChatView = ({
 	const handleJoinIrcChannel = channelName => {
 		joinIrcChannel(channelName);
 		setCurrentTab(channelName);
+	};
+	const handleCreatePrvMsgTab = target => {
+		createPrvMsgTab(target);
+		setCurrentTab(target);
 	};
 	const handleLeaveIrcChannel = (channel, isServerTab) => {
 		if (isServerTab) {
@@ -93,6 +98,7 @@ const IrcChatView = ({
 				nick={nick}
 				setUserAsAway={setUserAsAway}
 				setUserAsBack={setUserAsBack}
+				createPrvMsgTab={handleCreatePrvMsgTab}
 			/>
 			<Modal showModal={isToggled} toggleModal={setIsToggled}>
 				<IrcJoinableChannels

@@ -9,7 +9,8 @@ const IrcInputField = ({
 	joinIrcChannel,
 	nick,
 	setUserAsAway,
-	setUserAsBack
+	setUserAsBack,
+	createPrvMsgTab
 }) => {
 	const [message, setMessage] = useFormInput("");
 
@@ -29,6 +30,9 @@ const IrcInputField = ({
 					break;
 				case "/back":
 					setUserAsBack();
+					break;
+				case "/message":
+					createPrvMsgTab(action[1]);
 					break;
 				default:
 					return null;

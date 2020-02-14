@@ -15,6 +15,7 @@ export const CHANNEL_PRV_MSG = "CHANNEL_PRV_MSG";
 export const UPDATE_USERS_LIST = "UPDATE_USERS_LIST";
 export const LEAVE_CHANNEL = "LEAVE_CHANNEL";
 export const PERSONAL_MSG = "PERSONAL_MSG";
+export const CREATE_PRV_MSG_TAB = "CREATE_PRV_MSG_TAB";
 
 export const IrcReducer = (state, action) => {
 	let channel;
@@ -196,7 +197,19 @@ export const IrcReducer = (state, action) => {
 					]
 				};
 			}
-
+		case CREATE_PRV_MSG_TAB:
+			return {
+				...state,
+				userChannels: [
+					...state.userChannels,
+					{
+						channelName: action.payload,
+						messages: [],
+						userList: [],
+						messagesCount: 0
+					}
+				]
+			};
 		default:
 			return state;
 	}

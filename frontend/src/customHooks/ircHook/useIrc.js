@@ -5,7 +5,8 @@ import {
 	CONNECTION_LOST,
 	MAKING_CONNECTION,
 	LEAVE_CHANNEL,
-	CHANNEL_PRV_MSG
+	CHANNEL_PRV_MSG,
+	CREATE_PRV_MSG_TAB
 } from "./IrcReducer.js";
 import { IrcEventListeners } from "../../irc/IrcEventListeners.js";
 
@@ -68,6 +69,10 @@ export const useIrc = () => {
 		state.ircSocket.emit("set back");
 	};
 
+	const createPrvMsgTab = target => {
+		dispatch({ type: CREATE_PRV_MSG_TAB, payload: target });
+	};
+
 	return {
 		state,
 		connectToIrc,
@@ -77,6 +82,7 @@ export const useIrc = () => {
 		leaveIrcChannel,
 		sendMessageToChannel,
 		setUserAsAway,
-		setUserAsBack
+		setUserAsBack,
+		createPrvMsgTab
 	};
 };

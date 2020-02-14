@@ -16,7 +16,8 @@ function App() {
 		leaveIrcChannel,
 		sendMessageToChannel,
 		setUserAsAway,
-		setUserAsBack
+		setUserAsBack,
+		createPrvMsgTab
 	} = useIrc();
 	return (
 		<div className="App">
@@ -30,6 +31,7 @@ function App() {
 					sendMessageToChannel={sendMessageToChannel}
 					setUserAsAway={setUserAsAway}
 					setUserAsBack={setUserAsBack}
+					createPrvMsgTab={createPrvMsgTab}
 				/>
 			) : (
 				<IrcLoginView connectToIrc={connectToIrc} />
