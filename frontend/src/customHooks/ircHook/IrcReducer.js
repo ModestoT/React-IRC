@@ -21,12 +21,12 @@ export const IrcReducer = (state, action) => {
 	let channel;
 	switch (action.type) {
 		case MAKING_CONNECTION:
-			const ircSocket = CreateIrcConnection(action.payload);
+			const ircSocket = CreateIrcConnection(action.payload.ircOptions, action.payload.saveConfig);
 
 			return {
 				...state,
 				nick: action.payload.nick,
-				serverName: GrabServerName(action.payload.host),
+				serverName: GrabServerName(action.payload.ircOptions.host),
 				ircSocket
 			};
 		case CONNECTION_ESTABLISHED:

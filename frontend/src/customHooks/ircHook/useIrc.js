@@ -32,10 +32,14 @@ export const useIrc = () => {
 		}
 	}, [state.ircSocket]);
 
-	const connectToIrc = (ircOptions, e) => {
+	const connectToIrc = (ircOptions, saveConfig, e) => {
 		e.preventDefault();
 
-		dispatch({ type: MAKING_CONNECTION, payload: ircOptions });
+		if (state.isConnected) {
+			dispatch({ type: CONNECTION_LOST });
+		}
+
+		dispatch({ type: MAKING_CONNECTION, payload: { saveConfig, ircOptions } });
 	};
 
 	const disconnectFromIrc = () => {
