@@ -12,6 +12,7 @@ module.exports = CreateIrcClient = socket => {
 		})
 		.on("connected", e => {
 			console.log("Connected: \n", e);
+			socket.emit("connected to server");
 		})
 		.on("channel list start", () => {
 			socket.emit("grabbing channel list");
@@ -42,7 +43,6 @@ module.exports = CreateIrcClient = socket => {
 			console.log("Invite event: ", e);
 		})
 		.on("notice", e => {
-			console.log("Notice event: ", e);
 			//do this on front end to properly display BOLD and color assignments /u00002 = bold /u0003 = blue
 			let newData = e.message;
 			if (newData.includes("\u0002")) {
