@@ -24,7 +24,6 @@ io.on("connection", socket => {
 			channel.updateUsers(updated => {
 				userChannels.push(updated);
 			});
-			console.log(userChannels.length);
 		})
 		.on("grab channel list", () => {
 			ircClient.list();
@@ -34,6 +33,7 @@ io.on("connection", socket => {
 
 			for (let i = 0; i < userChannels.length; i++) {
 				if (userChannels[i].channelName.toLowerCase() === channel.toLowerCase()) {
+					userChannels[i].removeListeners();
 					userChannels.splice(i, 1);
 				}
 			}

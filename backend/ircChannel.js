@@ -8,8 +8,9 @@ module.exports = class IrcChannel {
 		this.channelName = channelName;
 		this.users = [];
 
-		ircClient
+		this.ircClient
 			.on("join", event => {
+				console.log("Joined", event);
 				if (event.channel.toLowerCase() === this.channelName.toLowerCase()) {
 					if (event.nick.toLowerCase() === this.ircClient.user.nick.toLowerCase()) {
 						this.webSocket.emit("joined channel", { ...event, users: this.users });
@@ -159,5 +160,16 @@ module.exports = class IrcChannel {
 		if (typeof cb === "function") {
 			cb(this);
 		}
+	}
+
+	removeListeners() {
+		this.ircClient.removeListener("join");
+		this.ircClient.removeListener("part");
+		this.ircClient.removeListener("kick");
+		this.ircClient.removeListener("nick");
+		this.ircClient.removeListener("quit");
+		this.ircClient.removeListener("away");
+		this.ircClient.removeListener("back");
+		this.ircClient.removeListener("privmsg");
 	}
 };
