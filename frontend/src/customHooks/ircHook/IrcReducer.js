@@ -1,4 +1,5 @@
 import { GrabServerName, CheckIfOverMessageLimit } from "../../helpers/IrcHelpers.js";
+import { AddChannelToPastConfigs } from "../../helpers/GeneralHelpers.js";
 import CreateIrcConnection from "../../irc/CreateIrcConnection.js";
 
 export const CONNECTION_ESTABLISHED = "CONNECTION_ESTABLISHED";
@@ -27,6 +28,7 @@ export const IrcReducer = (state, action) => {
 				...state,
 				nick: action.payload.nick,
 				serverName: GrabServerName(action.payload.ircOptions.host),
+				isSaveConfig: action.payload.isSaveConfig,
 				ircSocket
 			};
 		case CONNECTION_ESTABLISHED:
@@ -121,6 +123,8 @@ export const IrcReducer = (state, action) => {
 				};
 			} else {
 				//channel not in array yet so create a channel object for the new channel
+				AddChannelToPastConfigs(action.payload.channel, state.serverName);
+
 				return {
 					...state,
 					userChannels: [

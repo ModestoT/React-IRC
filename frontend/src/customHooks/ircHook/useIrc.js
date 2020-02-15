@@ -22,6 +22,7 @@ export const useIrc = () => {
 			channels: []
 		},
 		isConnected: false,
+		isSaveConfig: false,
 		isGrabbingChannels: false,
 		ircSocket: null
 	});
@@ -37,6 +38,7 @@ export const useIrc = () => {
 
 		if (state.isConnected) {
 			dispatch({ type: CONNECTION_LOST });
+			state.ircSocket.close();
 		}
 
 		dispatch({ type: MAKING_CONNECTION, payload: { saveConfig, ircOptions } });
