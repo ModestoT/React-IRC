@@ -43,8 +43,6 @@ const IrcInputField = ({
 
 		setMessage("");
 	};
-	//TODO: Implement ability to join server/channels from localstorage, add previously joined config to localstorage
-	//afterwords begin work on UI
 	return (
 		<form onSubmit={e => handleMessageToChannel(e)}>
 			<input
