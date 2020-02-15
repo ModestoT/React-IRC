@@ -18,11 +18,17 @@ function App() {
 		sendMessageToChannel,
 		setUserAsAway,
 		setUserAsBack,
-		createPrvMsgTab
+		createPrvMsgTab,
+		deleteConfig
 	} = useIrc();
 	return (
 		<div className="App">
-			<PastConfigsList connectToIrc={connectToIrc} currentServer={state.serverName} />
+			<PastConfigsList
+				connectToIrc={connectToIrc}
+				currentServer={state.serverName}
+				pastConfigs={state.pastConfigs}
+				deleteConfig={deleteConfig}
+			/>
 			{state.isConnected ? (
 				<IrcChatView
 					state={state}

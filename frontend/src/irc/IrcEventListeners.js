@@ -10,7 +10,8 @@ import {
 	GRABBING_CHANNEL_LIST_END,
 	CHANNEL_PRV_MSG,
 	UPDATE_USERS_LIST,
-	PERSONAL_MSG
+	PERSONAL_MSG,
+	CONNECTION_TO_SERVER_MADE
 } from "../customHooks/ircHook/IrcReducer.js";
 import { ParseForChannelName } from "../helpers/IrcHelpers.js";
 
@@ -18,6 +19,9 @@ export const IrcEventListeners = (socket, dispatch) => {
 	socket
 		.on("connected", () => {
 			dispatch({ type: CONNECTION_ESTABLISHED });
+		})
+		.on("connected to server", () => {
+			dispatch({ type: CONNECTION_TO_SERVER_MADE });
 		})
 		.on("disconnect", reason => {
 			dispatch({ type: CONNECTION_LOST });

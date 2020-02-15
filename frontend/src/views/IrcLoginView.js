@@ -13,7 +13,7 @@ const IrcLoginView = ({ connectToIrc }) => {
 	const [isSaveConfig, setIsSaveConfig] = useFormInput(false);
 
 	return (
-		<form className="irc-login-form" onSubmit={e => connectToIrc(ircOptions, isSaveConfig, e)}>
+		<form className="irc-login-form" onSubmit={e => connectToIrc(e, ircOptions, isSaveConfig)}>
 			<h2>Connect To an Irc Server</h2>
 			<InputField
 				type="text"
