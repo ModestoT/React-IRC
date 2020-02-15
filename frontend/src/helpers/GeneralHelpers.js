@@ -32,7 +32,6 @@ export const AddConfigToStorage = config => {
 export const AddChannelToPastConfigs = (channel, serverName) => {
 	const pastConfigs = JSON.parse(localStorage.getItem("past_configs"));
 
-	console.log("running save channel");
 	for (let i = 0; i < pastConfigs.length; i++) {
 		if (
 			pastConfigs[i].saveConfig &&
@@ -43,9 +42,21 @@ export const AddChannelToPastConfigs = (channel, serverName) => {
 				channels: UpdatePastConfigsChannels(pastConfigs[i].channels, channel)
 			};
 			localStorage.setItem("past_configs", JSON.stringify(pastConfigs));
-			break;
+			return pastConfigs;
 		}
 	}
+	return null;
+};
+
+export const DeleteConfig = id => {
+	const pastConfigs = JSON.parse(localStorage.getItem("past_configs"));
+	const configIndex = pastConfigs.findIndex(config => config.id === id);
+
+	pastConfigs.splice(configIndex, 1);
+
+	localStorage.setItem("past_configs", JSON.stringify(pastConfigs));
+
+	return pastConfigs;
 };
 
 const UpdatePastConfigsChannels = (channels, newChannel) => {
