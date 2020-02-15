@@ -2,18 +2,18 @@ import React from "react";
 
 import PastConfig from "./PastConfig";
 
-const PastConfigsList = ({ connectToIrc, currentServer }) => {
-	const pastConfigs = JSON.parse(localStorage.getItem("past_configs"));
-	if (pastConfigs) {
+const PastConfigsList = ({ connectToIrc, currentServer, pastConfigs, deleteConfig }) => {
+	if (pastConfigs.length > 0) {
 		return (
 			<ul>
 				<h2>Past Configs</h2>
-				{pastConfigs.map((config, index) => (
+				{pastConfigs.map(config => (
 					<PastConfig
-						key={index}
+						key={config.id}
 						config={config}
 						connectToIrc={connectToIrc}
 						currentServer={currentServer}
+						deleteConfig={deleteConfig}
 					/>
 				))}
 			</ul>
