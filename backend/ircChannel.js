@@ -10,7 +10,6 @@ module.exports = class IrcChannel {
 
 		this.ircClient
 			.on("join", event => {
-				console.log("Joined", event);
 				if (event.channel.toLowerCase() === this.channelName.toLowerCase()) {
 					if (event.nick.toLowerCase() === this.ircClient.user.nick.toLowerCase()) {
 						this.webSocket.emit("joined channel", { ...event, users: this.users });
