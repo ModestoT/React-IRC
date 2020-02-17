@@ -1,7 +1,7 @@
 import React from "react";
 
 const PastConfig = ({ config, connectToIrc, currentServer, deleteConfig }) => {
-	const { host, port, nick, ssl } = config;
+	const { host, port, nick, ssl, channels } = config;
 	const isDisabled = currentServer.length > 0 ? host.includes(currentServer) : false;
 	return (
 		<li>
@@ -9,6 +9,12 @@ const PastConfig = ({ config, connectToIrc, currentServer, deleteConfig }) => {
 			<p>Port: {port}</p>
 			<p>Nick: {nick}</p>
 			<p>Secure Connection: {ssl ? "true" : "false"}</p>
+			<ul style={{ padding: "0" }}>
+				Channels:
+				{channels.map(channel => (
+					<p>{channel}</p>
+				))}
+			</ul>
 			<button onClick={e => connectToIrc(e, config, false)} disabled={isDisabled}>
 				connect
 			</button>
