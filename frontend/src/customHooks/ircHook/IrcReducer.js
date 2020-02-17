@@ -34,7 +34,7 @@ export const IrcReducer = (state, action) => {
 				nick: nick,
 				serverName: GrabServerName(host),
 				pastConfigs: action.payload.saveConfig
-					? [...state.pastConfigs, ...JSON.parse(localStorage.getItem("past_configs"))]
+					? [...state.pastConfigs, action.payload.ircOptions]
 					: state.pastConfigs,
 				channelsToJoin,
 				ircSocket
