@@ -59,6 +59,24 @@ export const DeleteConfig = id => {
 	return pastConfigs;
 };
 
+export const DeleteChannelFromConfig = (channelName, configId) => {
+	const pastConfigs = JSON.parse(localStorage.getItem("past_configs"));
+
+	for (let i = 0; i < pastConfigs.length; i++) {
+		if (pastConfigs[i].id === configId) {
+			pastConfigs[i].channels = pastConfigs[i].channels.filter(
+				channel => channel.toLowerCase() !== channelName.toLowerCase()
+			);
+
+			break;
+		}
+	}
+
+	localStorage.setItem("past_configs", JSON.stringify(pastConfigs));
+
+	return pastConfigs;
+};
+
 const UpdatePastConfigsChannels = (channels, newChannel) => {
 	for (let i = 0; i < channels.length; i++) {
 		if (channels[i].toLowerCase() === newChannel.toLowerCase()) {
