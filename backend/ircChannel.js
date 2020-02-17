@@ -130,16 +130,6 @@ module.exports = class IrcChannel {
 						});
 					}
 				}
-				// client.who(e.nick, res => {
-				// 	if (res.users[0].nick === e.nick) {
-				// 		socket.emit("channel prv msg", {
-				// 			...e,
-				// 			nick: formatNick(res.users[0].nick, res.users[0].channel_modes)
-				// 		});
-				// 	} else {
-				// 		console.log("incorrect nick", res, e);
-				// 	}
-				// });
 			});
 
 		this.ircClient.join(channelName, key);
