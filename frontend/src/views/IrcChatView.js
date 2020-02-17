@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import Modal from "../components/Modal";
 import IrcJoinableChannels from "../components/irc/IrcJoinableChannels";
 import IrcChatTabs from "../components/irc/IrcChatTabs";
-import IrcChat from "../components/irc/IrcChat";
 import IrcInputField from "../components/irc/IrcInputfield";
+import IrcCurrentTabChat from "../components/irc/IrcCurrentTabChat";
 
 const IrcChatView = ({
 	state,
@@ -35,38 +35,27 @@ const IrcChatView = ({
 
 		setIsToggled(!isToggled);
 	};
-	const getCurrentTabChat = () => {
-		if (currentTab === serverName) {
-			return <IrcChat channel={{ messages: serverMsgs, userList: [] }} />;
-		} else {
-			const channel = userChannels.find(
-				({ channelName }) => channelName.toLowerCase() === currentTab.toLowerCase()
-			);
 
-			if (channel) {
-				return <IrcChat channel={channel} />;
-			} else {
-				return <IrcChat channel={{ messages: [], userList: [] }} />;
-			}
-		}
-	};
 	const handleJoinIrcChannel = channelName => {
 		joinIrcChannel(channelName);
 		setCurrentTab(channelName);
 	};
+
 	const handleCreatePrvMsgTab = target => {
 		createPrvMsgTab(target);
 		setCurrentTab(target);
 	};
+
 	const handleLeaveIrcChannel = (channel, isServerTab) => {
+		//leave channel selected
+		//check if channel selected is the current tab or not
+		//if it is the current tab change it to the tab to the left of the channel exited
+		//else dont change the current tab
 		if (isServerTab) {
 			disconnectFromIrc();
 		} else {
-			//leave channel selected
 			leaveIrcChannel(channel);
-			//check if channel selected is the current tab or not
 			if (channel === currentTab) {
-				//if it is the current tab change it to the tab to the left of the channel exited
 				const channelExitedIndex = userChannels.findIndex(
 					({ channelName }) => channelName === channel
 				);
@@ -77,9 +66,9 @@ const IrcChatView = ({
 					setCurrentTab(serverName);
 				}
 			}
-			//else dont change the current tab
 		}
 	};
+
 	return (
 		<div>
 			<IrcChatTabs
@@ -90,7 +79,12 @@ const IrcChatView = ({
 				toggleModal={toggleModal}
 				leaveIrcChannel={handleLeaveIrcChannel}
 			/>
-			{getCurrentTabChat()}
+			<IrcCurrentTabChat
+				currentTab={currentTab}
+				serverName={serverName}
+				serverMsgs={serverMsgs}
+				userChannels={userChannels}
+			/>
 			<IrcInputField
 				currentChannel={currentTab}
 				sendMessageToChannel={sendMessageToChannel}
