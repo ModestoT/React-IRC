@@ -1,11 +1,17 @@
 import React from "react";
+import styled from "styled-components";
 
 import { useIrc } from "./customHooks/ircHook/useIrc.js";
 import IrcChatView from "./views/IrcChatView.js";
 import IrcLoginView from "./views/IrcLoginView.js";
 
-import "./App.css";
 import PastConfigsList from "./components/PastConfigsList.js";
+
+const AppWrapper = styled.div`
+	font-size: 0.9rem;
+	display: flex;
+	height: 100vh;
+`;
 
 function App() {
 	const {
@@ -22,7 +28,7 @@ function App() {
 		deleteConfig
 	} = useIrc();
 	return (
-		<div className="App">
+		<AppWrapper>
 			<PastConfigsList
 				connectToIrc={connectToIrc}
 				currentServer={state.serverName}
@@ -44,7 +50,7 @@ function App() {
 			) : (
 				<IrcLoginView connectToIrc={connectToIrc} />
 			)}
-		</div>
+		</AppWrapper>
 	);
 }
 
