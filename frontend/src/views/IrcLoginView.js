@@ -8,7 +8,6 @@ const IrcLoginFormWrapper = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 71%;
 `;
 
 const IrcLoginForm = styled.form`

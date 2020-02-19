@@ -10,11 +10,11 @@ const PastConfigsListWrapper = styled.div`
 `;
 
 const PastConfigsList = ({ connectToIrc, currentServer, pastConfigs, deleteConfig }) => {
-	if (pastConfigs.length > 0) {
-		return (
-			<PastConfigsListWrapper>
-				<h2>Past Configs</h2>
-				{pastConfigs.map(config => (
+	return (
+		<PastConfigsListWrapper>
+			<h2>Past Configs</h2>
+			{pastConfigs.length > 0 ? (
+				pastConfigs.map(config => (
 					<PastConfig
 						key={config.id}
 						config={config}
@@ -22,12 +22,12 @@ const PastConfigsList = ({ connectToIrc, currentServer, pastConfigs, deleteConfi
 						currentServer={currentServer}
 						deleteConfig={deleteConfig}
 					/>
-				))}
-			</PastConfigsListWrapper>
-		);
-	} else {
-		return null;
-	}
+				))
+			) : (
+				<h4>No Saved configs yet</h4>
+			)}
+		</PastConfigsListWrapper>
+	);
 };
 
 export default PastConfigsList;

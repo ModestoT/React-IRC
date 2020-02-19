@@ -9,6 +9,7 @@ import HeaderAndSideMenuView from "./views/HeaderAndSideMenuView.js";
 const AppWrapper = styled.div`
 	font-size: 0.9rem;
 	display: flex;
+	flex-direction: column;
 	height: 100vh;
 `;
 
