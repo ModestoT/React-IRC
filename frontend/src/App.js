@@ -4,8 +4,7 @@ import styled from "styled-components";
 import { useIrc } from "./customHooks/ircHook/useIrc.js";
 import IrcChatView from "./views/IrcChatView.js";
 import IrcLoginView from "./views/IrcLoginView.js";
-
-import PastConfigsList from "./components/PastConfigsList.js";
+import HeaderAndSideMenuView from "./views/HeaderAndSideMenuView.js";
 
 const AppWrapper = styled.div`
 	font-size: 0.9rem;
@@ -27,9 +26,10 @@ function App() {
 		createPrvMsgTab,
 		deleteConfig
 	} = useIrc();
+
 	return (
 		<AppWrapper>
-			<PastConfigsList
+			<HeaderAndSideMenuView
 				connectToIrc={connectToIrc}
 				currentServer={state.serverName}
 				pastConfigs={state.pastConfigs}
