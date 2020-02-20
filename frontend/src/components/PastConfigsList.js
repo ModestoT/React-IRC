@@ -6,7 +6,6 @@ import PastConfig from "./PastConfig";
 const PastConfigsListWrapper = styled.div`
 	list-style-type: none;
 	margin: 1% 0 0 2%;
-	width: 13%;
 `;
 
 const PastConfigsList = ({ connectToIrc, currentServer, pastConfigs, deleteConfig }) => {

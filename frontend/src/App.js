@@ -35,22 +35,23 @@ function App() {
 				currentServer={state.serverName}
 				pastConfigs={state.pastConfigs}
 				deleteConfig={deleteConfig}
-			/>
-			{state.isConnected ? (
-				<IrcChatView
-					state={state}
-					joinIrcChannel={joinIrcChannel}
-					leaveIrcChannel={leaveIrcChannel}
-					grabAvailableChannels={grabAvailableChannels}
-					disconnectFromIrc={disconnectFromIrc}
-					sendMessageToChannel={sendMessageToChannel}
-					setUserAsAway={setUserAsAway}
-					setUserAsBack={setUserAsBack}
-					createPrvMsgTab={createPrvMsgTab}
-				/>
-			) : (
-				<IrcLoginView connectToIrc={connectToIrc} />
-			)}
+			>
+				{state.isConnected ? (
+					<IrcChatView
+						state={state}
+						joinIrcChannel={joinIrcChannel}
+						leaveIrcChannel={leaveIrcChannel}
+						grabAvailableChannels={grabAvailableChannels}
+						disconnectFromIrc={disconnectFromIrc}
+						sendMessageToChannel={sendMessageToChannel}
+						setUserAsAway={setUserAsAway}
+						setUserAsBack={setUserAsBack}
+						createPrvMsgTab={createPrvMsgTab}
+					/>
+				) : (
+					<IrcLoginView connectToIrc={connectToIrc} />
+				)}
+			</HeaderAndSideMenuView>
 		</AppWrapper>
 	);
 }
