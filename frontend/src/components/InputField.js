@@ -1,11 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 
-const InputWrapper = styled.div`
+const InputFieldWrapper = styled.div`
 	width: 100%;
 	display: flex;
 	align-items: center;
 	justify-content: flex-start;
+	margin: 2% 0;
 
 	#irc-port {
 		width: 25%;
@@ -13,24 +14,29 @@ const InputWrapper = styled.div`
 `;
 
 const LabelWrapper = styled.div`
-	width: 36%;
+	width: 46%;
 `;
 
-const Input = styled.input`
-	margin: 5px;
-	max-width: 100%;
+const InputWrapper = styled.div`
+	width: 100%;
+
+	input {
+		max-width: 100%;
+		margin: 5px;
+		padding: 1% 3%;
+	}
 `;
 
 const InputField = ({ id, labelText, type, value, onChange, checked }) => {
 	return (
-		<InputWrapper>
+		<InputFieldWrapper>
 			<LabelWrapper>
 				<label htmlFor={id}>{labelText}</label>
 			</LabelWrapper>
-			<div>
-				<Input id={id} type={type} value={value} onChange={onChange} checked={checked} />
-			</div>
-		</InputWrapper>
+			<InputWrapper>
+				<input id={id} type={type} value={value} onChange={onChange} checked={checked} />
+			</InputWrapper>
+		</InputFieldWrapper>
 	);
 };
 

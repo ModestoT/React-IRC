@@ -8,12 +8,18 @@ const IrcLoginFormWrapper = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	height: 80%;
 `;
 
 const IrcLoginForm = styled.form`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+
+	button {
+		margin-top: 10%;
+		padding: 2% 5%;
+	}
 `;
 
 const IrcLoginView = ({ connectToIrc }) => {
