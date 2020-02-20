@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import { useFormInput } from "../customHooks/useFormInput.js";
 import InputField from "../components/InputField.js";
+import Button from "../components/Button.js";
 
 const IrcLoginFormWrapper = styled.div`
 	display: flex;
@@ -15,11 +16,6 @@ const IrcLoginForm = styled.form`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-
-	button {
-		margin-top: 10%;
-		padding: 2% 5%;
-	}
 `;
 
 const IrcLoginView = ({ connectToIrc }) => {
@@ -74,7 +70,7 @@ const IrcLoginView = ({ connectToIrc }) => {
 					value="Save Config"
 					onChange={() => setIsSaveConfig(!isSaveConfig)}
 				/>
-				<button className="connect">Connect</button>
+				<Button btnText="Connect" />
 			</IrcLoginForm>
 		</IrcLoginFormWrapper>
 	);

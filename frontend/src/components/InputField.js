@@ -7,10 +7,6 @@ const InputFieldWrapper = styled.div`
 	align-items: center;
 	justify-content: flex-start;
 	margin: 2% 0;
-
-	#irc-port {
-		width: 25%;
-	}
 `;
 
 const LabelWrapper = styled.div`
@@ -24,6 +20,18 @@ const InputWrapper = styled.div`
 		max-width: 100%;
 		margin: 5px;
 		padding: 1% 3%;
+		background: ${props => props.theme.inputBg};
+		color: ${props => props.theme.mainText};
+		border: 1px solid ${props => props.theme.mainText};
+		border-radius: 3px;
+
+		&:focus {
+			background: ${props => props.theme.mainBg};
+		}
+	}
+
+	#irc-port {
+		width: 25%;
 	}
 `;
 
