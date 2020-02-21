@@ -2,9 +2,10 @@ import React from "react";
 import styled from "styled-components";
 
 const Btn = styled.button`
+	cursor: pointer;
 	border: none;
-	padding: 2% 5%;
-	margin: 4%;
+	padding: 8px 18px;
+	margin: 15px;
 	font-weight: bold;
 	border-radius: 3px;
 	background: ${props => props.theme.btnBg};

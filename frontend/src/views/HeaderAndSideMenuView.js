@@ -2,14 +2,19 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import Button from "../components/Button.js";
-import PastConfigsList from "../components/PastConfigsList.js";
+import PastServersList from "../components/PastServersList.js";
 
 const AppHeader = styled.header`
 	width: 100%;
 	display: flex;
 	align-items: center;
-	background: ${props => props.theme.mainBg};
+	background: ${props => props.theme.secondaryBg};
 	border-bottom: 1px solid ${props => props.theme.inputBg};
+	height: 9%;
+
+	@media (min-width: 1024px) {
+		height: 5%;
+	}
 `;
 
 const AppContent = styled.div`
@@ -17,6 +22,10 @@ const AppContent = styled.div`
 	height: 91%;
 	overflow: hidden;
 	background: ${props => props.theme.mainBg};
+
+	@media (min-width: 1024px) {
+		height: 100%;
+	}
 `;
 
 const ContentWrapper = styled.div`
@@ -40,14 +49,19 @@ const MobileSideMenu = styled.div`
 	z-index: 5;
 `;
 
-const DesktopSideMenu = styled.div``;
+const DesktopSideMenu = styled.div`
+	background: ${props => props.theme.secondaryBg};
+	height: 100%;
+	width: 15%;
+`;
 
 const HeaderAndSideMenuView = ({
 	children,
 	connectToIrc,
 	currentServer,
-	pastConfigs,
-	deleteConfig
+	pastServers,
+	deleteServer,
+	deleteChannelFromPastServers
 }) => {
 	const [sideMenuOpen, setSideMenuOpen] = useState(false);
 	const [windowWidthSize, setwindowWidthSize] = useState(window.innerWidth);
@@ -55,6 +69,8 @@ const HeaderAndSideMenuView = ({
 	useEffect(() => {
 		const updateWidth = () => {
 			setwindowWidthSize(window.innerWidth);
+
+			if (window.innerWidth > 1024) setSideMenuOpen(false);
 		};
 		window.addEventListener("resize", updateWidth);
 
@@ -64,25 +80,29 @@ const HeaderAndSideMenuView = ({
 	return (
 		<>
 			<AppHeader>
-				<Button onClick={() => setSideMenuOpen(!sideMenuOpen)} btnText="Configs" />
+				{windowWidthSize < 1024 && (
+					<Button onClick={() => setSideMenuOpen(!sideMenuOpen)} btnText="Servers" />
+				)}
 			</AppHeader>
 			<AppContent>
 				{windowWidthSize < 1024 ? (
 					<MobileSideMenu sideMenuOpen={sideMenuOpen}>
-						<PastConfigsList
+						<PastServersList
 							connectToIrc={connectToIrc}
 							currentServer={currentServer}
-							pastConfigs={pastConfigs}
-							deleteConfig={deleteConfig}
+							pastServers={pastServers}
+							deleteServer={deleteServer}
+							deleteChannelFromPastServers={deleteChannelFromPastServers}
 						/>
 					</MobileSideMenu>
 				) : (
 					<DesktopSideMenu>
-						<PastConfigsList
+						<PastServersList
 							connectToIrc={connectToIrc}
 							currentServer={currentServer}
-							pastConfigs={pastConfigs}
-							deleteConfig={deleteConfig}
+							pastServers={pastServers}
+							deleteServer={deleteServer}
+							deleteChannelFromPastServers={deleteChannelFromPastServers}
 						/>
 					</DesktopSideMenu>
 				)}
