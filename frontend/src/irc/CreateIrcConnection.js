@@ -1,6 +1,6 @@
 import io from "socket.io-client";
 
-import { AddConfigToStorage } from "../helpers/GeneralHelpers.js";
+import { AddServerToStorage } from "../helpers/GeneralHelpers.js";
 
 const ConnectToIrc = ircOptions => {
 	const socket = io.connect("http://localhost:3001");
@@ -16,9 +16,9 @@ const ConnectToIrc = ircOptions => {
 	return socket;
 };
 
-const CreateIrcConnection = (ircOptions, saveConfig) => {
-	if (saveConfig) {
-		AddConfigToStorage({ ...ircOptions, saveConfig });
+const CreateIrcConnection = (ircOptions, saveServer) => {
+	if (saveServer) {
+		AddServerToStorage({ ...ircOptions, saveServer });
 	}
 
 	return ConnectToIrc(ircOptions);

@@ -1,5 +1,9 @@
 import { GrabServerName, CheckIfOverMessageLimit } from "../../helpers/IrcHelpers.js";
-import { AddChannelToPastConfigs, DeleteConfig } from "../../helpers/GeneralHelpers.js";
+import {
+	AddChannelToPastServers,
+	DeleteServer,
+	DeleteChannelFromServer
+} from "../../helpers/GeneralHelpers.js";
 import CreateIrcConnection from "../../irc/CreateIrcConnection.js";
 
 export const CONNECTION_ESTABLISHED = "CONNECTION_ESTABLISHED";
@@ -19,7 +23,8 @@ export const PERSONAL_MSG = "PERSONAL_MSG";
 export const CREATE_PRV_MSG_TAB = "CREATE_PRV_MSG_TAB";
 export const CONNECTION_TO_SERVER_MADE = "CONNECTION_TO_SERVER_MADE";
 export const JOIN_CHANNELS = "JOIN_CHANNELS";
-export const DELETE_CONFIG = "DELETE_CONFIG";
+export const DELETE_SERVER_FROM_STORAGE = "DELETE_SERVER_FROM_STORAGE";
+export const DELETE_CHANNEL_FROM_STORAGE = "DELETE_CHANNEL_FROM_STORAGE";
 
 export const IrcReducer = (state, action) => {
 	let channel;
@@ -27,15 +32,15 @@ export const IrcReducer = (state, action) => {
 		case MAKING_CONNECTION:
 			let { host, nick, port, ssl } = action.payload.ircOptions;
 			let channelsToJoin = action.payload.ircOptions.channels || [];
-			const ircSocket = CreateIrcConnection({ host, nick, port, ssl }, action.payload.saveConfig);
+			const ircSocket = CreateIrcConnection({ host, nick, port, ssl }, action.payload.saveServer);
 
 			return {
 				...state,
 				nick: nick,
 				serverName: GrabServerName(host),
-				pastConfigs: action.payload.saveConfig
-					? [...state.pastConfigs, action.payload.ircOptions]
-					: state.pastConfigs,
+				pastServers: action.payload.saveServer
+					? [...state.pastServers, action.payload.ircOptions]
+					: state.pastServers,
 				channelsToJoin,
 				ircSocket
 			};
@@ -47,6 +52,7 @@ export const IrcReducer = (state, action) => {
 			};
 		case CONNECTION_LOST:
 			return {
+				...state,
 				serverName: "",
 				serverMsgs: [],
 				userChannels: [],
@@ -64,12 +70,15 @@ export const IrcReducer = (state, action) => {
 				...state,
 				isConnectedToServer: true
 			};
-		case DELETE_CONFIG:
-			let pastConfigs = DeleteConfig(action.payload);
-
+		case DELETE_SERVER_FROM_STORAGE:
 			return {
 				...state,
-				pastConfigs
+				pastServers: DeleteServer(action.payload)
+			};
+		case DELETE_CHANNEL_FROM_STORAGE:
+			return {
+				...state,
+				pastServers: DeleteChannelFromServer(action.payload.channel, action.payload.serverId)
 			};
 		case JOIN_CHANNELS:
 			action.payload.forEach(channel => state.ircSocket.emit("join channel", channel));
@@ -150,7 +159,7 @@ export const IrcReducer = (state, action) => {
 				};
 			} else {
 				//channel not in array yet so create a channel object for the new channel
-				const updatePastConfigs = AddChannelToPastConfigs(action.payload.channel, state.serverName);
+				const updatePastServers = AddChannelToPastServers(action.payload.channel, state.serverName);
 
 				return {
 					...state,
@@ -163,7 +172,7 @@ export const IrcReducer = (state, action) => {
 							messagesCount: 0
 						}
 					],
-					pastConfigs: updatePastConfigs !== null ? updatePastConfigs : state.pastConfigs
+					pastServers: updatePastServers !== null ? updatePastServers : state.pastServers
 				};
 			}
 		case CHANNEL_PRV_MSG:

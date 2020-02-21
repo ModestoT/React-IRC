@@ -8,8 +8,10 @@ import {
 	CHANNEL_PRV_MSG,
 	CREATE_PRV_MSG_TAB,
 	JOIN_CHANNELS,
-	DELETE_CONFIG
+	DELETE_SERVER_FROM_STORAGE,
+	DELETE_CHANNEL_FROM_STORAGE
 } from "./IrcReducer.js";
+
 import { IrcEventListeners } from "../../irc/IrcEventListeners.js";
 
 export const useIrc = () => {
@@ -24,10 +26,9 @@ export const useIrc = () => {
 			channels: []
 		},
 		channelsToJoin: [],
-		pastConfigs: JSON.parse(localStorage.getItem("past_configs")) || [],
+		pastServers: JSON.parse(localStorage.getItem("past_servers")) || [],
 		isConnected: false,
 		isConnectedToServer: false,
-		isSaveConfig: false,
 		isGrabbingChannels: false,
 		ircSocket: null
 	});
@@ -44,14 +45,14 @@ export const useIrc = () => {
 		}
 	}, [state.isConnectedToServer, state.channelsToJoin]);
 
-	const connectToIrc = (e, ircOptions, saveConfig) => {
+	const connectToIrc = (e, ircOptions, saveServer) => {
 		e.preventDefault();
 
 		if (state.isConnected) {
 			dispatch({ type: CONNECTION_LOST });
 			state.ircSocket.close();
 		}
-		dispatch({ type: MAKING_CONNECTION, payload: { saveConfig, ircOptions } });
+		dispatch({ type: MAKING_CONNECTION, payload: { saveServer, ircOptions } });
 	};
 
 	const disconnectFromIrc = () => {
@@ -89,8 +90,12 @@ export const useIrc = () => {
 		dispatch({ type: CREATE_PRV_MSG_TAB, payload: target });
 	};
 
-	const deleteConfig = id => {
-		dispatch({ type: DELETE_CONFIG, payload: id });
+	const deleteServer = id => {
+		dispatch({ type: DELETE_SERVER_FROM_STORAGE, payload: id });
+	};
+
+	const deleteChannelFromPastServers = (channel, serverId) => {
+		dispatch({ type: DELETE_CHANNEL_FROM_STORAGE, payload: { channel, serverId } });
 	};
 
 	return {
@@ -104,6 +109,7 @@ export const useIrc = () => {
 		setUserAsAway,
 		setUserAsBack,
 		createPrvMsgTab,
-		deleteConfig
+		deleteServer,
+		deleteChannelFromPastServers
 	};
 };

@@ -6,7 +6,7 @@ import IrcChatView from "./views/IrcChatView.js";
 import IrcLoginView from "./views/IrcLoginView.js";
 import HeaderAndSideMenuView from "./views/HeaderAndSideMenuView.js";
 
-const theme = {
+const darkTheme = {
 	mainBg: "#2B2B28",
 	mainText: "#D7DADC",
 	secondaryBg: "#2A282B",
@@ -35,17 +35,19 @@ function App() {
 		setUserAsAway,
 		setUserAsBack,
 		createPrvMsgTab,
-		deleteConfig
+		deleteServer,
+		deleteChannelFromPastServers
 	} = useIrc();
 
 	return (
-		<ThemeProvider theme={theme}>
+		<ThemeProvider theme={darkTheme}>
 			<AppWrapper>
 				<HeaderAndSideMenuView
 					connectToIrc={connectToIrc}
 					currentServer={state.serverName}
-					pastConfigs={state.pastConfigs}
-					deleteConfig={deleteConfig}
+					pastServers={state.pastServers}
+					deleteServer={deleteServer}
+					deleteChannelFromPastServers={deleteChannelFromPastServers}
 				>
 					{state.isConnected ? (
 						<IrcChatView

@@ -18,53 +18,53 @@ export const FormatIntoMatrix = (arr, limit) => {
 	return res;
 };
 
-export const AddConfigToStorage = config => {
-	const pastConfigs = JSON.parse(localStorage.getItem("past_configs"));
-	if (pastConfigs && pastConfigs.length > 0) {
-		console.log("running save config");
-		pastConfigs.push({ id: pastConfigs[pastConfigs.length - 1].id + 1, ...config, channels: [] });
-		localStorage.setItem("past_configs", JSON.stringify(pastConfigs));
+export const AddServerToStorage = server => {
+	const pastServers = JSON.parse(localStorage.getItem("past_servers"));
+	if (pastServers && pastServers.length > 0) {
+		console.log("running save Server");
+		pastServers.push({ id: pastServers[pastServers.length - 1].id + 1, ...server, channels: [] });
+		localStorage.setItem("past_servers", JSON.stringify(pastServers));
 	} else {
-		localStorage.setItem("past_configs", JSON.stringify([{ id: 1, ...config, channels: [] }]));
+		localStorage.setItem("past_servers", JSON.stringify([{ id: 1, ...server, channels: [] }]));
 	}
 };
 
-export const AddChannelToPastConfigs = (channel, serverName) => {
-	const pastConfigs = JSON.parse(localStorage.getItem("past_configs"));
+export const AddChannelToPastServers = (channel, serverName) => {
+	const pastServers = JSON.parse(localStorage.getItem("past_servers"));
 
-	for (let i = 0; i < pastConfigs.length; i++) {
+	for (let i = 0; i < pastServers.length; i++) {
 		if (
-			pastConfigs[i].saveConfig &&
-			GrabServerName(pastConfigs[i].host.toLowerCase()) === serverName.toLowerCase()
+			pastServers[i].saveServer &&
+			GrabServerName(pastServers[i].host.toLowerCase()) === serverName.toLowerCase()
 		) {
-			pastConfigs[i] = {
-				...pastConfigs[i],
-				channels: UpdatePastConfigsChannels(pastConfigs[i].channels, channel)
+			pastServers[i] = {
+				...pastServers[i],
+				channels: UpdatePastServersChannels(pastServers[i].channels, channel)
 			};
-			localStorage.setItem("past_configs", JSON.stringify(pastConfigs));
-			return pastConfigs;
+			localStorage.setItem("past_servers", JSON.stringify(pastServers));
+			return pastServers;
 		}
 	}
 	return null;
 };
 
-export const DeleteConfig = id => {
-	const pastConfigs = JSON.parse(localStorage.getItem("past_configs"));
-	const configIndex = pastConfigs.findIndex(config => config.id === id);
+export const DeleteServer = id => {
+	const pastServers = JSON.parse(localStorage.getItem("past_servers"));
+	const serverIndex = pastServers.findIndex(server => server.id === id);
 
-	pastConfigs.splice(configIndex, 1);
+	pastServers.splice(serverIndex, 1);
 
-	localStorage.setItem("past_configs", JSON.stringify(pastConfigs));
+	localStorage.setItem("past_servers", JSON.stringify(pastServers));
 
-	return pastConfigs;
+	return pastServers;
 };
 
-export const DeleteChannelFromConfig = (channelName, configId) => {
-	const pastConfigs = JSON.parse(localStorage.getItem("past_configs"));
+export const DeleteChannelFromServer = (channelName, serverId) => {
+	const pastServers = JSON.parse(localStorage.getItem("past_servers"));
 
-	for (let i = 0; i < pastConfigs.length; i++) {
-		if (pastConfigs[i].id === configId) {
-			pastConfigs[i].channels = pastConfigs[i].channels.filter(
+	for (let i = 0; i < pastServers.length; i++) {
+		if (pastServers[i].id === serverId) {
+			pastServers[i].channels = pastServers[i].channels.filter(
 				channel => channel.toLowerCase() !== channelName.toLowerCase()
 			);
 
@@ -72,12 +72,12 @@ export const DeleteChannelFromConfig = (channelName, configId) => {
 		}
 	}
 
-	localStorage.setItem("past_configs", JSON.stringify(pastConfigs));
+	localStorage.setItem("past_servers", JSON.stringify(pastServers));
 
-	return pastConfigs;
+	return pastServers;
 };
 
-const UpdatePastConfigsChannels = (channels, newChannel) => {
+const UpdatePastServersChannels = (channels, newChannel) => {
 	for (let i = 0; i < channels.length; i++) {
 		if (channels[i].toLowerCase() === newChannel.toLowerCase()) {
 			return channels;
