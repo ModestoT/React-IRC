@@ -29,15 +29,16 @@ const AppContent = styled.div`
 `;
 
 const ContentWrapper = styled.div`
+	position: relative;
 	width: 100%;
 	left: ${props => (props.sideMenuOpen ? "80%" : "0")};
+	transition: left 0.5s;
 	${props =>
 		props.sideMenuOpen &&
 		`
-      position: relative;
       background-color: rgba(0,0,0,.4);
       opacity: .5;
-    `}
+		`}
 `;
 
 const MobileSideMenu = styled.div`
@@ -47,6 +48,7 @@ const MobileSideMenu = styled.div`
 	background: ${props => props.theme.secondaryBg};
 	left: ${props => (props.sideMenuOpen ? "0" : "-100%")};
 	z-index: 5;
+	transition: left 0.5s;
 `;
 
 const DesktopSideMenu = styled.div`
