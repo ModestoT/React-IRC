@@ -6,11 +6,22 @@ const ChannelWrapper = styled.div`
 	justify-content: space-between;
 	align-items: baseline;
 	border-bottom: 1px solid ${props => props.theme.inputBg};
-	cursor: pointer;
 
-	&:hover {
-		p {
-			text-decoration: underline;
+	p {
+		margin: 2% 0;
+	}
+
+	button {
+		cursor: pointer;
+		background: indianred;
+		color: ${props => props.theme.mainText};
+		border: none;
+		border-radius: 3px;
+		padding: 1% 3%;
+
+		&:hover {
+			background: red;
+			color: white;
 		}
 	}
 `;

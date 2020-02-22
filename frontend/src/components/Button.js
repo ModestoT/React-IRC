@@ -10,6 +10,11 @@ const Btn = styled.button`
 	border-radius: 3px;
 	background: ${props => props.theme.btnBg};
 	color: ${props => props.theme.btnText};
+
+	&:hover {
+		background: #808075;
+		color: #bfbfb0;
+	}
 `;
 
 const Button = ({ onClick, btnText }) => {

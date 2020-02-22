@@ -6,6 +6,7 @@ import PastServer from "./PastServer.js";
 const PastServersListWrapper = styled.ul`
 	list-style-type: none;
 	padding: 0;
+	overflow: auto;
 
 	h1 {
 		text-align: center;

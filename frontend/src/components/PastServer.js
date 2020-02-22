@@ -5,6 +5,10 @@ import { GrabServerName } from "../helpers/IrcHelpers.js";
 import Button from "./Button.js";
 import PastServerChannel from "./PastServerChannel.js";
 
+const PastServerWrapper = styled.li`
+	margin-bottom: 10%;
+`;
+
 const PastServerHeader = styled.header`
 	display: flex;
 	justify-content: space-between;
@@ -15,22 +19,37 @@ const PastServerHeader = styled.header`
 	h2 {
 		margin: 0;
 	}
+
+	button {
+		cursor: pointer;
+		border: 1px solid transparent;
+		background: indianred;
+		color: white;
+		padding: 4px 8px;
+
+		&:hover {
+			background: red;
+			color: ${props => props.theme.mainText};
+		}
+	}
 `;
 
 const ChannelsList = styled.ul`
 	padding: 0 3%;
 	margin: 2% 0;
 `;
+
 const ChannelsListHeader = styled.header`
 	display: flex;
 	justify-content: space-between;
 	align-items: baseline;
 `;
+
 const ConnectBtnWrapper = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: baseline;
-	background: ${props => props.theme.mainBg};
+	background: ${props => props.theme.tertiaryBg};
 `;
 
 const PastServer = ({
@@ -44,10 +63,10 @@ const PastServer = ({
 	const { host, channels, id } = server;
 	const isConnected = currentServer.length > 0 ? host.includes(currentServer) : false;
 	return (
-		<li>
+		<PastServerWrapper>
 			<PastServerHeader>
 				<h2>{GrabServerName(host)}</h2>
-				<button onClick={() => deleteServer(server.id)}>delete</button>
+				<button onClick={() => deleteServer(server.id)}>Delete</button>
 			</PastServerHeader>
 			{!isConnected && (
 				<ConnectBtnWrapper>
@@ -58,7 +77,7 @@ const PastServer = ({
 			<ChannelsList>
 				<ChannelsListHeader>
 					<h4>Channels</h4>
-					<button onClick={() => setIsEditingChannels(!isEditingChannels)}>edit</button>
+					<Button onClick={() => setIsEditingChannels(!isEditingChannels)} btnText="edit" />
 				</ChannelsListHeader>
 				{channels.map((channel, index) => (
 					<PastServerChannel
@@ -70,7 +89,7 @@ const PastServer = ({
 					/>
 				))}
 			</ChannelsList>
-		</li>
+		</PastServerWrapper>
 	);
 };
 

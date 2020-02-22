@@ -10,6 +10,7 @@ const darkTheme = {
 	mainBg: "#2B2B28",
 	mainText: "#D7DADC",
 	secondaryBg: "#2A282B",
+	tertiaryBg: "#33332F",
 	btnBg: "#B8B8AB",
 	btnText: "#33332F",
 	inputBg: "#383834"

@@ -43,7 +43,7 @@ const ContentWrapper = styled.div`
 const MobileSideMenu = styled.div`
 	position: absolute;
 	width: 80%;
-	height: 91%;
+	height: calc(91% - 1px);
 	background: ${props => props.theme.secondaryBg};
 	left: ${props => (props.sideMenuOpen ? "0" : "-100%")};
 	z-index: 5;
