@@ -8,8 +8,8 @@ const AppHeader = styled.header`
 	width: 100%;
 	display: flex;
 	align-items: center;
-	background: ${props => props.theme.secondaryBg};
-	border-bottom: 1px solid ${props => props.theme.inputBg};
+	background: ${(props) => props.theme.secondaryBg};
+	border-bottom: 1px solid ${(props) => props.theme.inputBg};
 	height: 9%;
 
 	@media (min-width: 1024px) {
@@ -21,7 +21,7 @@ const AppContent = styled.div`
 	display: flex;
 	height: 91%;
 	overflow: hidden;
-	background: ${props => props.theme.mainBg};
+	background: ${(props) => props.theme.mainBg};
 
 	@media (min-width: 1024px) {
 		height: 100%;
@@ -31,9 +31,9 @@ const AppContent = styled.div`
 const ContentWrapper = styled.div`
 	position: relative;
 	width: 100%;
-	left: ${props => (props.sideMenuOpen ? "80%" : "0")};
+	left: ${(props) => (props.sideMenuOpen ? "80%" : "0")};
 	transition: left 0.5s;
-	${props =>
+	${(props) =>
 		props.sideMenuOpen &&
 		`
       background-color: rgba(0,0,0,.4);
@@ -45,14 +45,14 @@ const MobileSideMenu = styled.div`
 	position: absolute;
 	width: 80%;
 	height: calc(91% - 1px);
-	background: ${props => props.theme.secondaryBg};
-	left: ${props => (props.sideMenuOpen ? "0" : "-100%")};
+	background: ${(props) => props.theme.secondaryBg};
+	left: ${(props) => (props.sideMenuOpen ? "0" : "-100%")};
 	z-index: 5;
 	transition: left 0.5s;
 `;
 
 const DesktopSideMenu = styled.div`
-	background: ${props => props.theme.secondaryBg};
+	background: ${(props) => props.theme.secondaryBg};
 	height: 100%;
 	width: 15%;
 `;
@@ -63,7 +63,7 @@ const HeaderAndSideMenuView = ({
 	currentServer,
 	pastServers,
 	deleteServer,
-	deleteChannelFromPastServers
+	deleteChannelFromPastServers,
 }) => {
 	const [sideMenuOpen, setSideMenuOpen] = useState(false);
 	const [windowWidthSize, setwindowWidthSize] = useState(window.innerWidth);
@@ -79,6 +79,10 @@ const HeaderAndSideMenuView = ({
 		return () => window.removeEventListener("resize", updateWidth);
 	}, []);
 
+	const connectToPastServer = (e, server) => {
+		connectToIrc(e, server, false);
+		setSideMenuOpen(!sideMenuOpen);
+	};
 	return (
 		<>
 			<AppHeader>
@@ -90,7 +94,7 @@ const HeaderAndSideMenuView = ({
 				{windowWidthSize < 1024 ? (
 					<MobileSideMenu sideMenuOpen={sideMenuOpen}>
 						<PastServersList
-							connectToIrc={connectToIrc}
+							connectToIrc={connectToPastServer}
 							currentServer={currentServer}
 							pastServers={pastServers}
 							deleteServer={deleteServer}

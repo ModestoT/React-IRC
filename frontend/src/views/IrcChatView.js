@@ -15,7 +15,7 @@ const IrcChatView = ({
 	sendMessageToChannel,
 	setUserAsAway,
 	setUserAsBack,
-	createPrvMsgTab
+	createPrvMsgTab,
 }) => {
 	const {
 		serverName,
@@ -23,10 +23,11 @@ const IrcChatView = ({
 		userChannels,
 		joinableChannels,
 		isGrabbingChannels,
-		nick
+		nick,
 	} = state;
 	const [isToggled, setIsToggled] = useState(false);
 	const [currentTab, setCurrentTab] = useState(serverName);
+	const [showUsers, setShowUsers] = useState(false);
 
 	const toggleModal = () => {
 		if (joinableChannels.pages === 0) {
@@ -36,12 +37,12 @@ const IrcChatView = ({
 		setIsToggled(!isToggled);
 	};
 
-	const handleJoinIrcChannel = channelName => {
+	const handleJoinIrcChannel = (channelName) => {
 		joinIrcChannel(channelName);
 		setCurrentTab(channelName);
 	};
 
-	const handleCreatePrvMsgTab = target => {
+	const handleCreatePrvMsgTab = (target) => {
 		createPrvMsgTab(target);
 		setCurrentTab(target);
 	};
@@ -84,6 +85,8 @@ const IrcChatView = ({
 				serverName={serverName}
 				serverMsgs={serverMsgs}
 				userChannels={userChannels}
+				showUsers={showUsers}
+				setShowUsers={setShowUsers}
 			/>
 			<IrcInputField
 				currentChannel={currentTab}

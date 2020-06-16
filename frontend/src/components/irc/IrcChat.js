@@ -2,6 +2,8 @@ import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 
 import IrcChatMsg from "./IrcChatMsg";
+import IrcChatUsersList from "./IrcChatUsersList";
+import Button from "../Button";
 
 const IrcChatWindow = styled.div`
 	width: 80%;
@@ -12,7 +14,7 @@ const IrcChatWindow = styled.div`
 	padding: 1%;
 `;
 
-const IrcChat = ({ channel }) => {
+const IrcChat = ({ channel, showUsers, setShowUsers }) => {
 	const { messages, userList } = channel;
 	const divRef = useRef(null);
 
@@ -27,13 +29,10 @@ const IrcChat = ({ channel }) => {
 					return <IrcChatMsg key={index} msg={msg} />;
 				})}
 			</IrcChatWindow>
-			{userList.length > 0 && (
-				<ul className="irc-chat-user-list" style={{ overflow: "auto" }}>
-					{userList.map(user => {
-						return <li key={user.nick}>{user.nick}</li>;
-					})}
-				</ul>
-			)}
+			<div className="usersList">
+				<Button onClick={() => setShowUsers(!showUsers)} btnText="Users" />
+				{showUsers && <IrcChatUsersList userList={userList} />}
+			</div>
 		</div>
 	);
 };

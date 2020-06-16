@@ -14,7 +14,7 @@ const PastServerHeader = styled.header`
 	justify-content: space-between;
 	align-items: center;
 	padding: 3%;
-	background: ${props => props.theme.inputBg};
+	background: ${(props) => props.theme.inputBg};
 
 	h2 {
 		margin: 0;
@@ -29,7 +29,7 @@ const PastServerHeader = styled.header`
 
 		&:hover {
 			background: red;
-			color: ${props => props.theme.mainText};
+			color: ${(props) => props.theme.mainText};
 		}
 	}
 `;
@@ -49,7 +49,7 @@ const ConnectBtnWrapper = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: baseline;
-	background: ${props => props.theme.tertiaryBg};
+	background: ${(props) => props.theme.tertiaryBg};
 `;
 
 const PastServer = ({
@@ -57,7 +57,7 @@ const PastServer = ({
 	connectToIrc,
 	currentServer,
 	deleteServer,
-	deleteChannelFromPastServers
+	deleteChannelFromPastServers,
 }) => {
 	const [isEditingChannels, setIsEditingChannels] = useState(false);
 	const { host, channels, id } = server;
@@ -71,13 +71,17 @@ const PastServer = ({
 			{!isConnected && (
 				<ConnectBtnWrapper>
 					<p>Not connected.</p>
-					<Button onClick={e => connectToIrc(e, server, false)} btnText="connect" />
+					<Button onClick={(e) => connectToIrc(e, server, false)} btnText="connect" />
 				</ConnectBtnWrapper>
 			)}
 			<ChannelsList>
 				<ChannelsListHeader>
 					<h4>Channels</h4>
-					<Button onClick={() => setIsEditingChannels(!isEditingChannels)} btnText="edit" />
+					{isEditingChannels ? (
+						<Button onClick={() => setIsEditingChannels(!isEditingChannels)} btnText="done" />
+					) : (
+						<Button onClick={() => setIsEditingChannels(!isEditingChannels)} btnText="edit" />
+					)}
 				</ChannelsListHeader>
 				{channels.map((channel, index) => (
 					<PastServerChannel
