@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 import IrcChatMsg from "./IrcChatMsg";
 import IrcChatUsersList from "./IrcChatUsersList";
-import Button from "../Button";
 
 const IrcChatWindow = styled.div`
 	width: 80%;
@@ -14,7 +13,7 @@ const IrcChatWindow = styled.div`
 	padding: 1%;
 `;
 
-const IrcChat = ({ channel, showUsers, setShowUsers }) => {
+const IrcChat = ({ channel, showUsers }) => {
 	const { messages, userList } = channel;
 	const divRef = useRef(null);
 
@@ -29,10 +28,7 @@ const IrcChat = ({ channel, showUsers, setShowUsers }) => {
 					return <IrcChatMsg key={index} msg={msg} />;
 				})}
 			</IrcChatWindow>
-			<div className="usersList">
-				<Button onClick={() => setShowUsers(!showUsers)} btnText="Users" />
-				{showUsers && <IrcChatUsersList userList={userList} />}
-			</div>
+			{showUsers && <IrcChatUsersList userList={userList} />}
 		</div>
 	);
 };

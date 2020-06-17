@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components";
 
 const IrcChatUsersList = ({ userList }) => {
 	if (userList.length > 0) {

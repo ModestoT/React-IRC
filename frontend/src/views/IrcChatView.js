@@ -79,6 +79,8 @@ const IrcChatView = ({
 				setCurrentTab={setCurrentTab}
 				toggleModal={toggleModal}
 				leaveIrcChannel={handleLeaveIrcChannel}
+				showUsers={showUsers}
+				setShowUsers={setShowUsers}
 			/>
 			<IrcCurrentTabChat
 				currentTab={currentTab}
@@ -86,7 +88,6 @@ const IrcChatView = ({
 				serverMsgs={serverMsgs}
 				userChannels={userChannels}
 				showUsers={showUsers}
-				setShowUsers={setShowUsers}
 			/>
 			<IrcInputField
 				currentChannel={currentTab}

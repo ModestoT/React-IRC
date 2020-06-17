@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import IrcChatTab from "./IrcChatTab";
+import Button from "../Button.js";
 
 const TabsWrapper = styled.div`
 	display: flex;
@@ -14,7 +15,9 @@ const IrcChatTabs = ({
 	currentTab,
 	setCurrentTab,
 	toggleModal,
-	leaveIrcChannel
+	leaveIrcChannel,
+	showUsers,
+	setShowUsers,
 }) => {
 	return (
 		<TabsWrapper>
@@ -30,9 +33,8 @@ const IrcChatTabs = ({
 					/>
 				);
 			})}
-			<button className="join-channel" onClick={() => toggleModal()}>
-				+
-			</button>
+			<Button onClick={() => toggleModal()} btnText="+" />
+			<Button onClick={() => setShowUsers(!showUsers)} btnText="Users" />
 		</TabsWrapper>
 	);
 };
