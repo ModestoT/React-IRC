@@ -2,33 +2,34 @@ import React from "react";
 import styled from "styled-components";
 
 const TabWrapper = styled.div`
+	cursor: pointer;
 	display: flex;
+	border: 1.5px solid;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	color: ${(props) => (props.isCurrentTab ? props.theme.btnText : props.theme.mainText)};
+	border-color: ${(props) => props.theme.mainText};
+	background: ${(props) => props.isCurrentTab && props.theme.btnBg};
 `;
 
 const ChannelTab = styled.h2`
-	cursor: pointer;
-	border: 1px solid;
-	background: ${props => props.isCurrentTab && "blue"};
+	width: 60px;
 	text-transform: capitalize;
 	margin: 1% 0;
-	color: ${props => (props.isCurrentTab ? "white" : "black")};
+	overflow: hidden;
+	text-overflow: ellipsis;
+`;
+
+const CloseTabBtn = styled.button`
+	border: none;
+	background: inherit;
 `;
 
 const IrcChatTab = ({ channelName, currentTab, setCurrentTab, leaveIrcChannel, isServerTab }) => {
 	return (
-		<TabWrapper>
-			<ChannelTab
-				isCurrentTab={currentTab.toLowerCase() === channelName.toLowerCase()}
-				onClick={() => setCurrentTab(channelName)}
-			>
-				{channelName}
-			</ChannelTab>
-			<button
-				className="leave-channel-btn"
-				onClick={() => leaveIrcChannel(channelName, isServerTab)}
-			>
-				X
-			</button>
+		<TabWrapper isCurrentTab={currentTab.toLowerCase() === channelName.toLowerCase()}>
+			<ChannelTab onClick={() => setCurrentTab(channelName)}>{channelName}</ChannelTab>
+			<CloseTabBtn onClick={() => leaveIrcChannel(channelName, isServerTab)}>X</CloseTabBtn>
 		</TabWrapper>
 	);
 };
