@@ -2,7 +2,7 @@ import { GrabServerName, CheckIfOverMessageLimit } from "../../helpers/IrcHelper
 import {
 	AddChannelToPastServers,
 	DeleteServer,
-	DeleteChannelFromServer
+	DeleteChannelFromServer,
 } from "../../helpers/GeneralHelpers.js";
 import CreateIrcConnection from "../../irc/CreateIrcConnection.js";
 
@@ -39,16 +39,16 @@ export const IrcReducer = (state, action) => {
 				nick: nick,
 				serverName: GrabServerName(host),
 				pastServers: action.payload.saveServer
-					? [...state.pastServers, action.payload.ircOptions]
+					? JSON.parse(localStorage.getItem("past_servers"))
 					: state.pastServers,
 				channelsToJoin,
-				ircSocket
+				ircSocket,
 			};
 		case CONNECTION_ESTABLISHED:
 			console.log("connected to irc");
 			return {
 				...state,
-				isConnected: true
+				isConnected: true,
 			};
 		case CONNECTION_LOST:
 			return {
@@ -59,45 +59,45 @@ export const IrcReducer = (state, action) => {
 				joinableChannels: {
 					pages: 0,
 					channels: [],
-					channelCount: 0
+					channelCount: 0,
 				},
 				isConnected: false,
 				isConnectedToServer: false,
-				ircSocket: null
+				ircSocket: null,
 			};
 		case CONNECTION_TO_SERVER_MADE:
 			return {
 				...state,
-				isConnectedToServer: true
+				isConnectedToServer: true,
 			};
 		case DELETE_SERVER_FROM_STORAGE:
 			return {
 				...state,
-				pastServers: DeleteServer(action.payload)
+				pastServers: DeleteServer(action.payload),
 			};
 		case DELETE_CHANNEL_FROM_STORAGE:
 			return {
 				...state,
-				pastServers: DeleteChannelFromServer(action.payload.channel, action.payload.serverId)
+				pastServers: DeleteChannelFromServer(action.payload.channel, action.payload.serverId),
 			};
 		case JOIN_CHANNELS:
-			action.payload.forEach(channel => state.ircSocket.emit("join channel", channel));
+			action.payload.forEach((channel) => state.ircSocket.emit("join channel", channel));
 			return {
 				...state,
-				channelsToJoin: []
+				channelsToJoin: [],
 			};
 		case GRABBING_CHANNEL_LIST:
 			return {
 				...state,
-				isGrabbingChannels: true
+				isGrabbingChannels: true,
 			};
 		case UPDATE_CHANNELS_COUNT:
 			return {
 				...state,
 				joinableChannels: {
 					pages: state.joinableChannels.pages + 1,
-					channelCount: state.joinableChannels.channelCount + action.payload
-				}
+					channelCount: state.joinableChannels.channelCount + action.payload,
+				},
 			};
 		case GRABBING_CHANNEL_LIST_END:
 			return {
@@ -105,32 +105,32 @@ export const IrcReducer = (state, action) => {
 				isGrabbingChannels: false,
 				joinableChannels: {
 					...state.joinableChannels,
-					channels: action.payload
-				}
+					channels: action.payload,
+				},
 			};
 		case NOTICE_MESSAGE:
 			return {
 				...state,
-				serverMsgs: [...state.serverMsgs, `-${action.payload.nick}- ${action.payload.message}`]
+				serverMsgs: [...state.serverMsgs, `-${action.payload.nick}- ${action.payload.message}`],
 			};
 		case MOTD_MESSAGE:
 			return {
 				...state,
-				serverMsgs: [...state.serverMsgs, action.payload]
+				serverMsgs: [...state.serverMsgs, action.payload],
 			};
 		case CHANNEL_NOTICE:
 			return {
 				...state,
-				userChannels: state.userChannels.map(c => {
+				userChannels: state.userChannels.map((c) => {
 					let { messages, messagesCount } = CheckIfOverMessageLimit(c, 2000);
 					return c.channelName.toLowerCase() === action.payload.channelName.toLowerCase()
 						? {
 								...c,
 								messages: [...messages, `-${action.payload.nick}- ${action.payload.message}`],
-								messagesCount: messagesCount + 1
+								messagesCount: messagesCount + 1,
 						  }
 						: c;
-				})
+				}),
 			};
 		case CHANNEL_MESSAGE:
 			channel = state.userChannels.find(
@@ -140,7 +140,7 @@ export const IrcReducer = (state, action) => {
 				const { nick, ident, hostname, status, channel, message, users } = action.payload;
 				return {
 					...state,
-					userChannels: state.userChannels.map(c => {
+					userChannels: state.userChannels.map((c) => {
 						let { messages, messagesCount } = CheckIfOverMessageLimit(c, 2000);
 						return c.channelName.toLowerCase() === channel.toLowerCase()
 							? {
@@ -149,13 +149,13 @@ export const IrcReducer = (state, action) => {
 										...messages,
 										`${nick} [${ident}@${hostname}] has ${status} ${channel} ${
 											status === "left" ? `[${message}]` : ""
-										}`
+										}`,
 									],
 									messagesCount: messagesCount + 1,
-									userList: users
+									userList: users,
 							  }
 							: c;
-					})
+					}),
 				};
 			} else {
 				//channel not in array yet so create a channel object for the new channel
@@ -169,41 +169,41 @@ export const IrcReducer = (state, action) => {
 							channelName: action.payload.channel,
 							messages: [],
 							userList: action.payload.users,
-							messagesCount: 0
-						}
+							messagesCount: 0,
+						},
 					],
-					pastServers: updatePastServers !== null ? updatePastServers : state.pastServers
+					pastServers: updatePastServers !== null ? updatePastServers : state.pastServers,
 				};
 			}
 		case CHANNEL_PRV_MSG:
 			return {
 				...state,
-				userChannels: state.userChannels.map(c => {
+				userChannels: state.userChannels.map((c) => {
 					let { messages, messagesCount } = CheckIfOverMessageLimit(c, 2000);
 					return c.channelName.toLowerCase() === action.payload.target.toLowerCase()
 						? {
 								...c,
 								messages: [...messages, `<${action.payload.nick}> ${action.payload.message}`],
-								messagesCount: messagesCount + 1
+								messagesCount: messagesCount + 1,
 						  }
 						: c;
-				})
+				}),
 			};
 		case UPDATE_USERS_LIST:
 			return {
 				...state,
-				userChannels: state.userChannels.map(c =>
+				userChannels: state.userChannels.map((c) =>
 					c.channelName.toLowerCase() === action.payload.channelName.toLowerCase()
 						? { ...c, userList: action.payload.users }
 						: c
-				)
+				),
 			};
 		case LEAVE_CHANNEL:
 			return {
 				...state,
 				userChannels: state.userChannels.filter(
-					c => c.channelName.toLowerCase() !== action.payload.toLowerCase()
-				)
+					(c) => c.channelName.toLowerCase() !== action.payload.toLowerCase()
+				),
 			};
 		case PERSONAL_MSG:
 			channel = state.userChannels.find(
@@ -213,16 +213,16 @@ export const IrcReducer = (state, action) => {
 			if (channel) {
 				return {
 					...state,
-					userChannels: state.userChannels.map(c => {
+					userChannels: state.userChannels.map((c) => {
 						let { messages, messagesCount } = CheckIfOverMessageLimit(c, 2000);
 						return c.channelName.toLowerCase() === action.payload.sentFrom.toLowerCase()
 							? {
 									...c,
 									messages: [...messages, `<${action.payload.sentFrom}> ${action.payload.message}`],
-									messagesCount: messagesCount + 1
+									messagesCount: messagesCount + 1,
 							  }
 							: c;
-					})
+					}),
 				};
 			} else {
 				return {
@@ -233,9 +233,9 @@ export const IrcReducer = (state, action) => {
 							channelName: action.payload.sentFrom,
 							messages: [`<${action.payload.sentFrom}> ${action.payload.message}`],
 							userList: [],
-							messagesCount: 1
-						}
-					]
+							messagesCount: 1,
+						},
+					],
 				};
 			}
 		case CREATE_PRV_MSG_TAB:
@@ -247,9 +247,9 @@ export const IrcReducer = (state, action) => {
 						channelName: action.payload,
 						messages: [],
 						userList: [],
-						messagesCount: 0
-					}
-				]
+						messagesCount: 0,
+					},
+				],
 			};
 		default:
 			return state;

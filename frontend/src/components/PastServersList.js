@@ -8,7 +8,8 @@ const PastServersListWrapper = styled.ul`
 	padding: 0;
 	overflow: auto;
 
-	h1 {
+	h1,
+	h4 {
 		text-align: center;
 	}
 `;
@@ -18,13 +19,13 @@ const PastServersList = ({
 	currentServer,
 	pastServers,
 	deleteServer,
-	deleteChannelFromPastServers
+	deleteChannelFromPastServers,
 }) => {
 	return (
 		<PastServersListWrapper>
 			<h1>Saved Servers</h1>
 			{pastServers.length > 0 ? (
-				pastServers.map(server => (
+				pastServers.map((server) => (
 					<PastServer
 						key={server.id}
 						server={server}
