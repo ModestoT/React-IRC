@@ -7,13 +7,13 @@ const TabWrapper = styled.div`
 	border: 1.5px solid;
 	border-top-left-radius: 5px;
 	border-top-right-radius: 5px;
-	color: ${(props) => (props.isCurrentTab ? props.theme.btnText : props.theme.mainText)};
-	border-color: ${(props) => props.theme.mainText};
-	background: ${(props) => props.isCurrentTab && props.theme.btnBg};
+	color: ${(props) => (props.isCurrentTab ? props.theme.mainText : props.theme.btnText)};
+	border-color: ${(props) => props.theme.btnBg};
+	background: ${(props) => !props.isCurrentTab && props.theme.btnBg};
 `;
 
 const ChannelTab = styled.h2`
-	width: 60px;
+	width: ${(props) => (props.isCurrentTab ? "inherit" : `${props.currentTabWidth}px`)};
 	text-transform: capitalize;
 	margin: 1% 0;
 	overflow: hidden;
@@ -25,10 +25,23 @@ const CloseTabBtn = styled.button`
 	background: inherit;
 `;
 
-const IrcChatTab = ({ channelName, currentTab, setCurrentTab, leaveIrcChannel, isServerTab }) => {
+const IrcChatTab = ({
+	channelName,
+	currentTab,
+	setCurrentTab,
+	leaveIrcChannel,
+	isServerTab,
+	currentTabWidth,
+}) => {
 	return (
 		<TabWrapper isCurrentTab={currentTab.toLowerCase() === channelName.toLowerCase()}>
-			<ChannelTab onClick={() => setCurrentTab(channelName)}>{channelName}</ChannelTab>
+			<ChannelTab
+				currentTabWidth={currentTabWidth}
+				isCurrentTab={currentTab.toLowerCase() === channelName.toLowerCase()}
+				onClick={() => setCurrentTab(channelName)}
+			>
+				{channelName}
+			</ChannelTab>
 			<CloseTabBtn onClick={() => leaveIrcChannel(channelName, isServerTab)}>X</CloseTabBtn>
 		</TabWrapper>
 	);
