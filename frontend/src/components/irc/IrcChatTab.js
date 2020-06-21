@@ -13,7 +13,7 @@ const TabWrapper = styled.div`
 `;
 
 const ChannelTab = styled.h2`
-	width: ${(props) => (props.isCurrentTab ? "inherit" : `${props.currentTabWidth}px`)};
+	width: ${(props) => (props.isCurrentTab ? `calc(100% - 20px)` : `${props.currentTabWidth}px`)};
 	text-transform: capitalize;
 	margin: 1% 0;
 	overflow: hidden;

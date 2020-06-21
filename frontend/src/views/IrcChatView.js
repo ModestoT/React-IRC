@@ -16,6 +16,8 @@ const IrcChatView = ({
 	setUserAsAway,
 	setUserAsBack,
 	createPrvMsgTab,
+	windowWidthSize,
+	currentChannel,
 }) => {
 	const {
 		serverName,
@@ -25,6 +27,7 @@ const IrcChatView = ({
 		isGrabbingChannels,
 		nick,
 	} = state;
+
 	const [isToggled, setIsToggled] = useState(false);
 	const [currentTab, setCurrentTab] = useState(serverName);
 	const [showUsers, setShowUsers] = useState(false);
@@ -72,7 +75,8 @@ const IrcChatView = ({
 
 	return (
 		<div>
-			<IrcChatTabs
+			<h2>{currentChannel}</h2>
+			{/* <IrcChatTabs
 				tabs={[{ channelName: serverName, isServerTab: true }, ...userChannels]}
 				serverName={serverName}
 				currentTab={currentTab}
@@ -81,13 +85,15 @@ const IrcChatView = ({
 				leaveIrcChannel={handleLeaveIrcChannel}
 				showUsers={showUsers}
 				setShowUsers={setShowUsers}
-			/>
+				windowWidthSize={windowWidthSize}
+			/> */}
 			<IrcCurrentTabChat
 				currentTab={currentTab}
 				serverName={serverName}
 				serverMsgs={serverMsgs}
 				userChannels={userChannels}
 				showUsers={showUsers}
+				currentChannel={currentChannel}
 			/>
 			<IrcInputField
 				currentChannel={currentTab}

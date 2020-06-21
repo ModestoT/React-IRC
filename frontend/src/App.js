@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled, { ThemeProvider } from "styled-components";
 
 import { useIrc } from "./customHooks/ircHook/useIrc.js";
@@ -13,7 +13,7 @@ const darkTheme = {
 	tertiaryBg: "#33332F",
 	btnBg: "#B8B8AB",
 	btnText: "#33332F",
-	inputBg: "#383834"
+	inputBg: "#383834",
 };
 
 const AppWrapper = styled.div`
@@ -21,7 +21,7 @@ const AppWrapper = styled.div`
 	display: flex;
 	flex-direction: column;
 	height: 100vh;
-	color: ${props => props.theme.mainText};
+	color: ${(props) => props.theme.mainText};
 `;
 
 function App() {
@@ -37,8 +37,20 @@ function App() {
 		setUserAsBack,
 		createPrvMsgTab,
 		deleteServer,
-		deleteChannelFromPastServers
+		deleteChannelFromPastServers,
 	} = useIrc();
+
+	const [windowWidthSize, setwindowWidthSize] = useState(window.innerWidth);
+	const [currentChannel, setCurrentChannel] = useState(state.serverName);
+
+	useEffect(() => {
+		const updateWidth = () => {
+			setwindowWidthSize(window.innerWidth);
+		};
+		window.addEventListener("resize", updateWidth);
+
+		return () => window.removeEventListener("resize", updateWidth);
+	}, []);
 
 	return (
 		<ThemeProvider theme={darkTheme}>
@@ -49,6 +61,9 @@ function App() {
 					pastServers={state.pastServers}
 					deleteServer={deleteServer}
 					deleteChannelFromPastServers={deleteChannelFromPastServers}
+					windowWidthSize={windowWidthSize}
+					currentChannel={currentChannel}
+					setCurrentChannel={setCurrentChannel}
 				>
 					{state.isConnected ? (
 						<IrcChatView
@@ -61,6 +76,8 @@ function App() {
 							setUserAsAway={setUserAsAway}
 							setUserAsBack={setUserAsBack}
 							createPrvMsgTab={createPrvMsgTab}
+							windowWidthSize={windowWidthSize}
+							currentChannel={currentChannel}
 						/>
 					) : (
 						<IrcLoginView connectToIrc={connectToIrc} />

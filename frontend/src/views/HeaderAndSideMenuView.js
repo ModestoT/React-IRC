@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import Button from "../components/Button.js";
 import PastServersList from "../components/PastServersList.js";
+import { GrabServerName } from "../helpers/IrcHelpers.js";
 
 const AppHeader = styled.header`
 	width: 100%;
@@ -64,25 +65,30 @@ const HeaderAndSideMenuView = ({
 	pastServers,
 	deleteServer,
 	deleteChannelFromPastServers,
+	windowWidthSize,
+	currentChannel,
+	setCurrentChannel,
 }) => {
 	const [sideMenuOpen, setSideMenuOpen] = useState(false);
-	const [windowWidthSize, setwindowWidthSize] = useState(window.innerWidth);
 
 	useEffect(() => {
-		const updateWidth = () => {
-			setwindowWidthSize(window.innerWidth);
+		if (windowWidthSize > 1024) setSideMenuOpen(false);
+	}, [windowWidthSize]);
 
-			if (window.innerWidth > 1024) setSideMenuOpen(false);
-		};
-		window.addEventListener("resize", updateWidth);
-
-		return () => window.removeEventListener("resize", updateWidth);
-	}, []);
-
-	const connectToPastServer = (e, server) => {
-		connectToIrc(e, server, false);
+	const setCurrentChannelMobile = (channel) => {
+		setCurrentChannel(channel);
 		setSideMenuOpen(!sideMenuOpen);
 	};
+	const connectToPastServerMobile = (e, server) => {
+		connectToIrc(e, server, false);
+		setSideMenuOpen(!sideMenuOpen);
+		setCurrentChannel(GrabServerName(server.host));
+	};
+	const connectToPastServer = (e, server) => {
+		connectToIrc(e, server, false);
+		setCurrentChannel(GrabServerName(server.host));
+	};
+
 	return (
 		<>
 			<AppHeader>
@@ -94,21 +100,25 @@ const HeaderAndSideMenuView = ({
 				{windowWidthSize < 1024 ? (
 					<MobileSideMenu sideMenuOpen={sideMenuOpen}>
 						<PastServersList
-							connectToIrc={connectToPastServer}
+							connectToIrc={connectToPastServerMobile}
 							currentServer={currentServer}
 							pastServers={pastServers}
 							deleteServer={deleteServer}
 							deleteChannelFromPastServers={deleteChannelFromPastServers}
+							currentChannel={currentChannel}
+							setCurrentChannel={setCurrentChannelMobile}
 						/>
 					</MobileSideMenu>
 				) : (
 					<DesktopSideMenu>
 						<PastServersList
-							connectToIrc={connectToIrc}
+							connectToIrc={connectToPastServer}
 							currentServer={currentServer}
 							pastServers={pastServers}
 							deleteServer={deleteServer}
 							deleteChannelFromPastServers={deleteChannelFromPastServers}
+							currentChannel={currentChannel}
+							setCurrentChannel={setCurrentChannel}
 						/>
 					</DesktopSideMenu>
 				)}

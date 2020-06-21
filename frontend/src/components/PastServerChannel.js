@@ -5,16 +5,12 @@ const ChannelWrapper = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: baseline;
-	border-bottom: 1px solid ${props => props.theme.inputBg};
-
-	p {
-		margin: 2% 0;
-	}
+	border-bottom: 1px solid ${(props) => props.theme.inputBg};
 
 	button {
 		cursor: pointer;
 		background: indianred;
-		color: ${props => props.theme.mainText};
+		color: ${(props) => props.theme.mainText};
 		border: none;
 		border-radius: 3px;
 		padding: 1% 3%;
@@ -26,10 +22,29 @@ const ChannelWrapper = styled.div`
 	}
 `;
 
-const PastServerChannel = ({ channel, serverId, deleteChannelFromPastServers, isEditing }) => {
+const Channel = styled.p`
+	cursor: pointer;
+	margin: 2% 0;
+	text-decoration: ${(props) => (props.currentChannel === props.channel ? "underline" : "none")};
+`;
+
+const PastServerChannel = ({
+	channel,
+	serverId,
+	deleteChannelFromPastServers,
+	isEditing,
+	currentChannel,
+	setCurrentChannel,
+}) => {
 	return (
 		<ChannelWrapper>
-			<p>{channel}</p>
+			<Channel
+				onClick={() => setCurrentChannel(channel)}
+				channel={channel}
+				currentChannel={currentChannel}
+			>
+				{channel}
+			</Channel>
 			{isEditing && (
 				<button onClick={() => deleteChannelFromPastServers(channel, serverId)}>X</button>
 			)}

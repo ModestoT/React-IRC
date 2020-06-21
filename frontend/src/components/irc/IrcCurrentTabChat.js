@@ -2,12 +2,19 @@ import React from "react";
 
 import IrcChat from "./IrcChat.js";
 
-const IrcCurrentTabChat = ({ currentTab, serverName, serverMsgs, userChannels, showUsers }) => {
-	if (currentTab === serverName) {
+const IrcCurrentTabChat = ({
+	currentTab,
+	serverName,
+	serverMsgs,
+	userChannels,
+	showUsers,
+	currentChannel,
+}) => {
+	if (currentChannel === serverName) {
 		return <IrcChat channel={{ messages: serverMsgs, userList: [] }} showUsers={showUsers} />;
 	} else {
 		const channel = userChannels.find(
-			({ channelName }) => channelName.toLowerCase() === currentTab.toLowerCase()
+			({ channelName }) => channelName.toLowerCase() === currentChannel.toLowerCase()
 		);
 
 		if (channel) {

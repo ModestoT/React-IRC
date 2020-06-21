@@ -17,6 +17,7 @@ const PastServerHeader = styled.header`
 	background: ${(props) => props.theme.inputBg};
 
 	h2 {
+		cursor: pointer;
 		margin: 0;
 	}
 
@@ -58,6 +59,8 @@ const PastServer = ({
 	currentServer,
 	deleteServer,
 	deleteChannelFromPastServers,
+	currentChannel,
+	setCurrentChannel,
 }) => {
 	const [isEditingChannels, setIsEditingChannels] = useState(false);
 	const { host, channels, id } = server;
@@ -65,7 +68,7 @@ const PastServer = ({
 	return (
 		<PastServerWrapper>
 			<PastServerHeader>
-				<h2>{GrabServerName(host)}</h2>
+				<h2 onClick={() => setCurrentChannel(GrabServerName(host))}>{GrabServerName(host)}</h2>
 				<button onClick={() => deleteServer(server.id)}>Delete</button>
 			</PastServerHeader>
 			{!isConnected && (
@@ -90,6 +93,8 @@ const PastServer = ({
 						serverId={id}
 						deleteChannelFromPastServers={deleteChannelFromPastServers}
 						isEditing={isEditingChannels}
+						currentChannel={currentChannel}
+						setCurrentChannel={setCurrentChannel}
 					/>
 				))}
 			</ChannelsList>

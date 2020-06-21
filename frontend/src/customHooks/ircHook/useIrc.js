@@ -9,7 +9,7 @@ import {
 	CREATE_PRV_MSG_TAB,
 	JOIN_CHANNELS,
 	DELETE_SERVER_FROM_STORAGE,
-	DELETE_CHANNEL_FROM_STORAGE
+	DELETE_CHANNEL_FROM_STORAGE,
 } from "./IrcReducer.js";
 
 import { IrcEventListeners } from "../../irc/IrcEventListeners.js";
@@ -23,14 +23,14 @@ export const useIrc = () => {
 		joinableChannels: {
 			pages: 0,
 			channelCount: 0,
-			channels: []
+			channels: [],
 		},
 		channelsToJoin: [],
 		pastServers: JSON.parse(localStorage.getItem("past_servers")) || [],
 		isConnected: false,
 		isConnectedToServer: false,
 		isGrabbingChannels: false,
-		ircSocket: null
+		ircSocket: null,
 	});
 
 	useEffect(() => {
@@ -60,7 +60,7 @@ export const useIrc = () => {
 		dispatch({ type: CONNECTION_LOST });
 	};
 
-	const joinIrcChannel = channelName => {
+	const joinIrcChannel = (channelName) => {
 		state.ircSocket.emit("join channel", channelName);
 	};
 
@@ -68,7 +68,7 @@ export const useIrc = () => {
 		state.ircSocket.emit("grab channel list");
 	};
 
-	const leaveIrcChannel = channelName => {
+	const leaveIrcChannel = (channelName) => {
 		state.ircSocket.emit("leave channel", channelName);
 		dispatch({ type: LEAVE_CHANNEL, payload: channelName });
 	};
@@ -86,11 +86,11 @@ export const useIrc = () => {
 		state.ircSocket.emit("set back");
 	};
 
-	const createPrvMsgTab = target => {
+	const createPrvMsgTab = (target) => {
 		dispatch({ type: CREATE_PRV_MSG_TAB, payload: target });
 	};
 
-	const deleteServer = id => {
+	const deleteServer = (id) => {
 		dispatch({ type: DELETE_SERVER_FROM_STORAGE, payload: id });
 	};
 
@@ -110,6 +110,6 @@ export const useIrc = () => {
 		setUserAsBack,
 		createPrvMsgTab,
 		deleteServer,
-		deleteChannelFromPastServers
+		deleteChannelFromPastServers,
 	};
 };
