@@ -64,6 +64,7 @@ function App() {
 					windowWidthSize={windowWidthSize}
 					currentChannel={currentChannel}
 					setCurrentChannel={setCurrentChannel}
+					disconnectFromIrc={disconnectFromIrc}
 				>
 					{state.isConnected ? (
 						<IrcChatView

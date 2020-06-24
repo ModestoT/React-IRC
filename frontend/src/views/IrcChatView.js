@@ -4,7 +4,7 @@ import Modal from "../components/Modal";
 import IrcJoinableChannels from "../components/irc/IrcJoinableChannels";
 import IrcChatTabs from "../components/irc/IrcChatTabs";
 import IrcInputField from "../components/irc/IrcInputfield";
-import IrcCurrentTabChat from "../components/irc/IrcCurrentTabChat";
+import IrcCurrentChannelChat from "../components/irc/IrcCurrentChannelChat";
 
 const IrcChatView = ({
 	state,
@@ -16,7 +16,6 @@ const IrcChatView = ({
 	setUserAsAway,
 	setUserAsBack,
 	createPrvMsgTab,
-	windowWidthSize,
 	currentChannel,
 }) => {
 	const {
@@ -76,19 +75,7 @@ const IrcChatView = ({
 	return (
 		<div>
 			<h2>{currentChannel}</h2>
-			{/* <IrcChatTabs
-				tabs={[{ channelName: serverName, isServerTab: true }, ...userChannels]}
-				serverName={serverName}
-				currentTab={currentTab}
-				setCurrentTab={setCurrentTab}
-				toggleModal={toggleModal}
-				leaveIrcChannel={handleLeaveIrcChannel}
-				showUsers={showUsers}
-				setShowUsers={setShowUsers}
-				windowWidthSize={windowWidthSize}
-			/> */}
-			<IrcCurrentTabChat
-				currentTab={currentTab}
+			<IrcCurrentChannelChat
 				serverName={serverName}
 				serverMsgs={serverMsgs}
 				userChannels={userChannels}

@@ -22,6 +22,7 @@ const PastServersList = ({
 	deleteChannelFromPastServers,
 	currentChannel,
 	setCurrentChannel,
+	disconnectFromIrc,
 }) => {
 	return (
 		<PastServersListWrapper>
@@ -37,6 +38,7 @@ const PastServersList = ({
 						deleteChannelFromPastServers={deleteChannelFromPastServers}
 						currentChannel={currentChannel}
 						setCurrentChannel={setCurrentChannel}
+						disconnectFromIrc={disconnectFromIrc}
 					/>
 				))
 			) : (

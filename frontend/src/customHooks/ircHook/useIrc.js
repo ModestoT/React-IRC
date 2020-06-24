@@ -56,6 +56,7 @@ export const useIrc = () => {
 	};
 
 	const disconnectFromIrc = () => {
+		console.log("disconneting from irc server");
 		state.ircSocket.close();
 		dispatch({ type: CONNECTION_LOST });
 	};
@@ -69,6 +70,7 @@ export const useIrc = () => {
 	};
 
 	const leaveIrcChannel = (channelName) => {
+		console.log("Leaving channel");
 		state.ircSocket.emit("leave channel", channelName);
 		dispatch({ type: LEAVE_CHANNEL, payload: channelName });
 	};
@@ -92,10 +94,12 @@ export const useIrc = () => {
 
 	const deleteServer = (id) => {
 		dispatch({ type: DELETE_SERVER_FROM_STORAGE, payload: id });
+		disconnectFromIrc();
 	};
 
 	const deleteChannelFromPastServers = (channel, serverId) => {
 		dispatch({ type: DELETE_CHANNEL_FROM_STORAGE, payload: { channel, serverId } });
+		leaveIrcChannel(channel);
 	};
 
 	return {

@@ -68,6 +68,7 @@ const HeaderAndSideMenuView = ({
 	windowWidthSize,
 	currentChannel,
 	setCurrentChannel,
+	disconnectFromIrc,
 }) => {
 	const [sideMenuOpen, setSideMenuOpen] = useState(false);
 
@@ -79,11 +80,13 @@ const HeaderAndSideMenuView = ({
 		setCurrentChannel(channel);
 		setSideMenuOpen(!sideMenuOpen);
 	};
+
 	const connectToPastServerMobile = (e, server) => {
 		connectToIrc(e, server, false);
 		setSideMenuOpen(!sideMenuOpen);
 		setCurrentChannel(GrabServerName(server.host));
 	};
+
 	const connectToPastServer = (e, server) => {
 		connectToIrc(e, server, false);
 		setCurrentChannel(GrabServerName(server.host));
@@ -107,6 +110,7 @@ const HeaderAndSideMenuView = ({
 							deleteChannelFromPastServers={deleteChannelFromPastServers}
 							currentChannel={currentChannel}
 							setCurrentChannel={setCurrentChannelMobile}
+							disconnectFromIrc={disconnectFromIrc}
 						/>
 					</MobileSideMenu>
 				) : (
@@ -119,6 +123,7 @@ const HeaderAndSideMenuView = ({
 							deleteChannelFromPastServers={deleteChannelFromPastServers}
 							currentChannel={currentChannel}
 							setCurrentChannel={setCurrentChannel}
+							disconnectFromIrc={disconnectFromIrc}
 						/>
 					</DesktopSideMenu>
 				)}

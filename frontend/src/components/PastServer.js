@@ -51,6 +51,19 @@ const ConnectBtnWrapper = styled.div`
 	justify-content: center;
 	align-items: baseline;
 	background: ${(props) => props.theme.tertiaryBg};
+
+	.disconnect {
+		cursor: pointer;
+		border: 1px solid transparent;
+		background: indianred;
+		color: white;
+		padding: 4px 8px;
+		margin: 15px;
+
+		&:hover {
+			background: red;
+			color: ${(props) => props.theme.mainText};
+		}
 `;
 
 const PastServer = ({
@@ -61,6 +74,7 @@ const PastServer = ({
 	deleteChannelFromPastServers,
 	currentChannel,
 	setCurrentChannel,
+	disconnectFromIrc,
 }) => {
 	const [isEditingChannels, setIsEditingChannels] = useState(false);
 	const { host, channels, id } = server;
@@ -71,10 +85,17 @@ const PastServer = ({
 				<h2 onClick={() => setCurrentChannel(GrabServerName(host))}>{GrabServerName(host)}</h2>
 				<button onClick={() => deleteServer(server.id)}>Delete</button>
 			</PastServerHeader>
-			{!isConnected && (
+			{!isConnected ? (
 				<ConnectBtnWrapper>
 					<p>Not connected.</p>
 					<Button onClick={(e) => connectToIrc(e, server, false)} btnText="connect" />
+				</ConnectBtnWrapper>
+			) : (
+				<ConnectBtnWrapper>
+					<p>Connected</p>
+					<button className="disconnect" onClick={() => disconnectFromIrc()}>
+						Disconnect
+					</button>
 				</ConnectBtnWrapper>
 			)}
 			<ChannelsList>
