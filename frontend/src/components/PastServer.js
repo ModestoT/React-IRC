@@ -66,6 +66,13 @@ const ConnectBtnWrapper = styled.div`
 		}
 `;
 
+const AddChannelBtn = styled.button`
+	margin: 2% 0;
+	background: ${(props) => props.theme.btnBg};
+	border: none;
+	color: ${(props) => props.theme.btnText};
+`;
+
 const PastServer = ({
 	server,
 	connectToIrc,
@@ -118,6 +125,7 @@ const PastServer = ({
 						setCurrentChannel={setCurrentChannel}
 					/>
 				))}
+				{isConnected && <AddChannelBtn>+</AddChannelBtn>}
 			</ChannelsList>
 		</PastServerWrapper>
 	);
