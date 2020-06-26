@@ -4,7 +4,6 @@ const server = require("http").createServer();
 const io = require("socket.io")(server);
 
 const CreateIrcClient = require("./ircClient.js");
-const IrcChannel = require("./ircChannel.js");
 const port = process.env.PORT || 3001;
 
 io.on("connection", (socket) => {
@@ -19,12 +18,12 @@ io.on("connection", (socket) => {
 			ircClient.connect(options);
 		})
 		.on("join channel", (channelName) => {
-			// const channel = new IrcChannel(ircClient, channelName, socket);
 			const channel = ircClient.channel(channelName);
 
-			channel.updateUsers((updated) => {
-				userChannels.push(updated);
-			});
+			userChannels.push(channel);
+			// channel.updateUsers((updated) => {
+			// 	userChannels.push(updated);
+			// });
 		})
 		.on("grab channel list", () => {
 			ircClient.list();
@@ -34,13 +33,10 @@ io.on("connection", (socket) => {
 
 			for (let i = 0; i < userChannels.length; i++) {
 				if (userChannels[i].name.toLowerCase() === channel.toLowerCase()) {
-					console.log("ForLoop channel", userChannels[i].name);
-					// userChannels[i].removeListeners();
 					userChannels.splice(i, 1);
 					i--;
 				}
 			}
-			userChannels.forEach((channel) => console.log(channel.name));
 		})
 		.on("msgChannel", (data) => {
 			const { target, message } = data;

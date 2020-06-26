@@ -1,5 +1,6 @@
 const IRC = require("irc-framework");
-const { sortMatrix, getErrMsg } = require("./helpers/helperFunctions.js");
+const { sortMatrix, getErrMsg, formatQuitMessage } = require("./helpers/helperFunctions.js");
+const { baseNick } = require("./helpers/ircHelperFunctions.js");
 
 module.exports = CreateIrcClient = (socket, userChannels) => {
 	const client = new IRC.Client();
@@ -22,16 +23,13 @@ module.exports = CreateIrcClient = (socket, userChannels) => {
 			socket.emit("available channels", list.length);
 		})
 		.on("join", (event) => {
-			console.log("Join event", event);
-
-			if (event.nick.toLowerCase() === client.user.nick.toLowerCase()) {
-				socket.emit("joined channel", { ...event, users: this.users });
-			} else {
-				let channel = userChannels.find(
-					(channel) => channel.name.toLowerCase() === event.channel.toLowerCase()
-				);
-
-				if (channel) {
+			let channel = userChannels.find(
+				(channel) => channel.name.toLowerCase() === event.channel.toLowerCase()
+			);
+			if (channel) {
+				if (event.nick.toLowerCase() === client.user.nick.toLowerCase()) {
+					socket.emit("joined channel", { ...event, users: [] });
+				} else {
 					client.who(event.nick, ({ users }) => {
 						socket.emit("joined channel", {
 							...users[0],
@@ -42,6 +40,42 @@ module.exports = CreateIrcClient = (socket, userChannels) => {
 				}
 			}
 		})
+		.on("part", (event) => {
+			if (event.nick.toLowerCase() !== client.user.nick.toLowerCase()) {
+				const channelLeft = userChannels.find(
+					(channel) => channel.name.toLowerCase() === event.channel.toLowerCase()
+				);
+
+				socket.emit("left channel", {
+					...event,
+					message: formatQuitMessage(event.message),
+					users: channelLeft.users,
+				});
+			}
+		})
+		.on("quit", (event) => {
+			let channelLeft = null;
+
+			for (let i = 0; i < userChannels.length; i++) {
+				let users = userChannels[i].users;
+				for (let j = 0; j < users.length; j++) {
+					if (users[j].nick.toLowerCase() === event.nick.toLowerCase()) {
+						channelLeft = userChannels[i];
+						break;
+					}
+				}
+
+				if (channelLeft) break;
+			}
+
+			if (channelLeft) {
+				socket.emit("left channel", {
+					...event,
+					channel: channelLeft.name,
+					users: channelLeft.users,
+				});
+			}
+		})
 		.on("channel list end", () => {
 			sortMatrix(availableChannels, (a, b) => {
 				return b.num_users - a.num_users;
@@ -49,9 +83,6 @@ module.exports = CreateIrcClient = (socket, userChannels) => {
 
 			socket.emit("grabbing channel list end", availableChannels);
 			availableChannels = [];
-		})
-		.on("debug", (e) => {
-			console.log("debug: ", e);
 		})
 		.on("action", (e) => {
 			console.log("action: ", e);
