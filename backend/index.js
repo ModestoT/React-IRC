@@ -7,38 +7,42 @@ const CreateIrcClient = require("./ircClient.js");
 const IrcChannel = require("./ircChannel.js");
 const port = process.env.PORT || 3001;
 
-io.on("connection", socket => {
+io.on("connection", (socket) => {
 	console.log("connection made to server socket!");
 	let userChannels = [];
 
-	const ircClient = CreateIrcClient(socket);
+	const ircClient = CreateIrcClient(socket, userChannels);
 
 	socket
-		.on("connect to irc", options => {
+		.on("connect to irc", (options) => {
 			console.log("connecting to the irc client", options);
 			ircClient.connect(options);
 		})
-		.on("join channel", channelName => {
-			const channel = new IrcChannel(ircClient, channelName, socket);
+		.on("join channel", (channelName) => {
+			// const channel = new IrcChannel(ircClient, channelName, socket);
+			const channel = ircClient.channel(channelName);
 
-			channel.updateUsers(updated => {
+			channel.updateUsers((updated) => {
 				userChannels.push(updated);
 			});
 		})
 		.on("grab channel list", () => {
 			ircClient.list();
 		})
-		.on("leave channel", channel => {
+		.on("leave channel", (channel) => {
 			ircClient.part(channel);
 
 			for (let i = 0; i < userChannels.length; i++) {
 				if (userChannels[i].channelName.toLowerCase() === channel.toLowerCase()) {
-					userChannels[i].removeListeners();
+					console.log("ForLoop channel", userChannels[i].channelName);
+					// userChannels[i].removeListeners();
 					userChannels.splice(i, 1);
+					i--;
 				}
 			}
+			userChannels.forEach((channel) => console.log(channel.channelName));
 		})
-		.on("msgChannel", data => {
+		.on("msgChannel", (data) => {
 			const { target, message } = data;
 			ircClient.say(target, message);
 		})
@@ -48,10 +52,10 @@ io.on("connection", socket => {
 		.on("set back", () => {
 			ircClient.emit("back", { nick: ircClient.user.nick });
 		})
-		.on("error", err => {
+		.on("error", (err) => {
 			console.log("Socket error: ", err);
 		})
-		.on("disconnect", reason => {
+		.on("disconnect", (reason) => {
 			console.log("disconection: ", reason);
 			ircClient.quit();
 		});

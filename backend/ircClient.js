@@ -1,7 +1,7 @@
 const IRC = require("irc-framework");
 const { sortMatrix, getErrMsg } = require("./helpers/helperFunctions.js");
 
-module.exports = CreateIrcClient = socket => {
+module.exports = CreateIrcClient = (socket, userChannels) => {
 	const client = new IRC.Client();
 	let availableChannels = [];
 
@@ -10,16 +10,37 @@ module.exports = CreateIrcClient = socket => {
 			console.log("IRC Socket connected Registering...");
 			socket.emit("connected");
 		})
-		.on("connected", e => {
+		.on("connected", (e) => {
 			console.log("Connected: \n", e);
 			socket.emit("connected to server");
 		})
 		.on("channel list start", () => {
 			socket.emit("grabbing channel list");
 		})
-		.on("channel list", list => {
+		.on("channel list", (list) => {
 			availableChannels.push(list);
 			socket.emit("available channels", list.length);
+		})
+		.on("join", (event) => {
+			console.log("Join event", event);
+
+			if (event.nick.toLowerCase() === client.user.nick.toLowerCase()) {
+				socket.emit("joined channel", { ...event, users: this.users });
+			} else {
+				let channel = userChannels.find(
+					(channel) => channel.name.toLowerCase() === event.channel.toLowerCase()
+				);
+
+				if (channel) {
+					client.who(event.nick, ({ users }) => {
+						socket.emit("joined channel", {
+							...users[0],
+							channel: channel.name,
+							users: channel.users,
+						});
+					});
+				}
+			}
 		})
 		.on("channel list end", () => {
 			sortMatrix(availableChannels, (a, b) => {
@@ -29,20 +50,20 @@ module.exports = CreateIrcClient = socket => {
 			socket.emit("grabbing channel list end", availableChannels);
 			availableChannels = [];
 		})
-		.on("debug", e => {
+		.on("debug", (e) => {
 			console.log("debug: ", e);
 		})
-		.on("action", e => {
+		.on("action", (e) => {
 			console.log("action: ", e);
 		})
-		.on("topic", e => {
+		.on("topic", (e) => {
 			console.log("Topic event: ", e);
 			// socket.emit("set channel topic", e);
 		})
-		.on("invited", e => {
+		.on("invited", (e) => {
 			console.log("Invite event: ", e);
 		})
-		.on("notice", e => {
+		.on("notice", (e) => {
 			//do this on front end to properly display BOLD and color assignments /u00002 = bold /u0003 = blue
 			let newData = e.message;
 			if (newData.includes("\u0002")) {
@@ -54,23 +75,23 @@ module.exports = CreateIrcClient = socket => {
 			}
 			socket.emit("irc notice", {
 				nick: e.nick,
-				message: newData
+				message: newData,
 			});
 		})
-		.on("privmsg", e => {
+		.on("privmsg", (e) => {
 			if (e.target.toLowerCase() === client.user.nick.toLowerCase()) {
 				console.log("private message to you :", e);
 
 				socket.emit("personal msg", { sentFrom: e.nick, message: e.message });
 			}
 		})
-		.on("tagmsg", e => {
+		.on("tagmsg", (e) => {
 			console.log("Tag Msg event: ", e);
 		})
-		.on("wallops", e => {
+		.on("wallops", (e) => {
 			console.log("Wallop event: ", e);
 		})
-		.on("motd", e => {
+		.on("motd", (e) => {
 			// console.log("MOTD event: ", e);
 			let newData = e.motd;
 			if (newData.includes("\u0002")) {
@@ -82,13 +103,13 @@ module.exports = CreateIrcClient = socket => {
 			}
 			socket.emit("server motd", newData);
 		})
-		.on("nick in use", err => {
+		.on("nick in use", (err) => {
 			socket.emit("errMsg", err.reason);
 		})
-		.on("nick invalid", err => {
+		.on("nick invalid", (err) => {
 			socket.emit("errMsg", err.reason);
 		})
-		.on("raw", e => {
+		.on("raw", (e) => {
 			const line = /477\s/gi.exec(e.line);
 			if (line) {
 				console.log("Msg: ", getErrMsg(e.line.replace("\n", ""), line.index));
@@ -101,7 +122,7 @@ module.exports = CreateIrcClient = socket => {
 			console.log("irc client disconected");
 			socket.disconnect(true);
 		})
-		.on("error", e => {
+		.on("error", (e) => {
 			console.log("IRC error event: ", e);
 		});
 
