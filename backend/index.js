@@ -33,14 +33,14 @@ io.on("connection", (socket) => {
 			ircClient.part(channel);
 
 			for (let i = 0; i < userChannels.length; i++) {
-				if (userChannels[i].channelName.toLowerCase() === channel.toLowerCase()) {
-					console.log("ForLoop channel", userChannels[i].channelName);
+				if (userChannels[i].name.toLowerCase() === channel.toLowerCase()) {
+					console.log("ForLoop channel", userChannels[i].name);
 					// userChannels[i].removeListeners();
 					userChannels.splice(i, 1);
 					i--;
 				}
 			}
-			userChannels.forEach((channel) => console.log(channel.channelName));
+			userChannels.forEach((channel) => console.log(channel.name));
 		})
 		.on("msgChannel", (data) => {
 			const { target, message } = data;
