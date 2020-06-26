@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import Button from "../components/Button.js";
+import Modal from "../components/Modal";
+import IrcJoinableChannels from "../components/irc/IrcJoinableChannels";
 import PastServersList from "../components/PastServersList.js";
 import { GrabServerName } from "../helpers/IrcHelpers.js";
 
@@ -60,21 +62,39 @@ const DesktopSideMenu = styled.div`
 
 const HeaderAndSideMenuView = ({
 	children,
+	state,
 	connectToIrc,
-	currentServer,
-	pastServers,
 	deleteServer,
 	deleteChannelFromPastServers,
 	windowWidthSize,
 	currentChannel,
 	setCurrentChannel,
 	disconnectFromIrc,
+	grabAvailableChannels,
+	joinIrcChannel,
 }) => {
+	const { serverName, pastServers, joinableChannels, isGrabbingChannels } = state;
+
 	const [sideMenuOpen, setSideMenuOpen] = useState(false);
+	const [isToggled, setIsToggled] = useState(false);
 
 	useEffect(() => {
 		if (windowWidthSize > 1024) setSideMenuOpen(false);
 	}, [windowWidthSize]);
+
+	const toggleModal = () => {
+		if (joinableChannels.pages === 0) {
+			grabAvailableChannels();
+		}
+
+		setIsToggled(!isToggled);
+		setSideMenuOpen(!sideMenuOpen);
+	};
+
+	const handleJoinIrcChannel = (channel) => {
+		joinIrcChannel(channel);
+		setCurrentChannel(channel);
+	};
 
 	const setCurrentChannelMobile = (channel) => {
 		setCurrentChannel(channel);
@@ -104,30 +124,40 @@ const HeaderAndSideMenuView = ({
 					<MobileSideMenu sideMenuOpen={sideMenuOpen}>
 						<PastServersList
 							connectToIrc={connectToPastServerMobile}
-							currentServer={currentServer}
+							currentServer={serverName}
 							pastServers={pastServers}
 							deleteServer={deleteServer}
 							deleteChannelFromPastServers={deleteChannelFromPastServers}
 							currentChannel={currentChannel}
 							setCurrentChannel={setCurrentChannelMobile}
 							disconnectFromIrc={disconnectFromIrc}
+							toggleModal={toggleModal}
 						/>
 					</MobileSideMenu>
 				) : (
 					<DesktopSideMenu>
 						<PastServersList
 							connectToIrc={connectToPastServer}
-							currentServer={currentServer}
+							currentServer={serverName}
 							pastServers={pastServers}
 							deleteServer={deleteServer}
 							deleteChannelFromPastServers={deleteChannelFromPastServers}
 							currentChannel={currentChannel}
 							setCurrentChannel={setCurrentChannel}
 							disconnectFromIrc={disconnectFromIrc}
+							toggleModal={toggleModal}
 						/>
 					</DesktopSideMenu>
 				)}
 				<ContentWrapper sideMenuOpen={sideMenuOpen}>{children}</ContentWrapper>
+
+				<Modal showModal={isToggled} toggleModal={setIsToggled}>
+					<IrcJoinableChannels
+						joinableChannels={state.joinableChannels}
+						joinIrcChannel={handleJoinIrcChannel}
+						isGrabbingChannels={isGrabbingChannels}
+					/>
+				</Modal>
 			</AppContent>
 		</>
 	);

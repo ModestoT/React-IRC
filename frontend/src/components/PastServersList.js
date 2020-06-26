@@ -23,6 +23,7 @@ const PastServersList = ({
 	currentChannel,
 	setCurrentChannel,
 	disconnectFromIrc,
+	toggleModal,
 }) => {
 	return (
 		<PastServersListWrapper>
@@ -39,6 +40,7 @@ const PastServersList = ({
 						currentChannel={currentChannel}
 						setCurrentChannel={setCurrentChannel}
 						disconnectFromIrc={disconnectFromIrc}
+						toggleModal={toggleModal}
 					/>
 				))
 			) : (

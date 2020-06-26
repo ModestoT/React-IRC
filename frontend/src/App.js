@@ -52,19 +52,25 @@ function App() {
 		return () => window.removeEventListener("resize", updateWidth);
 	}, []);
 
+	const handleCreatePrvMsg = (target) => {
+		createPrvMsgTab(target);
+		setCurrentChannel(target);
+	};
+
 	return (
 		<ThemeProvider theme={darkTheme}>
 			<AppWrapper>
 				<HeaderAndSideMenuView
 					connectToIrc={connectToIrc}
-					currentServer={state.serverName}
-					pastServers={state.pastServers}
+					state={state}
 					deleteServer={deleteServer}
 					deleteChannelFromPastServers={deleteChannelFromPastServers}
 					windowWidthSize={windowWidthSize}
 					currentChannel={currentChannel}
 					setCurrentChannel={setCurrentChannel}
 					disconnectFromIrc={disconnectFromIrc}
+					grabAvailableChannels={grabAvailableChannels}
+					joinIrcChannel={joinIrcChannel}
 				>
 					{state.isConnected ? (
 						<IrcChatView
@@ -76,7 +82,7 @@ function App() {
 							sendMessageToChannel={sendMessageToChannel}
 							setUserAsAway={setUserAsAway}
 							setUserAsBack={setUserAsBack}
-							createPrvMsgTab={createPrvMsgTab}
+							handleCreatePrvMsg={handleCreatePrvMsg}
 							windowWidthSize={windowWidthSize}
 							currentChannel={currentChannel}
 						/>

@@ -11,7 +11,7 @@ import {
 	CHANNEL_PRV_MSG,
 	UPDATE_USERS_LIST,
 	PERSONAL_MSG,
-	CONNECTION_TO_SERVER_MADE
+	CONNECTION_TO_SERVER_MADE,
 } from "../customHooks/ircHook/IrcReducer.js";
 import { ParseForChannelName } from "../helpers/IrcHelpers.js";
 
@@ -23,12 +23,12 @@ export const IrcEventListeners = (socket, dispatch) => {
 		.on("connected to server", () => {
 			dispatch({ type: CONNECTION_TO_SERVER_MADE });
 		})
-		.on("disconnect", reason => {
+		.on("disconnect", (reason) => {
 			dispatch({ type: CONNECTION_LOST });
 			console.log("Diconnected from irc: ", reason);
 			socket.close();
 		})
-		.on("irc notice", notice => {
+		.on("irc notice", (notice) => {
 			const channelName = ParseForChannelName(notice.message);
 
 			if (!channelName || channelName[0] !== "#") {
@@ -36,41 +36,41 @@ export const IrcEventListeners = (socket, dispatch) => {
 			} else {
 				dispatch({
 					type: CHANNEL_NOTICE,
-					payload: { ...notice, channelName }
+					payload: { ...notice, channelName },
 				});
 			}
 		})
-		.on("joined channel", e => {
+		.on("joined channel", (e) => {
 			dispatch({
 				type: CHANNEL_MESSAGE,
-				payload: { ...e, status: "joined" }
+				payload: { ...e, status: "joined" },
 			});
 		})
-		.on("left channel", e => {
+		.on("left channel", (e) => {
 			dispatch({
 				type: CHANNEL_MESSAGE,
-				payload: { ...e, status: "left" }
+				payload: { ...e, status: "left" },
 			});
 		})
-		.on("users list", data => {
+		.on("users list", (data) => {
 			dispatch({ type: UPDATE_USERS_LIST, payload: data });
 		})
-		.on("server motd", motd => {
+		.on("server motd", (motd) => {
 			dispatch({ type: MOTD_MESSAGE, payload: motd });
 		})
 		.on("grabbing channel list", () => {
 			dispatch({ type: GRABBING_CHANNEL_LIST });
 		})
-		.on("available channels", count => {
+		.on("available channels", (count) => {
 			dispatch({ type: UPDATE_CHANNELS_COUNT, payload: count });
 		})
-		.on("grabbing channel list end", channels => {
+		.on("grabbing channel list end", (channels) => {
 			dispatch({ type: GRABBING_CHANNEL_LIST_END, payload: channels });
 		})
-		.on("channel prv msg", msg => {
+		.on("channel prv msg", (msg) => {
 			dispatch({ type: CHANNEL_PRV_MSG, payload: msg });
 		})
-		.on("personal msg", data => {
+		.on("personal msg", (data) => {
 			dispatch({ type: PERSONAL_MSG, payload: data });
 		});
 };

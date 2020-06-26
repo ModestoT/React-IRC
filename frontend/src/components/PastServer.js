@@ -82,6 +82,7 @@ const PastServer = ({
 	currentChannel,
 	setCurrentChannel,
 	disconnectFromIrc,
+	toggleModal,
 }) => {
 	const [isEditingChannels, setIsEditingChannels] = useState(false);
 	const { host, channels, id } = server;
@@ -125,7 +126,7 @@ const PastServer = ({
 						setCurrentChannel={setCurrentChannel}
 					/>
 				))}
-				{isConnected && <AddChannelBtn>+</AddChannelBtn>}
+				{isConnected && <AddChannelBtn onClick={() => toggleModal()}>+</AddChannelBtn>}
 			</ChannelsList>
 		</PastServerWrapper>
 	);

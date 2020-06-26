@@ -15,7 +15,7 @@ const IrcChatView = ({
 	sendMessageToChannel,
 	setUserAsAway,
 	setUserAsBack,
-	createPrvMsgTab,
+	handleCreatePrvMsg,
 	currentChannel,
 }) => {
 	const {
@@ -27,50 +27,50 @@ const IrcChatView = ({
 		nick,
 	} = state;
 
-	const [isToggled, setIsToggled] = useState(false);
+	// // const [isToggled, setIsToggled] = useState(false);
 	const [currentTab, setCurrentTab] = useState(serverName);
 	const [showUsers, setShowUsers] = useState(false);
 
-	const toggleModal = () => {
-		if (joinableChannels.pages === 0) {
-			grabAvailableChannels();
-		}
+	// const toggleModal = () => {
+	// 	if (joinableChannels.pages === 0) {
+	// 		grabAvailableChannels();
+	// 	}
 
-		setIsToggled(!isToggled);
-	};
+	// 	setIsToggled(!isToggled);
+	// };
 
 	const handleJoinIrcChannel = (channelName) => {
 		joinIrcChannel(channelName);
 		setCurrentTab(channelName);
 	};
 
-	const handleCreatePrvMsgTab = (target) => {
-		createPrvMsgTab(target);
-		setCurrentTab(target);
-	};
+	// const handleCreatePrvMsgTab = (target) => {
+	// 	createPrvMsgTab(target);
+	// 	setCurrentTab(target);
+	// };
 
-	const handleLeaveIrcChannel = (channel, isServerTab) => {
-		//leave channel selected
-		//check if channel selected is the current tab or not
-		//if it is the current tab change it to the tab to the left of the channel exited
-		//else dont change the current tab
-		if (isServerTab) {
-			disconnectFromIrc();
-		} else {
-			leaveIrcChannel(channel);
-			if (channel === currentTab) {
-				const channelExitedIndex = userChannels.findIndex(
-					({ channelName }) => channelName === channel
-				);
+	// const handleLeaveIrcChannel = (channel, isServerTab) => {
+	// 	//leave channel selected
+	// 	//check if channel selected is the current tab or not
+	// 	//if it is the current tab change it to the tab to the left of the channel exited
+	// 	//else dont change the current tab
+	// 	if (isServerTab) {
+	// 		disconnectFromIrc();
+	// 	} else {
+	// 		leaveIrcChannel(channel);
+	// 		if (channel === currentTab) {
+	// 			const channelExitedIndex = userChannels.findIndex(
+	// 				({ channelName }) => channelName === channel
+	// 			);
 
-				if (channelExitedIndex > 0) {
-					setCurrentTab(userChannels[channelExitedIndex - 1].channelName);
-				} else {
-					setCurrentTab(serverName);
-				}
-			}
-		}
-	};
+	// 			if (channelExitedIndex > 0) {
+	// 				setCurrentTab(userChannels[channelExitedIndex - 1].channelName);
+	// 			} else {
+	// 				setCurrentTab(serverName);
+	// 			}
+	// 		}
+	// 	}
+	// };
 
 	return (
 		<div>
@@ -89,15 +89,15 @@ const IrcChatView = ({
 				nick={nick}
 				setUserAsAway={setUserAsAway}
 				setUserAsBack={setUserAsBack}
-				createPrvMsgTab={handleCreatePrvMsgTab}
+				createPrvMsgTab={handleCreatePrvMsg}
 			/>
-			<Modal showModal={isToggled} toggleModal={setIsToggled}>
+			{/* <Modal showModal={isToggled} toggleModal={setIsToggled}>
 				<IrcJoinableChannels
 					joinableChannels={joinableChannels}
 					joinIrcChannel={handleJoinIrcChannel}
 					isGrabbingChannels={isGrabbingChannels}
 				/>
-			</Modal>
+			</Modal> */}
 		</div>
 	);
 };
