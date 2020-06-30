@@ -1,6 +1,5 @@
 const IRC = require("irc-framework");
-const { sortMatrix, getErrMsg, formatQuitMessage } = require("./helpers/helperFunctions.js");
-const { baseNick } = require("./helpers/ircHelperFunctions.js");
+const { sortMatrix, getErrMsg } = require("./helpers/helperFunctions.js");
 const SetUpChannelListeners = require("./ircChannelListeners.js");
 
 module.exports = CreateIrcClient = (socket, userChannels) => {

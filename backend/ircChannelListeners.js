@@ -1,4 +1,5 @@
 const { formatQuitMessage } = require("./helpers/helperFunctions.js");
+const { baseNick } = require("./helpers/ircHelperFunctions.js");
 
 module.exports = SetUpChannelListeners = (client, socket, userChannels) => {
 	client
@@ -55,5 +56,23 @@ module.exports = SetUpChannelListeners = (client, socket, userChannels) => {
 					users: channelLeft.users,
 				});
 			}
+		})
+		.on("privmsg", (event) => {
+			socket.emit("channel prv msg", {
+				...event,
+				nick: baseNick(event.nick),
+			});
+			// if (event.target.toLowerCase() === this.channelName.toLowerCase()) {
+			//   const foundUser = this.users.find(
+			//     (user) => baseNick(user.nick.toLowerCase()) === event.nick.toLowerCase()
+			//   );
+
+			//   if (foundUser) {
+			//     this.webSocket.emit("channel prv msg", {
+			//       ...event,
+			//       nick: foundUser.nick,
+			//     });
+			//   }
+			// }
 		});
 };
