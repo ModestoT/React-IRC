@@ -74,5 +74,50 @@ module.exports = SetUpChannelListeners = (client, socket, userChannels) => {
 			//     });
 			//   }
 			// }
+		})
+		.on("away", (event) => {
+			let channel = null;
+
+			for (let i = 0; i < userChannels.length; i++) {
+				let users = userChannels[i].users;
+				for (let j = 0; j < users.length; j++) {
+					if (baseNick(users[j].nick.toLowerCase()) === event.nick.toLowerCase()) {
+						users[j].away = true;
+						channel = userChannels[i];
+						break;
+					}
+				}
+
+				if (channel) break;
+			}
+
+			if (channel) {
+				socket.emit("users list", {
+					channelName: channel.name,
+					users: channel.users,
+				});
+			}
+		})
+		.on("back", (event) => {
+			let channel = null;
+
+			for (let i = 0; i < userChannels.length; i++) {
+				let users = userChannels[i].users;
+				for (let j = 0; j < users.length; j++) {
+					if (baseNick(users[j].nick.toLowerCase()) === event.nick.toLowerCase()) {
+						users[j].away = false;
+						channel = userChannels[i];
+						break;
+					}
+				}
+
+				if (channel) break;
+			}
+			if (channel) {
+				socket.emit("users list", {
+					channelName: channel.name,
+					users: channel.users,
+				});
+			}
 		});
 };
