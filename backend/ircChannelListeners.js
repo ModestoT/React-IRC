@@ -1,5 +1,5 @@
 const { formatQuitMessage } = require("./helpers/helperFunctions.js");
-const { baseNick } = require("./helpers/ircHelperFunctions.js");
+const { baseNick, formatNick } = require("./helpers/ircHelperFunctions.js");
 
 module.exports = SetUpChannelListeners = (client, socket, userChannels) => {
 	client
@@ -119,5 +119,46 @@ module.exports = SetUpChannelListeners = (client, socket, userChannels) => {
 					users: channel.users,
 				});
 			}
+		})
+		.on("kick", (event) => {
+			let channel = userChannels.find(
+				(channel) => channel.name.toLowerCase() === event.channel.toLowerCase()
+			);
+
+			if (channel) {
+				socket.emit("left channel", {
+					...event,
+					channel: channel.name,
+					users: channel.users,
+				});
+			}
+		})
+		.on("nick", (event) => {
+			for (let i = 0; i < userChannels.length; i++) {
+				let foundUser = userChannels[i].users.find((user) => {
+					if (baseNick(user.nick.toLowerCase()) === event.nick.toLowerCase()) {
+						user.nick = formatNick(event.new_nick, user.channel_modes);
+						return true;
+					}
+				});
+				if (foundUser) {
+					socket.emit("users list", {
+						channelName: userChannels[i].name,
+						users: userChannels[i].users,
+					});
+				}
+			}
+			// const foundUser = this.users.find((user) => {
+			// 	if (baseNick(user.nick.toLowerCase()) === event.nick.toLowerCase()) {
+			// 		user.nick = formatNick(event.new_nick, user.channel_modes);
+			// 		return true;
+			// 	}
+			// });
+			// if (foundUser) {
+			// 	this.webSocket.emit("users list", {
+			// 		channelName: this.channelName,
+			// 		users: this.users,
+			// 	});
+			// }
 		});
 };
