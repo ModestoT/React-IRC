@@ -1,5 +1,5 @@
 const { formatQuitMessage } = require("./helpers/helperFunctions.js");
-const { baseNick, formatNick } = require("./helpers/ircHelperFunctions.js");
+const { formattedNicks, baseNick, formatNick } = require("./helpers/ircHelperFunctions.js");
 
 module.exports = SetUpChannelListeners = (client, socket, userChannels) => {
 	client
@@ -8,17 +8,13 @@ module.exports = SetUpChannelListeners = (client, socket, userChannels) => {
 				(channel) => channel.name.toLowerCase() === event.channel.toLowerCase()
 			);
 			if (channel) {
-				if (event.nick.toLowerCase() === client.user.nick.toLowerCase()) {
-					socket.emit("joined channel", { ...event, users: [] });
-				} else {
-					client.who(event.nick, ({ users }) => {
-						socket.emit("joined channel", {
-							...users[0],
-							channel: channel.name,
-							users: channel.users,
-						});
-					});
-				}
+				client.who(channel.name, (whoList) => {
+					const newList = formattedNicks(whoList.users);
+
+					channel.users = newList;
+
+					socket.emit("joined channel", { ...event, users: channel.users });
+				});
 			}
 		})
 		.on("part", (event) => {

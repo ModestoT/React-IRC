@@ -1,5 +1,7 @@
 require("dotenv").config();
 
+const { formattedNicks } = require("./helpers/ircHelperFunctions.js");
+
 const server = require("http").createServer();
 const io = require("socket.io")(server);
 

@@ -1,6 +1,6 @@
 const { strSortFn } = require("./helperFunctions.js");
 
-const baseNick = nick => {
+const baseNick = (nick) => {
 	if (/[~]|[&]|[@]|[%]|[+]/g.test(nick)) {
 		return nick.slice(1);
 	} else {
@@ -9,29 +9,29 @@ const baseNick = nick => {
 };
 
 const formatNick = (nick, modes) => {
-	if (modes[0] === "q" && nick[0] !== "~") {
+	if (modes && modes[0] === "q" && nick[0] !== "~") {
 		return `~${nick}`;
-	} else if (modes[0] === "a" && nick[0] !== "&") {
+	} else if (modes && modes[0] === "a" && nick[0] !== "&") {
 		return `&${nick}`;
-	} else if (modes[0] === "o" && nick[0] !== "@") {
+	} else if (modes && modes[0] === "o" && nick[0] !== "@") {
 		return `@${nick}`;
-	} else if (modes[0] === "h" && nick[0] !== "%") {
+	} else if (modes && modes[0] === "h" && nick[0] !== "%") {
 		return `%${nick}`;
-	} else if (modes[0] === "v" && nick[0] !== "+") {
+	} else if (modes && modes[0] === "v" && nick[0] !== "+") {
 		return `+${nick}`;
 	} else {
 		return nick;
 	}
 };
 
-const formattedNicks = usersList => {
+const formattedNicks = (usersList) => {
 	//storing the nicks with modes sorted based on their rank
 	let formattedNicks = {
 		1: [],
 		2: [],
 		3: [],
 		4: [],
-		5: []
+		5: [],
 	};
 	const tempArr = [];
 	//loop through the user list adding the users with modes to the appropriate key in the formattedNicks obj and remove it from the original array
@@ -65,5 +65,5 @@ const formattedNicks = usersList => {
 module.exports = {
 	formatNick,
 	formattedNicks,
-	baseNick
+	baseNick,
 };
