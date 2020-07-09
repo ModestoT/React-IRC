@@ -4,12 +4,17 @@ import styled from "styled-components";
 import IrcChatMsg from "./IrcChatMsg";
 import IrcChatUsersList from "./IrcChatUsersList";
 
+const IrcChatWrapper = styled.div`
+	display: flex;
+	height: 80vh;
+`;
+
 const IrcChatWindow = styled.div`
-	width: 80%;
 	overflow: auto;
 	word-break: break-word;
 	margin: 1% auto;
-	border: 1px solid;
+	border-top: 1px solid;
+	border-bottom: 1px solid;
 	padding: 1%;
 `;
 
@@ -22,14 +27,14 @@ const IrcChat = ({ channel, showUsers }) => {
 	}, [messages]);
 
 	return (
-		<div style={{ display: "flex", height: "87vh" }}>
+		<IrcChatWrapper>
 			<IrcChatWindow ref={divRef}>
 				{messages.map((msg, index) => {
 					return <IrcChatMsg key={index} msg={msg} />;
 				})}
 			</IrcChatWindow>
 			{showUsers && <IrcChatUsersList userList={userList} />}
-		</div>
+		</IrcChatWrapper>
 	);
 };
 
