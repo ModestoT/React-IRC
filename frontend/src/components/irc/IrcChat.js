@@ -7,12 +7,16 @@ import IrcChatUsersList from "./IrcChatUsersList";
 const IrcChatWrapper = styled.div`
 	display: flex;
 	height: 80vh;
+
+	@media (min-width: 1024px) {
+		height: 86vh;
+	}
 `;
 
 const IrcChatWindow = styled.div`
+	width: 100%;
 	overflow: auto;
 	word-break: break-word;
-	margin: 1% auto;
 	border-top: 1px solid;
 	border-bottom: 1px solid;
 	padding: 1%;

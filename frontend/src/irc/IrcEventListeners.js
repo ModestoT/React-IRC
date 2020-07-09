@@ -71,6 +71,8 @@ export const IrcEventListeners = (socket, dispatch) => {
 			dispatch({ type: CHANNEL_PRV_MSG, payload: msg });
 		})
 		.on("personal msg", (data) => {
-			dispatch({ type: PERSONAL_MSG, payload: data });
+			setTimeout(() => {
+				dispatch({ type: PERSONAL_MSG, payload: data });
+			}, 800);
 		});
 };
