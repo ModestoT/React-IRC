@@ -122,7 +122,7 @@ export const IrcReducer = (state, action) => {
 			return {
 				...state,
 				userChannels: state.userChannels.map((c) => {
-					let { messages, messagesCount } = CheckIfOverMessageLimit(c, 2000);
+					let { messages, messagesCount } = CheckIfOverMessageLimit(c, 500);
 					return c.channelName.toLowerCase() === action.payload.channelName.toLowerCase()
 						? {
 								...c,
@@ -141,7 +141,7 @@ export const IrcReducer = (state, action) => {
 				return {
 					...state,
 					userChannels: state.userChannels.map((c) => {
-						let { messages, messagesCount } = CheckIfOverMessageLimit(c, 2000);
+						let { messages, messagesCount } = CheckIfOverMessageLimit(c, 500);
 						return c.channelName.toLowerCase() === channel.toLowerCase()
 							? {
 									...c,
@@ -179,7 +179,7 @@ export const IrcReducer = (state, action) => {
 			return {
 				...state,
 				userChannels: state.userChannels.map((c) => {
-					let { messages, messagesCount } = CheckIfOverMessageLimit(c, 2000);
+					let { messages, messagesCount } = CheckIfOverMessageLimit(c, 500);
 					return c.channelName.toLowerCase() === action.payload.target.toLowerCase()
 						? {
 								...c,
@@ -214,7 +214,7 @@ export const IrcReducer = (state, action) => {
 				return {
 					...state,
 					userChannels: state.userChannels.map((c) => {
-						let { messages, messagesCount } = CheckIfOverMessageLimit(c, 2000);
+						let { messages, messagesCount } = CheckIfOverMessageLimit(c, 500);
 						return c.channelName.toLowerCase() === action.payload.sentFrom.toLowerCase()
 							? {
 									...c,
