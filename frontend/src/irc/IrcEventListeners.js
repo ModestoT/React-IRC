@@ -71,6 +71,7 @@ export const IrcEventListeners = (socket, dispatch) => {
 			dispatch({ type: CHANNEL_PRV_MSG, payload: msg });
 		})
 		.on("personal msg", (data) => {
+			//timeout used to add slight delay before dispatching a render for the message. Aim is to improve preformance.
 			setTimeout(() => {
 				dispatch({ type: PERSONAL_MSG, payload: data });
 			}, 800);
