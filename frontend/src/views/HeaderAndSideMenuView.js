@@ -16,7 +16,7 @@ const AppHeader = styled.header`
 	height: 7%;
 
 	@media (min-width: 1024px) {
-		height: 5%;
+		display: none;
 	}
 `;
 

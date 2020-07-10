@@ -9,7 +9,7 @@ const IrcChatWrapper = styled.div`
 	height: 87%;
 
 	@media (min-width: 1024px) {
-		height: 86vh;
+		height: 89%;
 	}
 `;
 

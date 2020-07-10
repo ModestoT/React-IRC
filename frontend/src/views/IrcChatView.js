@@ -14,8 +14,13 @@ const ChannelHeader = styled.header`
 	align-items: center;
 	height: 8%;
 
+	@media (min-width: 1024px) {
+		height: 6%;
+	}
+
 	h2 {
 		margin-left: 15px;
+		font-size: 2rem;
 	}
 `;
 

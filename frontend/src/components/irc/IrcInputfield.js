@@ -17,6 +17,11 @@ const IrcTextBox = styled.form`
 		border-radius: 15px;
 		border: none;
 		padding: 1%;
+		outline: none;
+
+		@media (min-width: 1024px) {
+			padding: 0.5%;
+		}
 	}
 `;
 
@@ -67,6 +72,7 @@ const IrcInputField = ({
 				value={message}
 				onChange={(e) => setMessage(e.target.value)}
 				spellCheck="true"
+				placeholder={`Send message to ${currentChannel}`}
 			/>
 		</IrcTextBox>
 	);
