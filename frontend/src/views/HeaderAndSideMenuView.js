@@ -13,7 +13,7 @@ const AppHeader = styled.header`
 	align-items: center;
 	background: ${(props) => props.theme.secondaryBg};
 	border-bottom: 1px solid ${(props) => props.theme.inputBg};
-	height: 9%;
+	height: 7%;
 
 	@media (min-width: 1024px) {
 		height: 5%;
@@ -22,13 +22,9 @@ const AppHeader = styled.header`
 
 const AppContent = styled.div`
 	display: flex;
-	height: 91%;
+	height: 100%;
 	overflow: hidden;
 	background: ${(props) => props.theme.mainBg};
-
-	@media (min-width: 1024px) {
-		height: 100%;
-	}
 `;
 
 const ContentWrapper = styled.div`
@@ -47,7 +43,7 @@ const ContentWrapper = styled.div`
 const MobileSideMenu = styled.div`
 	position: absolute;
 	width: 80%;
-	height: calc(91% - 1px);
+	height: calc(93% - 1px);
 	background: ${(props) => props.theme.secondaryBg};
 	left: ${(props) => (props.sideMenuOpen ? "0" : "-100%")};
 	z-index: 5;

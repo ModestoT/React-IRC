@@ -1,7 +1,24 @@
 import React from "react";
+import styled from "styled-components";
 
 import { useFormInput } from "../../customHooks/useFormInput.js";
 import { FixChannelName } from "../../helpers/IrcHelpers.js";
+
+const IrcTextBox = styled.form`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 5%;
+
+	input {
+		width: 95%;
+		background: ${(props) => props.theme.inputBg};
+		color: ${(props) => props.theme.mainText};
+		border-radius: 15px;
+		border: none;
+		padding: 1%;
+	}
+`;
 
 const IrcInputField = ({
 	currentChannel,
@@ -10,11 +27,11 @@ const IrcInputField = ({
 	nick,
 	setUserAsAway,
 	setUserAsBack,
-	createPrvMsgTab
+	createPrvMsgTab,
 }) => {
 	const [message, setMessage] = useFormInput("");
 
-	const handleMessageToChannel = e => {
+	const handleMessageToChannel = (e) => {
 		e.preventDefault();
 
 		if (message[0] === "/") {
@@ -44,14 +61,14 @@ const IrcInputField = ({
 		setMessage("");
 	};
 	return (
-		<form onSubmit={e => handleMessageToChannel(e)}>
+		<IrcTextBox onSubmit={(e) => handleMessageToChannel(e)}>
 			<input
 				type="text"
 				value={message}
-				onChange={e => setMessage(e.target.value)}
+				onChange={(e) => setMessage(e.target.value)}
 				spellCheck="true"
 			/>
-		</form>
+		</IrcTextBox>
 	);
 };
 

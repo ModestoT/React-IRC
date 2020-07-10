@@ -6,7 +6,7 @@ import IrcChatUsersList from "./IrcChatUsersList";
 
 const IrcChatWrapper = styled.div`
 	display: flex;
-	height: 80vh;
+	height: 87%;
 
 	@media (min-width: 1024px) {
 		height: 86vh;

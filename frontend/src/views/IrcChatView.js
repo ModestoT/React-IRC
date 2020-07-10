@@ -4,10 +4,15 @@ import IrcInputField from "../components/irc/IrcInputfield";
 import IrcCurrentChannelChat from "../components/irc/IrcCurrentChannelChat";
 import Button from "../components/Button.js";
 
+const ChatViewWrapper = styled.div`
+	height: 100%;
+`;
+
 const ChannelHeader = styled.header`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	height: 8%;
 
 	h2 {
 		margin-left: 15px;
@@ -39,7 +44,7 @@ const IrcChatView = ({
 	// };
 
 	return (
-		<div>
+		<ChatViewWrapper>
 			<ChannelHeader>
 				<h2>{currentChannel}</h2>
 				{currentChannel.toLowerCase() !== state.serverName.toLowerCase() && (
@@ -62,7 +67,7 @@ const IrcChatView = ({
 				setUserAsBack={setUserAsBack}
 				createPrvMsgTab={handleCreatePrvMsg}
 			/>
-		</div>
+		</ChatViewWrapper>
 	);
 };
 
