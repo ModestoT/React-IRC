@@ -32,6 +32,7 @@ const IrcChatView = ({
 	setUserAsBack,
 	handleCreatePrvMsg,
 	currentChannel,
+	windowWidthSize,
 }) => {
 	const { serverName, serverMsgs, userChannels, nick } = state;
 
@@ -52,9 +53,10 @@ const IrcChatView = ({
 		<ChatViewWrapper>
 			<ChannelHeader>
 				<h2>{currentChannel}</h2>
-				{currentChannel.toLowerCase() !== state.serverName.toLowerCase() && (
-					<Button onClick={() => setShowUsers(!showUsers)} btnText="Users" />
-				)}
+				{currentChannel.toLowerCase() !== state.serverName.toLowerCase() &&
+					windowWidthSize < 1024 && (
+						<Button onClick={() => setShowUsers(!showUsers)} btnText="Users" />
+					)}
 			</ChannelHeader>
 			<IrcCurrentChannelChat
 				serverName={serverName}
@@ -62,6 +64,7 @@ const IrcChatView = ({
 				userChannels={userChannels}
 				showUsers={showUsers}
 				currentChannel={currentChannel}
+				windowWidthSize={windowWidthSize}
 			/>
 			<IrcInputField
 				currentChannel={currentTab}

@@ -7,6 +7,8 @@ import IrcChatUsersList from "./IrcChatUsersList";
 const IrcChatWrapper = styled.div`
 	display: flex;
 	height: 87%;
+	border-top: 1px solid;
+	border-bottom: 1px solid;
 
 	@media (min-width: 1024px) {
 		height: 89%;
@@ -17,12 +19,10 @@ const IrcChatWindow = styled.div`
 	width: 100%;
 	overflow: auto;
 	word-break: break-word;
-	border-top: 1px solid;
-	border-bottom: 1px solid;
 	padding: 1%;
 `;
 
-const IrcChat = ({ channel, showUsers }) => {
+const IrcChat = ({ channel, showUsers, windowWidthSize }) => {
 	const { messages, userList } = channel;
 	const divRef = useRef(null);
 
@@ -37,7 +37,11 @@ const IrcChat = ({ channel, showUsers }) => {
 					return <IrcChatMsg key={index} msg={msg} />;
 				})}
 			</IrcChatWindow>
-			{showUsers && <IrcChatUsersList userList={userList} />}
+			{windowWidthSize > 1024 ? (
+				<IrcChatUsersList userList={userList} />
+			) : (
+				showUsers && <IrcChatUsersList userList={userList} />
+			)}
 		</IrcChatWrapper>
 	);
 };

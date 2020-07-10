@@ -8,18 +8,31 @@ const IrcCurrentChannelChat = ({
 	userChannels,
 	showUsers,
 	currentChannel,
+	windowWidthSize,
 }) => {
 	if (currentChannel === serverName) {
-		return <IrcChat channel={{ messages: serverMsgs, userList: [] }} showUsers={showUsers} />;
+		return (
+			<IrcChat
+				channel={{ messages: serverMsgs, userList: [] }}
+				showUsers={showUsers}
+				windowWidthSize={windowWidthSize}
+			/>
+		);
 	} else {
 		const channel = userChannels.find(
 			({ channelName }) => channelName.toLowerCase() === currentChannel.toLowerCase()
 		);
 
 		if (channel) {
-			return <IrcChat channel={channel} showUsers={showUsers} />;
+			return <IrcChat channel={channel} showUsers={showUsers} windowWidthSize={windowWidthSize} />;
 		} else {
-			return <IrcChat channel={{ messages: [], userList: [] }} showUsers={showUsers} />;
+			return (
+				<IrcChat
+					channel={{ messages: [], userList: [] }}
+					showUsers={showUsers}
+					windowWidthSize={windowWidthSize}
+				/>
+			);
 		}
 	}
 };
