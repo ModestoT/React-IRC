@@ -16,10 +16,19 @@ const IrcChatWrapper = styled.div`
 `;
 
 const IrcChatWindow = styled.div`
+	position: relative;
 	width: 100%;
 	overflow: auto;
 	word-break: break-word;
 	padding: 1%;
+	right: ${(props) => (props.showUsers ? "67%" : "0")};
+	transition: right 0.5s;
+	${(props) =>
+		props.showUsers &&
+		`
+      background-color: rgba(0,0,0,.4);
+      opacity: .5;
+		`}
 `;
 
 const IrcChat = ({ channel, showUsers, windowWidthSize }) => {
@@ -31,17 +40,18 @@ const IrcChat = ({ channel, showUsers, windowWidthSize }) => {
 	}, [messages]);
 
 	return (
-		<IrcChatWrapper>
-			<IrcChatWindow ref={divRef}>
+		<IrcChatWrapper showUsers={showUsers}>
+			<IrcChatWindow ref={divRef} showUsers={showUsers}>
 				{messages.map((msg, index) => {
 					return <IrcChatMsg key={index} msg={msg} />;
 				})}
 			</IrcChatWindow>
-			{windowWidthSize > 1024 ? (
-				<IrcChatUsersList userList={userList} />
+			<IrcChatUsersList userList={userList} showUsers={showUsers} />
+			{/* {windowWidthSize > 1024 ? (
+				<IrcChatUsersList userList={userList} showUsers={showUsers} />
 			) : (
-				showUsers && <IrcChatUsersList userList={userList} />
-			)}
+				showUsers && <IrcChatUsersList userList={userList} showUsers={showUsers} />
+			)} */}
 		</IrcChatWrapper>
 	);
 };
