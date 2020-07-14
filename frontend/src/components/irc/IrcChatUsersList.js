@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import IrcChatUser from "./IrcChatUser";
 
 const UsersList = styled.ul`
 	position: absolute;
@@ -10,11 +11,6 @@ const UsersList = styled.ul`
 	transition: right 0.5s;
 	margin: 0;
 	overflow-x: hidden;
-
-	li {
-		text-overflow: ellipsis;
-		overflow: hidden;
-	}
 
 	@media (min-width: 1024px) {
 		right: 0;
@@ -28,8 +24,8 @@ const IrcChatUsersList = ({ userList, showUsers }) => {
 	if (userList.length > 0) {
 		return (
 			<UsersList showUsers={showUsers}>
-				{userList.map((user) => {
-					return <li key={user.nick}>{user.nick}</li>;
+				{userList.map((user, index) => {
+					return <IrcChatUser key={index} user={user} />;
 				})}
 			</UsersList>
 		);
