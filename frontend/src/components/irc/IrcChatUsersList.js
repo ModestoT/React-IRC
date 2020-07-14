@@ -9,7 +9,19 @@ const UsersList = styled.ul`
 	z-index: 5;
 	transition: right 0.5s;
 	margin: 0;
-	overflow: auto;
+	overflow-x: hidden;
+
+	li {
+		text-overflow: ellipsis;
+		overflow: hidden;
+	}
+
+	@media (min-width: 1024px) {
+		right: 0;
+		position: initial;
+		height: 100%;
+		background: inherit;
+	}
 `;
 
 const IrcChatUsersList = ({ userList, showUsers }) => {
