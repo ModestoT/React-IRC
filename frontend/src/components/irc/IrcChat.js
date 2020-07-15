@@ -21,7 +21,7 @@ const IrcChatWindow = styled.div`
 	overflow: auto;
 	word-break: break-word;
 	padding: 1%;
-	right: ${(props) => (props.showUsers ? "67%" : "0")};
+	right: ${(props) => (props.showUsers ? "54%" : "0")};
 	transition: right 0.5s;
 	${(props) =>
 		props.showUsers &&

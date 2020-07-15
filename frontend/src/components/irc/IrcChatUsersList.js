@@ -1,31 +1,43 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import IrcChatUser from "./IrcChatUser";
 
 const UsersList = styled.ul`
 	position: absolute;
-	height: 87%;
+	width: 50%;
+	height: 84.5%;
 	background: ${(props) => props.theme.secondaryBg};
 	right: ${(props) => (props.showUsers ? "0" : "-100%")};
-	z-index: 5;
 	transition: right 0.5s;
 	margin: 0;
+	padding: 2%;
 	overflow-x: hidden;
+	z-index: 5;
 
 	@media (min-width: 1024px) {
 		right: 0;
 		position: initial;
-		height: 100%;
-		background: inherit;
+		width: 14%;
+		height: 98%;
+		padding: 0.5%;
 	}
 `;
 
 const IrcChatUsersList = ({ userList, showUsers }) => {
+	const [currentUserSelected, setCurrentUserSelected] = useState("");
+
 	if (userList.length > 0) {
 		return (
 			<UsersList showUsers={showUsers}>
 				{userList.map((user, index) => {
-					return <IrcChatUser key={index} user={user} />;
+					return (
+						<IrcChatUser
+							key={index}
+							user={user}
+							currentUserSelected={currentUserSelected}
+							setCurrentUserSelected={setCurrentUserSelected}
+						/>
+					);
 				})}
 			</UsersList>
 		);

@@ -1,25 +1,31 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
+
+import Button from "../Button.js";
 
 const UserPreview = styled.div`
 	display: flex;
 	align-items: flex-start;
 	flex-wrap: wrap;
-	width: 50%;
-	height: 15%;
+	width: 43%;
+	height: 13%;
 	background: black;
 	border: 1px solid;
 	position: fixed;
 	margin: 10px;
-`;
 
-const UserStatus = styled.div`
-	display: flex;
-	width: 80%;
-	margin: 5px;
-	align-items: center;
-	p {
-		margin: 0;
+	h4 {
+		margin: 8px 15px;
+		width: 75%;
+	}
+
+	@media (min-width: 1024px) {
+		width: 9%;
+		height: 10%;
+
+		h4 {
+			width: 71%;
+		}
 	}
 `;
 
@@ -28,6 +34,11 @@ const StatusDot = styled.span`
 	width: 15px;
 	background-color: ${(props) => (props.away ? "red" : "green")};
 	border-radius: 50%;
+	margin-right: 5px;
+`;
+
+const UserWrapper = styled.div`
+	display: flex;
 `;
 
 const User = styled.li`
@@ -39,23 +50,35 @@ const User = styled.li`
 	}
 `;
 
-const IrcChatUser = ({ user }) => {
+const PreviewClose = styled.span`
+	cursor: pointer;
+	margin: 6px 0;
+
+	&:hover {
+		transform: scale(1.4);
+	}
+
+	@media (min-width: 1024px) {
+		margin: 2%;
+	}
+`;
+
+const IrcChatUser = ({ user, currentUserSelected, setCurrentUserSelected }) => {
 	const { away, nick } = user;
-	const [showPreview, setShowPreview] = useState(false);
 
 	return (
 		<>
-			{showPreview && (
+			{nick === currentUserSelected && (
 				<UserPreview>
-					<UserStatus>
-						<StatusDot away={away} />
-						<p>{away ? "Away" : "Online"}</p>
-					</UserStatus>
-					<span onClick={() => setShowPreview(false)}>x</span>
 					<h4>{nick}</h4>
+					<PreviewClose onClick={() => setCurrentUserSelected("")}>x</PreviewClose>
+					<Button btnText="Message" />
 				</UserPreview>
 			)}
-			<User onClick={() => setShowPreview(!showPreview)}>{nick}</User>
+			<UserWrapper>
+				<StatusDot away={away} />
+				<User onClick={() => setCurrentUserSelected(nick)}>{nick}</User>
+			</UserWrapper>
 		</>
 	);
 };
