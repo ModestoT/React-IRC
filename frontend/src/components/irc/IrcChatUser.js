@@ -11,8 +11,10 @@ const UserPreview = styled.div`
 	height: 13%;
 	background: black;
 	border: 1px solid;
-	position: fixed;
+	position: absolute;
 	margin: 10px;
+	left: calc(${(props) => props.x}px - 320px);
+	top: calc(${(props) => props.y}px - 50px);
 
 	h4 {
 		margin: 8px 15px;
@@ -63,13 +65,20 @@ const PreviewClose = styled.span`
 	}
 `;
 
-const IrcChatUser = ({ user, currentUserSelected, setCurrentUserSelected }) => {
+const IrcChatUser = ({
+	user,
+	currentUserSelected,
+	setCurrentUserSelected,
+	showPreviewCard,
+	previewCoords,
+}) => {
 	const { away, nick } = user;
+	const { x, y } = previewCoords;
 
 	return (
 		<>
 			{nick === currentUserSelected && (
-				<UserPreview>
+				<UserPreview x={x} y={y}>
 					<h4>{nick}</h4>
 					<PreviewClose onClick={() => setCurrentUserSelected("")}>x</PreviewClose>
 					<Button btnText="Message" />
@@ -77,7 +86,7 @@ const IrcChatUser = ({ user, currentUserSelected, setCurrentUserSelected }) => {
 			)}
 			<UserWrapper>
 				<StatusDot away={away} />
-				<User onClick={() => setCurrentUserSelected(nick)}>{nick}</User>
+				<User onClick={(e) => showPreviewCard(e, nick)}>{nick}</User>
 			</UserWrapper>
 		</>
 	);
