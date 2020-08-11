@@ -13,7 +13,7 @@ const UserPreview = styled.div`
 	border: 1px solid;
 	position: absolute;
 	margin: 10px;
-	left: calc(${(props) => props.x}px - 320px);
+	left: 82%;
 	top: calc(${(props) => props.y}px - 50px);
 
 	h4 {
@@ -22,11 +22,11 @@ const UserPreview = styled.div`
 	}
 
 	@media (min-width: 1024px) {
-		width: 9%;
+		width: 15%;
 		height: 10%;
 
 		h4 {
-			width: 71%;
+			width: 82%;
 		}
 	}
 `;
@@ -61,7 +61,7 @@ const PreviewClose = styled.span`
 	}
 
 	@media (min-width: 1024px) {
-		margin: 2%;
+		margin-top: 2%;
 	}
 `;
 
@@ -73,12 +73,12 @@ const IrcChatUser = ({
 	previewCoords,
 }) => {
 	const { away, nick } = user;
-	const { x, y } = previewCoords;
+	const { y } = previewCoords;
 
 	return (
 		<>
 			{nick === currentUserSelected && (
-				<UserPreview x={x} y={y}>
+				<UserPreview y={y}>
 					<h4>{nick}</h4>
 					<PreviewClose onClick={() => setCurrentUserSelected("")}>x</PreviewClose>
 					<Button btnText="Message" />
