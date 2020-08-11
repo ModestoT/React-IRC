@@ -25,6 +25,12 @@ const UsersList = styled.ul`
 
 const IrcChatUsersList = ({ userList, showUsers }) => {
 	const [currentUserSelected, setCurrentUserSelected] = useState("");
+	const [previewCoords, setPreviewCoords] = useState({});
+
+	const showPreviewCard = (e, nick) => {
+		setCurrentUserSelected(nick);
+		setPreviewCoords({ x: e.clientX, y: e.clientY });
+	};
 
 	if (userList.length > 0) {
 		return (
@@ -35,7 +41,9 @@ const IrcChatUsersList = ({ userList, showUsers }) => {
 							key={index}
 							user={user}
 							currentUserSelected={currentUserSelected}
+							showPreviewCard={showPreviewCard}
 							setCurrentUserSelected={setCurrentUserSelected}
+							previewCoords={previewCoords}
 						/>
 					);
 				})}
