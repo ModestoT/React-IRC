@@ -7,8 +7,8 @@ const UsersList = styled.ul`
 	width: 50%;
 	height: 84.5%;
 	background: ${(props) => props.theme.secondaryBg};
-	right: ${(props) => (props.showUsers ? "0" : "-100%")};
-	transition: right 0.5s;
+	transform: translate(${(props) => (props.showUsers ? "85%" : "190%")});
+	transition: 0.5s ease-in-out;
 	margin: 0;
 	padding: 2%;
 	overflow-x: hidden;

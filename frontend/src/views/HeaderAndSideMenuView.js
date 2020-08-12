@@ -30,8 +30,8 @@ const AppContent = styled.div`
 const ContentWrapper = styled.div`
 	position: relative;
 	width: 100%;
-	left: ${(props) => (props.sideMenuOpen ? "80%" : "0")};
-	transition: left 0.5s;
+	transform: translate(${(props) => (props.sideMenuOpen ? "80%" : "0")});
+	transition: 0.5s ease-in-out;
 	${(props) =>
 		props.sideMenuOpen &&
 		`
@@ -45,9 +45,9 @@ const MobileSideMenu = styled.div`
 	width: 80%;
 	height: calc(93% - 1px);
 	background: ${(props) => props.theme.secondaryBg};
-	left: ${(props) => (props.sideMenuOpen ? "0" : "-100%")};
+	transform: translate(${(props) => (props.sideMenuOpen ? "0" : "-100%")});
+	transition: 0.5s ease-in-out;
 	z-index: 5;
-	transition: left 0.5s;
 `;
 
 const DesktopSideMenu = styled.div`
