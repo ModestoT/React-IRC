@@ -1,36 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 
-import Button from "../Button.js";
-
-const UserPreview = styled.div`
-	display: flex;
-	align-items: flex-start;
-	flex-wrap: wrap;
-	width: 43%;
-	height: 13%;
-	background: black;
-	border: 1px solid;
-	position: absolute;
-	margin: 10px;
-	left: 82%;
-	top: calc(${(props) => props.y}px - 50px);
-
-	h4 {
-		margin: 8px 15px;
-		width: 75%;
-	}
-
-	@media (min-width: 1024px) {
-		width: 15%;
-		height: 10%;
-
-		h4 {
-			width: 82%;
-		}
-	}
-`;
-
 const StatusDot = styled.span`
 	height: 15px;
 	width: 15px;
@@ -52,38 +22,11 @@ const User = styled.li`
 	}
 `;
 
-const PreviewClose = styled.span`
-	cursor: pointer;
-	margin: 6px 0;
-
-	&:hover {
-		transform: scale(1.4);
-	}
-
-	@media (min-width: 1024px) {
-		margin-top: 2%;
-	}
-`;
-
-const IrcChatUser = ({
-	user,
-	currentUserSelected,
-	setCurrentUserSelected,
-	showPreviewCard,
-	previewCoords,
-}) => {
+const IrcChatUser = ({ user, showPreviewCard }) => {
 	const { away, nick } = user;
-	const { y } = previewCoords;
 
 	return (
 		<>
-			{nick === currentUserSelected && (
-				<UserPreview y={y}>
-					<h4>{nick}</h4>
-					<PreviewClose onClick={() => setCurrentUserSelected("")}>x</PreviewClose>
-					<Button btnText="Message" />
-				</UserPreview>
-			)}
 			<UserWrapper>
 				<StatusDot away={away} />
 				<User onClick={(e) => showPreviewCard(e, nick)}>{nick}</User>
