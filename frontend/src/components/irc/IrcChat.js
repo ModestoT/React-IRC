@@ -31,7 +31,7 @@ const IrcChatWindow = styled.div`
 		`}
 `;
 
-const IrcChat = ({ channel, showUsers, windowWidthSize }) => {
+const IrcChat = ({ channel, showUsers }) => {
 	const { messages, userList } = channel;
 	const divRef = useRef(null);
 
@@ -47,11 +47,6 @@ const IrcChat = ({ channel, showUsers, windowWidthSize }) => {
 				})}
 			</IrcChatWindow>
 			<IrcChatUsersList userList={userList} showUsers={showUsers} />
-			{/* {windowWidthSize > 1024 ? (
-				<IrcChatUsersList userList={userList} showUsers={showUsers} />
-			) : (
-				showUsers && <IrcChatUsersList userList={userList} showUsers={showUsers} />
-			)} */}
 		</IrcChatWrapper>
 	);
 };

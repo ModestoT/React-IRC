@@ -44,6 +44,14 @@ const IrcChatView = ({
 		setCurrentTab(channelName);
 	};
 
+	// NEXT STEPS: Implement private messaging with new navigation design
+	// create a message notification button near the text input field
+	// need an array to keep track of amount of private messages a user has
+	// show length of the array on the button
+	// when button is clicked shows the private messages, when a message is selected
+	// the small window turns into a small chat window for the private messages
+	// Similar to twitch design
+
 	// const handleCreatePrvMsgTab = (target) => {
 	// 	createPrvMsgTab(target);
 	// 	setCurrentTab(target);
@@ -64,7 +72,6 @@ const IrcChatView = ({
 				userChannels={userChannels}
 				showUsers={showUsers}
 				currentChannel={currentChannel}
-				windowWidthSize={windowWidthSize}
 			/>
 			<IrcInputField
 				currentChannel={currentTab}
