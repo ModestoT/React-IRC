@@ -1,7 +1,7 @@
 import io from "socket.io-client";
 
 import { AddServerToStorage } from "../helpers/GeneralHelpers.js";
-const backend = process.env.backend || "http://localhost:3001";
+const backend = process.env.backend;
 
 const ConnectToIrc = (ircOptions) => {
 	console.log(`connecting to ${backend}`);
