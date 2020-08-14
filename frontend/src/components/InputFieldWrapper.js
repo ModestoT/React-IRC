@@ -1,14 +1,39 @@
 import React from "react";
 import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCommentAlt } from "@fortawesome/free-regular-svg-icons";
 
 import IrcInputField from "./irc/IrcInputfield.js";
 
 const IFwrapper = styled.div`
 	display: flex;
-	alight-items: center;
+	align-items: center;
 	height: 5%;
 `;
 
+const PMwrapper = styled.button`
+	cursor: pointer;
+	border: none;
+	background: none;
+	width: 10%;
+	padding: 0;
+	font-size: 1.1rem;
+	color: ${(props) => props.theme.btnBg};
+
+	&:hover {
+		background: #808075;
+		border-radius: 4px;
+		color: white;
+		height: 73%;
+		padding: 0.7%;
+	}
+
+	@media (min-width: 1024px) {
+		width: 2.5%;
+		font-size: 1.5rem;
+		height: 68%;
+	}
+`;
 // NEXT STEPS: Implement private messaging with new navigation design
 // create a message notification button near the text input field
 // need an array to keep track of amount of private messages a user has
@@ -18,7 +43,7 @@ const IFwrapper = styled.div`
 // Similar to twitch design
 
 const InputFieldWrapper = ({
-	currentTab,
+	currentChannel,
 	sendMessageToChannel,
 	handleJoinIrcChannel,
 	nick,
@@ -29,7 +54,7 @@ const InputFieldWrapper = ({
 	return (
 		<IFwrapper>
 			<IrcInputField
-				currentChannel={currentTab}
+				currentChannel={currentChannel}
 				sendMessageToChannel={sendMessageToChannel}
 				joinIrcChannel={handleJoinIrcChannel}
 				nick={nick}
@@ -37,7 +62,9 @@ const InputFieldWrapper = ({
 				setUserAsBack={setUserAsBack}
 				createPrvMsgTab={handleCreatePrvMsg}
 			/>
-			<button>stuff</button>
+			<PMwrapper>
+				<FontAwesomeIcon icon={faCommentAlt} />
+			</PMwrapper>
 		</IFwrapper>
 	);
 };
