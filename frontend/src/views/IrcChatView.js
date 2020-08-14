@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import IrcInputField from "../components/irc/IrcInputfield";
-import IrcCurrentChannelChat from "../components/irc/IrcCurrentChannelChat";
+
+import InputFieldWrapper from "../components/InputFieldWrapper.js";
+import IrcCurrentChannelChat from "../components/irc/IrcCurrentChannelChat.js";
 import Button from "../components/Button.js";
 
 const ChatViewWrapper = styled.div`
@@ -44,14 +45,6 @@ const IrcChatView = ({
 		setCurrentTab(channelName);
 	};
 
-	// NEXT STEPS: Implement private messaging with new navigation design
-	// create a message notification button near the text input field
-	// need an array to keep track of amount of private messages a user has
-	// show length of the array on the button
-	// when button is clicked shows the private messages, when a message is selected
-	// the small window turns into a small chat window for the private messages
-	// Similar to twitch design
-
 	// const handleCreatePrvMsgTab = (target) => {
 	// 	createPrvMsgTab(target);
 	// 	setCurrentTab(target);
@@ -73,7 +66,7 @@ const IrcChatView = ({
 				showUsers={showUsers}
 				currentChannel={currentChannel}
 			/>
-			<IrcInputField
+			<InputFieldWrapper
 				currentChannel={currentTab}
 				sendMessageToChannel={sendMessageToChannel}
 				joinIrcChannel={handleJoinIrcChannel}
