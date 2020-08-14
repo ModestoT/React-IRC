@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
+import Button from "../Button.js";
 import { useFormInput } from "../../customHooks/useFormInput.js";
 import { FixChannelName } from "../../helpers/IrcHelpers.js";
 
@@ -8,7 +9,11 @@ const IrcTextBox = styled.form`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	width: 96%;
+	width: 90%;
+
+	@media (min-width: 1024px) {
+		width: 97%;
+	}
 
 	input {
 		width: 95%;
@@ -74,6 +79,7 @@ const IrcInputField = ({
 				spellCheck="true"
 				placeholder={`Send message to ${currentChannel}`}
 			/>
+			<Button btnText="Send" margin={5} padding={[5, 8]} />
 		</IrcTextBox>
 	);
 };

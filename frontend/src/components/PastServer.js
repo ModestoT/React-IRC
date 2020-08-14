@@ -67,6 +67,7 @@ const ConnectBtnWrapper = styled.div`
 `;
 
 const AddChannelBtn = styled.button`
+	cursor: pointer;
 	margin: 2% 0;
 	background: ${(props) => props.theme.btnBg};
 	border: none;
