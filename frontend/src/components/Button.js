@@ -4,12 +4,12 @@ import styled from "styled-components";
 const Btn = styled.button`
 	cursor: pointer;
 	border: none;
-	padding: 8px 18px;
-	margin: 15px;
+	padding: ${(props) => `${props.padding[0]}px ${props.padding[1]}px`};
+	margin: ${(props) => props.margin}px;
 	font-weight: bold;
 	border-radius: 3px;
-	background: ${props => props.theme.btnBg};
-	color: ${props => props.theme.btnText};
+	background: ${(props) => props.theme.btnBg};
+	color: ${(props) => props.theme.btnText};
 
 	&:hover {
 		background: #808075;
@@ -17,8 +17,12 @@ const Btn = styled.button`
 	}
 `;
 
-const Button = ({ onClick, btnText }) => {
-	return <Btn onClick={onClick}>{btnText}</Btn>;
+const Button = ({ onClick, btnText, margin = 15, padding = [8, 18] }) => {
+	return (
+		<Btn margin={margin} padding={padding} onClick={onClick}>
+			{btnText}
+		</Btn>
+	);
 };
 
 export default Button;
