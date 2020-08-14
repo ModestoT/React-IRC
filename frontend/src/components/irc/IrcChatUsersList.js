@@ -9,7 +9,7 @@ const UsersList = styled.ul`
 	height: 84.5%;
 	background: ${(props) => props.theme.secondaryBg};
 	transform: translate(${(props) => (props.showUsers ? "85%" : "185%")});
-	transition: 0.5s ease-in-out;
+	transition: 0.4s ease-in-out;
 	margin: 0;
 	padding: 2%;
 	overflow-x: hidden;

@@ -83,8 +83,11 @@ const HeaderAndSideMenuView = ({
 			grabAvailableChannels();
 		}
 
+		if (windowWidthSize < 1024) {
+			setSideMenuOpen(!sideMenuOpen);
+		}
+
 		setIsToggled(!isToggled);
-		setSideMenuOpen(!sideMenuOpen);
 	};
 
 	const handleJoinIrcChannel = (channel) => {
