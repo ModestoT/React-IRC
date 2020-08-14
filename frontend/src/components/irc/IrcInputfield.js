@@ -8,7 +8,7 @@ const IrcTextBox = styled.form`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	height: 5%;
+	width: 96%;
 
 	input {
 		width: 95%;
