@@ -5,19 +5,23 @@ import { SearchChannelMatrix } from "../../helpers/IrcHelpers.js";
 import IrcChannelsTable from "./IrcChannelsTable.js";
 import ChangePageButtons from "../ChangePageButtons.js";
 
-const ServerSearch = styled.input`
-	input {
-		width: 95%;
-		background: ${(props) => props.theme.inputBg};
-		color: ${(props) => props.theme.mainText};
-		border-radius: 15px;
-		border: none;
-		padding: 1%;
-		outline: none;
+const ServerListWrapper = styled.div`
+	height: 85%;
+	overflow: auto;
+`;
 
-		@media (min-width: 1024px) {
-			padding: 0.5%;
-		}
+const ServerSearch = styled.input`
+	width: 95%;
+	background: ${(props) => props.theme.inputBg};
+	color: ${(props) => props.theme.mainText};
+	border-radius: 15px;
+	border: none;
+	padding: 1%;
+	outline: none;
+	margin: 5px;
+
+	@media (min-width: 1024px) {
+		padding: 0.5%;
 	}
 `;
 
@@ -95,13 +99,15 @@ const IrcJoinableChannels = ({
 				aria-label="Search for a channel to join"
 				placeholder="Search for a channel to join"
 			/>
+			<ServerListWrapper>
+				{isGrabbingChannels ? <span>Getting List of Channels...</span> : renderChannels()}
+			</ServerListWrapper>
 			<ChangePageButtons
 				handlePageBack={handlePageBack}
 				handlePageForward={handlePageForward}
 				currentPage={data.currentPage}
 				totalPages={pages}
 			/>
-			{isGrabbingChannels ? <span>Getting List of Channels...</span> : renderChannels()}
 		</>
 	);
 };

@@ -15,7 +15,7 @@ const OverlayWrapper = styled.div`
 `;
 
 const ModalWrapper = styled.div`
-	width: 80%;
+	width: 95%;
 	height: 90vh;
 	background-color: ${(props) => props.theme.mainBg};
 	border-radius: 3px;
