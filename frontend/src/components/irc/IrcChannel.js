@@ -10,6 +10,8 @@ const TableRow = styled.tr`
 	align-items: center;
 	width: 100%;
 	margin: 5px 0;
+	padding: 5px 0;
+	border-bottom: 1px solid ${(props) => props.theme.mainText};
 `;
 
 const ChannelNumUsers = styled.td`
@@ -59,7 +61,7 @@ const IrcChannel = ({ joinableChannel, joinIrcChannel, toggleModal }) => {
 			{/* Add ability to expand the topic on click to view all the text */}
 			<ChannelTopic>{topic}</ChannelTopic>
 			<td>
-				<Button onClick={() => handleChannelJoin()} btnText="JOIN" />
+				<Button onClick={() => handleChannelJoin()} btnText="JOIN" margin={3} padding={[7, 12]} />
 			</td>
 		</TableRow>
 	);
