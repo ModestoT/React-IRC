@@ -18,7 +18,7 @@ const ModalWrapper = styled.div`
 	display: flex;
 	flex-direction: column;
 	width: 95%;
-	height: 90vh;
+	height: 97vh;
 	background-color: ${(props) => props.theme.mainBg};
 	border-radius: 3px;
 	overflow: auto;

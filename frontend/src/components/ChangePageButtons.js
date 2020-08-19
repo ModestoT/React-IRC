@@ -3,18 +3,27 @@ import styled from "styled-components";
 
 const ChangePageWrapper = styled.div`
 	display: flex;
-	justify-content: center;
+	justify-content: space-around;
 	align-items: center;
+	font-size: 1.3rem;
+
+	.arrows {
+		font-size: 2rem;
+	}
 `;
 
 const ChangePageButtons = ({ handlePageBack, handlePageForward, currentPage, totalPages }) => {
 	return (
 		<ChangePageWrapper>
-			<span onClick={() => handlePageBack()}>{"<"}</span>
+			<span className="arrows" onClick={() => handlePageBack()}>
+				{"<"}
+			</span>
 			<span>
 				{currentPage + 1}/{totalPages}
 			</span>
-			<span onClick={() => handlePageForward()}>{">"}</span>
+			<span className="arrows" onClick={() => handlePageForward()}>
+				{">"}
+			</span>
 		</ChangePageWrapper>
 	);
 };
