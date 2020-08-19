@@ -14,10 +14,17 @@ const ChannelNumUsers = styled.td`
 	display: flex;
 	width: 16%;
 	justify-content: space-evenly;
+
+	@media (min-width: 1024px) {
+		width: 5%;
+	}
 `;
 
 const ChannelName = styled.td`
 	width: 29%;
+	@media (min-width: 1024px) {
+		width: 12%;
+	}
 `;
 
 const ChannelTopic = styled.td`
@@ -26,14 +33,20 @@ const ChannelTopic = styled.td`
 	height: 50px;
 	overflow: hidden;
 	text-overflow: ellipsis;
+
+	@media (min-width: 1024px) {
+		width: 79%;
+	}
 `;
 
 const IrcChannel = ({ joinableChannel, joinIrcChannel, toggleModal }) => {
 	const { channel, topic, num_users } = joinableChannel;
+
 	const handleChannelJoin = () => {
 		joinIrcChannel(channel);
 		toggleModal();
 	};
+
 	return (
 		<TableRow>
 			<ChannelNumUsers>
@@ -41,6 +54,7 @@ const IrcChannel = ({ joinableChannel, joinIrcChannel, toggleModal }) => {
 				{num_users}
 			</ChannelNumUsers>
 			<ChannelName>{channel}</ChannelName>
+			{/* Add ability to expand the topic on click to view all the text */}
 			<ChannelTopic>{topic}</ChannelTopic>
 			<td>
 				<button onClick={() => handleChannelJoin()}>JOIN</button>

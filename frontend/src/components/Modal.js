@@ -15,6 +15,8 @@ const OverlayWrapper = styled.div`
 `;
 
 const ModalWrapper = styled.div`
+	display: flex;
+	flex-direction: column;
 	width: 95%;
 	height: 90vh;
 	background-color: ${(props) => props.theme.mainBg};

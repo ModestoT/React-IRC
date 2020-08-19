@@ -8,6 +8,10 @@ import ChangePageButtons from "../ChangePageButtons.js";
 const ServerListWrapper = styled.div`
 	height: 85%;
 	overflow: auto;
+
+	@media (min-width: 1024px) {
+		height: 84%;
+	}
 `;
 
 const ServerSearch = styled.input`
@@ -22,6 +26,7 @@ const ServerSearch = styled.input`
 
 	@media (min-width: 1024px) {
 		padding: 0.5%;
+		width: initial;
 	}
 `;
 
@@ -90,6 +95,7 @@ const IrcJoinableChannels = ({
 			currentPage: d.currentPage === pages ? d.currentPage : d.currentPage + 1,
 		}));
 	};
+
 	return (
 		<>
 			<ServerSearch
