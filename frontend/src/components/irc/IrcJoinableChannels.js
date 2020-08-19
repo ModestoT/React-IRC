@@ -92,7 +92,7 @@ const IrcJoinableChannels = ({
 	const handlePageForward = () => {
 		setData((d) => ({
 			...d,
-			currentPage: d.currentPage === pages ? pages - 1 : d.currentPage + 1,
+			currentPage: d.currentPage + 1 === pages ? pages - 1 : d.currentPage + 1,
 		}));
 	};
 
