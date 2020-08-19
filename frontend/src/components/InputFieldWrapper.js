@@ -24,8 +24,6 @@ const PMwrapper = styled.button`
 		background: #808075;
 		border-radius: 4px;
 		color: white;
-		height: 73%;
-		padding: 0.7%;
 	}
 
 	@media (min-width: 1024px) {
