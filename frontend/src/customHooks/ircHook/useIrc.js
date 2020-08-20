@@ -26,6 +26,7 @@ export const useIrc = () => {
 			channels: [],
 		},
 		channelsToJoin: [],
+		privateMsgs: [],
 		pastServers: JSON.parse(localStorage.getItem("past_servers")) || [],
 		isConnected: false,
 		isConnectedToServer: false,
