@@ -47,7 +47,7 @@ const InputFieldWrapper = ({
 	nick,
 	setUserAsAway,
 	setUserAsBack,
-	handleCreatePrvMsg,
+	sendPrivMsg,
 }) => {
 	return (
 		<IFwrapper>
@@ -58,7 +58,7 @@ const InputFieldWrapper = ({
 				nick={nick}
 				setUserAsAway={setUserAsAway}
 				setUserAsBack={setUserAsBack}
-				createPrvMsgTab={handleCreatePrvMsg}
+				sendPrivMsg={sendPrivMsg}
 			/>
 			<PMwrapper>
 				<FontAwesomeIcon icon={faCommentAlt} />

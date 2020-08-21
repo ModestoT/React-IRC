@@ -37,7 +37,7 @@ const IrcInputField = ({
 	nick,
 	setUserAsAway,
 	setUserAsBack,
-	createPrvMsgTab,
+	sendPrivMsg,
 }) => {
 	const [message, setMessage] = useFormInput("");
 
@@ -59,7 +59,8 @@ const IrcInputField = ({
 					setUserAsBack();
 					break;
 				case "/message":
-					createPrvMsgTab(action[1]);
+					const data = { target: action[1], message: action.slice(2).join(" ") };
+					sendPrivMsg(data);
 					break;
 				default:
 					return null;

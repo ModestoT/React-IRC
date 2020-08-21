@@ -31,7 +31,7 @@ const IrcChatView = ({
 	sendMessageToChannel,
 	setUserAsAway,
 	setUserAsBack,
-	handleCreatePrvMsg,
+	sendPrivMsg,
 	currentChannel,
 	windowWidthSize,
 }) => {
@@ -73,7 +73,7 @@ const IrcChatView = ({
 				nick={nick}
 				setUserAsAway={setUserAsAway}
 				setUserAsBack={setUserAsBack}
-				createPrvMsgTab={handleCreatePrvMsg}
+				sendPrivMsg={sendPrivMsg}
 			/>
 		</ChatViewWrapper>
 	);
