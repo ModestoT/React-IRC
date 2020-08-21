@@ -26,7 +26,7 @@ export const useIrc = () => {
 			channels: [],
 		},
 		channelsToJoin: [],
-		privateMsgs: [],
+		privateMsgs: { unreadPrivMsgs: 0, receivedMessages: [] },
 		pastServers: JSON.parse(localStorage.getItem("past_servers")) || [],
 		isConnected: false,
 		isConnectedToServer: false,
@@ -89,8 +89,9 @@ export const useIrc = () => {
 		state.ircSocket.emit("set back");
 	};
 
-	const createPrvMsgTab = (target) => {
-		dispatch({ type: CREATE_PRV_MSG_TAB, payload: target });
+	const sendPrivMsg = (data) => {
+		state.ircSocket.emit("msgChannel", data);
+		// dispatch({ type: CREATE_PRV_MSG_TAB, payload: target });
 	};
 
 	const deleteServer = (id) => {
@@ -113,7 +114,7 @@ export const useIrc = () => {
 		sendMessageToChannel,
 		setUserAsAway,
 		setUserAsBack,
-		createPrvMsgTab,
+		sendPrivMsg,
 		deleteServer,
 		deleteChannelFromPastServers,
 	};

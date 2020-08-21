@@ -206,36 +206,35 @@ export const IrcReducer = (state, action) => {
 				),
 			};
 		case PERSONAL_MSG:
-			channel = state.userChannels.find(
-				({ channelName }) => channelName.toLowerCase() === action.payload.sentFrom.toLowerCase()
+			//Need to rewrite this for private messages. Needs it's own array that keeps track of the messages.
+			let findUser = state.privateMsgs.receivedMessages.find(
+				(msg) => msg.user.toLowerCase() === action.payload.sentFrom.toLowerCase()
 			);
 
-			if (channel) {
+			if (findUser) {
 				return {
 					...state,
-					userChannels: state.userChannels.map((c) => {
-						let { messages, messagesCount } = CheckIfOverMessageLimit(c, 500);
-						return c.channelName.toLowerCase() === action.payload.sentFrom.toLowerCase()
-							? {
-									...c,
-									messages: [...messages, `<${action.payload.sentFrom}> ${action.payload.message}`],
-									messagesCount: messagesCount + 1,
-							  }
-							: c;
-					}),
+					privateMsgs: {
+						...state.privateMsgs,
+						unreadPrivMsgs: state.privateMsgs.unreadPrivMsgs + 1,
+						receivedMessages: state.privateMsgs.receivedMessages.map((msg) =>
+							msg.user.toLowerCase() === action.payload.sentFrom.toLowerCase()
+								? { ...msg, messages: [...msg.messages, action.payload.message] }
+								: msg
+						),
+					},
 				};
 			} else {
 				return {
 					...state,
-					userChannels: [
-						...state.userChannels,
-						{
-							channelName: action.payload.sentFrom,
-							messages: [`<${action.payload.sentFrom}> ${action.payload.message}`],
-							userList: [],
-							messagesCount: 1,
-						},
-					],
+					privateMsgs: {
+						...state.privateMsgs,
+						unreadPrivMsgs: state.privateMsgs.unreadPrivMsgs + 1,
+						receivedMessages: [
+							...state.privateMsgs.receivedMessages,
+							{ user: action.payload.sentFrom, messages: [action.payload.message] },
+						],
+					},
 				};
 			}
 		case CREATE_PRV_MSG_TAB:
