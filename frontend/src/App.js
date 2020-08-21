@@ -35,7 +35,7 @@ function App() {
 		sendMessageToChannel,
 		setUserAsAway,
 		setUserAsBack,
-		createPrvMsgTab,
+		sendPrivMsg,
 		deleteServer,
 		deleteChannelFromPastServers,
 	} = useIrc();
@@ -51,11 +51,6 @@ function App() {
 
 		return () => window.removeEventListener("resize", updateWidth);
 	}, []);
-
-	const handleCreatePrvMsg = (target) => {
-		createPrvMsgTab(target);
-		setCurrentChannel(target);
-	};
 
 	return (
 		<ThemeProvider theme={darkTheme}>
@@ -82,7 +77,7 @@ function App() {
 							sendMessageToChannel={sendMessageToChannel}
 							setUserAsAway={setUserAsAway}
 							setUserAsBack={setUserAsBack}
-							handleCreatePrvMsg={handleCreatePrvMsg}
+							sendPrivMsg={sendPrivMsg}
 							windowWidthSize={windowWidthSize}
 							currentChannel={currentChannel}
 						/>
