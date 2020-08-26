@@ -35,7 +35,7 @@ const IrcChatView = ({
 	currentChannel,
 	windowWidthSize,
 }) => {
-	const { serverName, serverMsgs, userChannels, nick } = state;
+	const { serverName, serverMsgs, userChannels, nick, privateMsgs } = state;
 
 	const [currentTab, setCurrentTab] = useState(serverName);
 	const [showUsers, setShowUsers] = useState(false);
@@ -44,11 +44,6 @@ const IrcChatView = ({
 		joinIrcChannel(channelName);
 		setCurrentTab(channelName);
 	};
-
-	// const handleCreatePrvMsgTab = (target) => {
-	// 	createPrvMsgTab(target);
-	// 	setCurrentTab(target);
-	// };
 
 	return (
 		<ChatViewWrapper>
@@ -74,6 +69,7 @@ const IrcChatView = ({
 				setUserAsAway={setUserAsAway}
 				setUserAsBack={setUserAsBack}
 				sendPrivMsg={sendPrivMsg}
+				privateMsgs={privateMsgs}
 			/>
 		</ChatViewWrapper>
 	);
