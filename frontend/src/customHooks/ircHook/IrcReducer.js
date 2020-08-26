@@ -20,7 +20,6 @@ export const CHANNEL_PRV_MSG = "CHANNEL_PRV_MSG";
 export const UPDATE_USERS_LIST = "UPDATE_USERS_LIST";
 export const LEAVE_CHANNEL = "LEAVE_CHANNEL";
 export const PERSONAL_MSG = "PERSONAL_MSG";
-export const CREATE_PRV_MSG_TAB = "CREATE_PRV_MSG_TAB";
 export const CONNECTION_TO_SERVER_MADE = "CONNECTION_TO_SERVER_MADE";
 export const JOIN_CHANNELS = "JOIN_CHANNELS";
 export const DELETE_SERVER_FROM_STORAGE = "DELETE_SERVER_FROM_STORAGE";
@@ -206,7 +205,6 @@ export const IrcReducer = (state, action) => {
 				),
 			};
 		case PERSONAL_MSG:
-			//Need to rewrite this for private messages. Needs it's own array that keeps track of the messages.
 			let findUser = state.privateMsgs.receivedMessages.find(
 				(msg) => msg.user.toLowerCase() === action.payload.sentFrom.toLowerCase()
 			);
@@ -237,19 +235,6 @@ export const IrcReducer = (state, action) => {
 					},
 				};
 			}
-		case CREATE_PRV_MSG_TAB:
-			return {
-				...state,
-				userChannels: [
-					...state.userChannels,
-					{
-						channelName: action.payload,
-						messages: [],
-						userList: [],
-						messagesCount: 0,
-					},
-				],
-			};
 		default:
 			return state;
 	}
