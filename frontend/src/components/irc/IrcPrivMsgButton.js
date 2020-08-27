@@ -59,18 +59,17 @@ const ReceivedMsgsWrapper = styled.div`
 // and we will display the amount of unseen messages from that user as well on the overview of the private messages.
 
 const IrcPrivMsgButton = ({ privateMsgs }) => {
-	const { unreadPrivMsgs, receivedMessages } = privateMsgs;
 	const [showMessages, setShowMessages] = useState(false);
 
 	return (
 		<>
 			<PMbuttonwrapper onClick={() => setShowMessages(!showMessages)}>
 				<FontAwesomeIcon icon={faCommentAlt} />
-				{unreadPrivMsgs > 0 && <UnreadMsgs>{unreadPrivMsgs}</UnreadMsgs>}
+				<UnreadMsgs>1</UnreadMsgs>
 			</PMbuttonwrapper>
 			{showMessages && (
 				<ReceivedMsgsWrapper>
-					{receivedMessages.map((recMsg) => {
+					{privateMsgs.map((recMsg) => {
 						return <IrcPrivMsg key={recMsg.user} recievedMsg={recMsg} />;
 					})}
 				</ReceivedMsgsWrapper>

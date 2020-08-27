@@ -205,34 +205,32 @@ export const IrcReducer = (state, action) => {
 				),
 			};
 		case PERSONAL_MSG:
-			let findUser = state.privateMsgs.receivedMessages.find(
+			let findUser = state.privateMsgs.find(
 				(msg) => msg.user.toLowerCase() === action.payload.sentFrom.toLowerCase()
 			);
 
 			if (findUser) {
 				return {
 					...state,
-					privateMsgs: {
-						...state.privateMsgs,
-						unreadPrivMsgs: state.privateMsgs.unreadPrivMsgs + 1,
-						receivedMessages: state.privateMsgs.receivedMessages.map((msg) =>
-							msg.user.toLowerCase() === action.payload.sentFrom.toLowerCase()
-								? { ...msg, messages: [...msg.messages, action.payload.message] }
-								: msg
-						),
-					},
+					privateMsgs: state.privateMsgs.map((msg) =>
+						msg.user.toLowerCase() === action.payload.sentFrom.toLowerCase()
+							? {
+									...msg,
+									messages: [...msg.messages, { message: action.payload.message, seen: false }],
+							  }
+							: msg
+					),
 				};
 			} else {
 				return {
 					...state,
-					privateMsgs: {
+					privateMsgs: [
 						...state.privateMsgs,
-						unreadPrivMsgs: state.privateMsgs.unreadPrivMsgs + 1,
-						receivedMessages: [
-							...state.privateMsgs.receivedMessages,
-							{ user: action.payload.sentFrom, messages: [action.payload.message] },
-						],
-					},
+						{
+							user: action.payload.sentFrom,
+							messages: [{ message: action.payload.message, seen: false }],
+						},
+					],
 				};
 			}
 		default:
