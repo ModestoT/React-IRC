@@ -54,12 +54,18 @@ const ReceivedMsgsWrapper = styled.div`
 	background: black;
 `;
 
-// TODO: for the method of setting messages as seen. Since each message is added to an object of a user that sent the message
-// when can turn the message into an object as well and add a seen key to it. When it's mapped we can set the unseen messages to seen
-// and we will display the amount of unseen messages from that user as well on the overview of the private messages.
-
 const IrcPrivMsgButton = ({ privateMsgs, totalUnreadMessages, updateReadMessages }) => {
 	const [showMessages, setShowMessages] = useState(false);
+	const [userSelected, setUserSelected] = useState(null);
+
+	const handleSelectUser = (privMsg) => {
+		setUserSelected(privMsg);
+		updateReadMessages(privMsg.user, privMsg.unReadMessages);
+	};
+
+	const handleDeselectUser = () => {
+		setUserSelected(null);
+	};
 
 	return (
 		<>
@@ -69,15 +75,24 @@ const IrcPrivMsgButton = ({ privateMsgs, totalUnreadMessages, updateReadMessages
 			</PMbuttonwrapper>
 			{showMessages && (
 				<ReceivedMsgsWrapper>
-					{privateMsgs.map((privMsg) => {
-						return (
-							<IrcPrivMsg
-								key={privMsg.user}
-								privMsg={privMsg}
-								updateReadMessages={updateReadMessages}
-							/>
-						);
-					})}
+					{userSelected === null
+						? privateMsgs.map((privMsg) => {
+								return (
+									<IrcPrivMsg
+										key={privMsg.user}
+										privMsg={privMsg}
+										handleSelectUser={handleSelectUser}
+									/>
+								);
+						  })
+						: userSelected.messages.map((msg, index) => {
+								return (
+									<div key={index}>
+										<h4>{userSelected.user}</h4>
+										<p>{msg}</p>
+									</div>
+								);
+						  })}
 				</ReceivedMsgsWrapper>
 			)}
 		</>
