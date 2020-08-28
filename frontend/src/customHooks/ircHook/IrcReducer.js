@@ -20,6 +20,7 @@ export const CHANNEL_PRV_MSG = "CHANNEL_PRV_MSG";
 export const UPDATE_USERS_LIST = "UPDATE_USERS_LIST";
 export const LEAVE_CHANNEL = "LEAVE_CHANNEL";
 export const PERSONAL_MSG = "PERSONAL_MSG";
+export const UPDATE_READ_MESSAGES = "UPDATE_READ_MESSAGES";
 export const CONNECTION_TO_SERVER_MADE = "CONNECTION_TO_SERVER_MADE";
 export const JOIN_CHANNELS = "JOIN_CHANNELS";
 export const DELETE_SERVER_FROM_STORAGE = "DELETE_SERVER_FROM_STORAGE";
@@ -212,10 +213,13 @@ export const IrcReducer = (state, action) => {
 			if (findUser) {
 				return {
 					...state,
-					totalUnreadMessages: state.privateMsgs.reduce(
-						(accumulator, currentValue) => accumulator + currentValue.unReadMessages,
-						state.totalUnreadMessages
-					),
+					totalUnreadMessages:
+						findUser.unReadMessages === 0
+							? state.totalUnreadMessages + 1
+							: state.privateMsgs.reduce(
+									(accumulator, currentValue) => accumulator + currentValue.unReadMessages,
+									state.totalUnreadMessages
+							  ),
 					privateMsgs: state.privateMsgs.map((msg) =>
 						msg.user.toLowerCase() === action.payload.sentFrom.toLowerCase()
 							? {
@@ -240,6 +244,17 @@ export const IrcReducer = (state, action) => {
 					],
 				};
 			}
+
+		case UPDATE_READ_MESSAGES:
+			return {
+				...state,
+				totalUnreadMessages: state.totalUnreadMessages - action.payload.unReadMessageCount,
+				privateMsgs: state.privateMsgs.map((msg) =>
+					msg.user.toLowerCase() === action.payload.user.toLowerCase()
+						? { ...msg, unReadMessages: 0 }
+						: msg
+				),
+			};
 		default:
 			return state;
 	}

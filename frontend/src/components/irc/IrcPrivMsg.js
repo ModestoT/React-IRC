@@ -6,10 +6,10 @@ const PrivMsgWrapper = styled.div`
 	align-items: center;
 `;
 
-const IrcPrivMsg = ({ privMsg }) => {
-	const { user, messages } = privMsg;
+const IrcPrivMsg = ({ privMsg, updateReadMessages }) => {
+	const { user, messages, unReadMessages } = privMsg;
 	return (
-		<PrivMsgWrapper>
+		<PrivMsgWrapper onClick={() => updateReadMessages(user, unReadMessages)}>
 			<h4>{user}</h4>
 			<p>{messages[messages.length - 1]}</p>
 		</PrivMsgWrapper>

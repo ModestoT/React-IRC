@@ -34,6 +34,7 @@ const IrcChatView = ({
 	sendPrivMsg,
 	currentChannel,
 	windowWidthSize,
+	updateReadMessages,
 }) => {
 	const { serverName, serverMsgs, userChannels, nick, privateMsgs, totalUnreadMessages } = state;
 
@@ -71,6 +72,7 @@ const IrcChatView = ({
 				sendPrivMsg={sendPrivMsg}
 				privateMsgs={privateMsgs}
 				totalUnreadMessages={totalUnreadMessages}
+				updateReadMessages={updateReadMessages}
 			/>
 		</ChatViewWrapper>
 	);

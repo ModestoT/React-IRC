@@ -38,6 +38,7 @@ function App() {
 		sendPrivMsg,
 		deleteServer,
 		deleteChannelFromPastServers,
+		updateReadMessages,
 	} = useIrc();
 
 	const [windowWidthSize, setwindowWidthSize] = useState(window.innerWidth);
@@ -78,6 +79,7 @@ function App() {
 							setUserAsAway={setUserAsAway}
 							setUserAsBack={setUserAsBack}
 							sendPrivMsg={sendPrivMsg}
+							updateReadMessages={updateReadMessages}
 							windowWidthSize={windowWidthSize}
 							currentChannel={currentChannel}
 						/>

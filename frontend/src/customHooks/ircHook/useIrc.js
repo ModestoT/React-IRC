@@ -9,6 +9,7 @@ import {
 	JOIN_CHANNELS,
 	DELETE_SERVER_FROM_STORAGE,
 	DELETE_CHANNEL_FROM_STORAGE,
+	UPDATE_READ_MESSAGES,
 } from "./IrcReducer.js";
 
 import { IrcEventListeners } from "../../irc/IrcEventListeners.js";
@@ -104,6 +105,10 @@ export const useIrc = () => {
 		leaveIrcChannel(channel);
 	};
 
+	const updateReadMessages = (user, unReadMessageCount) => {
+		dispatch({ type: UPDATE_READ_MESSAGES, payload: { user, unReadMessageCount } });
+	};
+
 	return {
 		state,
 		connectToIrc,
@@ -117,5 +122,6 @@ export const useIrc = () => {
 		sendPrivMsg,
 		deleteServer,
 		deleteChannelFromPastServers,
+		updateReadMessages,
 	};
 };

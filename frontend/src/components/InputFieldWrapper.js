@@ -28,6 +28,7 @@ const InputFieldWrapper = ({
 	sendPrivMsg,
 	privateMsgs,
 	totalUnreadMessages,
+	updateReadMessages,
 }) => {
 	return (
 		<IFwrapper>
@@ -40,7 +41,11 @@ const InputFieldWrapper = ({
 				setUserAsBack={setUserAsBack}
 				sendPrivMsg={sendPrivMsg}
 			/>
-			<IrcPrivMsgButton privateMsgs={privateMsgs} totalUnreadMessages={totalUnreadMessages} />
+			<IrcPrivMsgButton
+				privateMsgs={privateMsgs}
+				totalUnreadMessages={totalUnreadMessages}
+				updateReadMessages={updateReadMessages}
+			/>
 		</IFwrapper>
 	);
 };
