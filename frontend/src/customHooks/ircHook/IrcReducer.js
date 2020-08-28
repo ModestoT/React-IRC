@@ -212,11 +212,16 @@ export const IrcReducer = (state, action) => {
 			if (findUser) {
 				return {
 					...state,
+					totalUnreadMessages: state.privateMsgs.reduce(
+						(accumulator, currentValue) => accumulator + currentValue.unReadMessages,
+						state.totalUnreadMessages
+					),
 					privateMsgs: state.privateMsgs.map((msg) =>
 						msg.user.toLowerCase() === action.payload.sentFrom.toLowerCase()
 							? {
 									...msg,
-									messages: [...msg.messages, { message: action.payload.message, seen: false }],
+									messages: [...msg.messages, action.payload.message],
+									unReadMessages: msg.unReadMessages + 1,
 							  }
 							: msg
 					),
@@ -224,11 +229,13 @@ export const IrcReducer = (state, action) => {
 			} else {
 				return {
 					...state,
+					totalUnreadMessages: state.totalUnreadMessages + 1,
 					privateMsgs: [
 						...state.privateMsgs,
 						{
 							user: action.payload.sentFrom,
-							messages: [{ message: action.payload.message, seen: false }],
+							messages: [action.payload.message],
+							unReadMessages: 1,
 						},
 					],
 				};

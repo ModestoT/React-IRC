@@ -6,8 +6,8 @@ const PrivMsgWrapper = styled.div`
 	align-items: center;
 `;
 
-const IrcPrivMsg = ({ recievedMsg }) => {
-	const { user, messages } = recievedMsg;
+const IrcPrivMsg = ({ privMsg }) => {
+	const { user, messages } = privMsg;
 	return (
 		<PrivMsgWrapper>
 			<h4>{user}</h4>

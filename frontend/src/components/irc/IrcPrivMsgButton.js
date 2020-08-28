@@ -58,19 +58,19 @@ const ReceivedMsgsWrapper = styled.div`
 // when can turn the message into an object as well and add a seen key to it. When it's mapped we can set the unseen messages to seen
 // and we will display the amount of unseen messages from that user as well on the overview of the private messages.
 
-const IrcPrivMsgButton = ({ privateMsgs }) => {
+const IrcPrivMsgButton = ({ privateMsgs, totalUnreadMessages }) => {
 	const [showMessages, setShowMessages] = useState(false);
 
 	return (
 		<>
 			<PMbuttonwrapper onClick={() => setShowMessages(!showMessages)}>
 				<FontAwesomeIcon icon={faCommentAlt} />
-				<UnreadMsgs>1</UnreadMsgs>
+				{totalUnreadMessages > 0 && <UnreadMsgs>{totalUnreadMessages}</UnreadMsgs>}
 			</PMbuttonwrapper>
 			{showMessages && (
 				<ReceivedMsgsWrapper>
-					{privateMsgs.map((recMsg) => {
-						return <IrcPrivMsg key={recMsg.user} recievedMsg={recMsg} />;
+					{privateMsgs.map((privMsg) => {
+						return <IrcPrivMsg key={privMsg.user} privMsg={privMsg} />;
 					})}
 				</ReceivedMsgsWrapper>
 			)}
