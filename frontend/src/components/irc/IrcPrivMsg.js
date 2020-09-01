@@ -4,6 +4,13 @@ import styled from "styled-components";
 const PrivMsgWrapper = styled.div`
 	display: flex;
 	align-items: center;
+	height: 12%;
+	border-bottom: 1px solid grey;
+	padding: 0 3%;
+
+	p {
+		margin-left: 5px;
+	}
 `;
 
 const IrcPrivMsg = ({ privMsg, handleSelectUser }) => {

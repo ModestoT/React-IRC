@@ -12,8 +12,8 @@ const PMbuttonwrapper = styled.button`
 	border: none;
 	background: none;
 	width: 9%;
-	height: 100%;
-	padding: 1.9% 0%;
+	height: 80%;
+	padding: 1.3% 0%;
 	font-size: 1.1rem;
 	color: ${(props) => props.theme.btnBg};
 
@@ -47,12 +47,35 @@ const UnreadMsgs = styled.span`
 
 const ReceivedMsgsWrapper = styled.div`
 	position: absolute;
-	border: 1px solid white;
+	width: 45%;
+	height: 40%;
+	background: ${(props) => props.theme.mainBg};
+	border: 1px solid ${(props) => props.theme.inputBg};
+	border-radius: 3px;
 	right: 1%;
 	bottom: 4%;
-	width: 150px;
-	height: 200px;
-	background: black;
+`;
+
+const PMHeader = styled.header`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: ${(props) => props.theme.inputBg};
+	border: 1px solid grey;
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+	height: 11%;
+`;
+
+const PrivMsgWrapper = styled.div`
+	display: flex;
+	align-items: center;
+	height: 12%;
+	padding: 0 3%;
+
+	p {
+		margin-left: 5px;
+	}
 `;
 
 const IrcPrivMsgButton = ({ privateMsgs, totalUnreadMessages, updateReadMessages }) => {
@@ -76,6 +99,9 @@ const IrcPrivMsgButton = ({ privateMsgs, totalUnreadMessages, updateReadMessages
 			</PMbuttonwrapper>
 			{showMessages && (
 				<ReceivedMsgsWrapper>
+					<PMHeader>
+						<h3>{userSelected === null ? "Private Messages" : `${userSelected.user}`}</h3>
+					</PMHeader>
 					{userSelected === null
 						? privateMsgs.map((privMsg) => {
 								return (
@@ -88,10 +114,10 @@ const IrcPrivMsgButton = ({ privateMsgs, totalUnreadMessages, updateReadMessages
 						  })
 						: userSelected.messages.map((msg, index) => {
 								return (
-									<div key={index}>
+									<PrivMsgWrapper key={index}>
 										<h4>{userSelected.user}</h4>
 										<p>{msg}</p>
-									</div>
+									</PrivMsgWrapper>
 								);
 						  })}
 				</ReceivedMsgsWrapper>
