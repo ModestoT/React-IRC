@@ -16,7 +16,7 @@ const IrcTextBox = styled.form`
 	}
 
 	input {
-		width: 95%;
+		width: 79%;
 		background: ${(props) => props.theme.inputBg};
 		color: ${(props) => props.theme.mainText};
 		border-radius: 15px;
@@ -25,8 +25,13 @@ const IrcTextBox = styled.form`
 		outline: none;
 
 		@media (min-width: 1024px) {
+			width: 95%;
 			padding: 0.5%;
 		}
+	}
+
+	button {
+		margin-left: 10px;
 	}
 `;
 
@@ -80,7 +85,7 @@ const IrcInputField = ({
 				spellCheck="true"
 				placeholder={`Send message to ${currentChannel}`}
 			/>
-			<Button btnText="Send" margin={5} padding={[5, 8]} />
+			<Button btnText="Send" margin={2} padding={[5, 8]} />
 		</IrcTextBox>
 	);
 };
