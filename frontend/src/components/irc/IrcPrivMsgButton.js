@@ -13,7 +13,7 @@ const PMbuttonwrapper = styled.button`
 	background: none;
 	width: 9%;
 	height: 80%;
-	padding: 1.3% 0%;
+	padding: 1.1% 0%;
 	font-size: 1.1rem;
 	color: ${(props) => props.theme.btnBg};
 
@@ -28,9 +28,10 @@ const PMbuttonwrapper = styled.button`
 	}
 
 	@media (min-width: 1024px) {
-		width: 2.5%;
+		width: 3%;
 		font-size: 1.5rem;
 		height: 68%;
+		padding: 0.3% 0%;
 	}
 `;
 
@@ -42,7 +43,12 @@ const UnreadMsgs = styled.span`
 	font-size: 0.8rem;
 	right: 1%;
 	bottom: 2%;
-	padding: 0.1% 0.7%;
+	padding: 1px 5px;
+
+	@media (min-width: 1024px) {
+		right: 0.5%;
+		bottom: 2.5%;
+	}
 `;
 
 const ReceivedMsgsWrapper = styled.div`
@@ -54,6 +60,10 @@ const ReceivedMsgsWrapper = styled.div`
 	border-radius: 3px;
 	right: 1%;
 	bottom: 4%;
+
+	@media (min-width: 1024px) {
+		width: 20%;
+	}
 `;
 
 const PMHeader = styled.header`
@@ -74,7 +84,7 @@ const PrivMsgWrapper = styled.div`
 	padding: 0 3%;
 
 	p {
-		margin-left: 5px;
+		margin-left: 15px;
 	}
 `;
 

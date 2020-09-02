@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const PrivMsgWrapper = styled.div`
+	cursor: pointer;
 	display: flex;
 	align-items: center;
 	height: 12%;
@@ -9,7 +10,7 @@ const PrivMsgWrapper = styled.div`
 	padding: 0 3%;
 
 	p {
-		margin-left: 5px;
+		margin-left: 15px;
 	}
 `;
 
