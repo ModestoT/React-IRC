@@ -4,7 +4,7 @@ import styled, { ThemeProvider } from "styled-components";
 import { useIrc } from "./customHooks/ircHook/useIrc.js";
 import IrcChatView from "./views/IrcChatView.js";
 import IrcLoginView from "./views/IrcLoginView.js";
-import HeaderAndSideMenuView from "./views/HeaderAndSideMenuView.js";
+import HeaderAndSideMenu from "./components/HeaderAndSideMenu.js";
 
 const darkTheme = {
 	mainBg: "#2B2B28",
@@ -56,7 +56,7 @@ function App() {
 	return (
 		<ThemeProvider theme={darkTheme}>
 			<AppWrapper>
-				<HeaderAndSideMenuView
+				<HeaderAndSideMenu
 					connectToIrc={connectToIrc}
 					state={state}
 					deleteServer={deleteServer}
@@ -86,7 +86,7 @@ function App() {
 					) : (
 						<IrcLoginView connectToIrc={connectToIrc} />
 					)}
-				</HeaderAndSideMenuView>
+				</HeaderAndSideMenu>
 			</AppWrapper>
 		</ThemeProvider>
 	);

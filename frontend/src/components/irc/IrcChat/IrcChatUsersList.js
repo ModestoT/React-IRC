@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+
 import IrcChatUser from "./IrcChatUser";
-import Button from "../Button.js";
+import Button from "../../Button.js";
 
 const UsersList = styled.ul`
 	position: absolute;
@@ -68,6 +69,7 @@ const PreviewClose = styled.span`
 	}
 `;
 
+// TODO: optimize userlist loading. Only load part of the list then load more as user scrolls down
 const IrcChatUsersList = ({ userList, showUsers, windowWidthSize }) => {
 	const [currentUserSelected, setCurrentUserSelected] = useState("");
 	const [previewCoords, setPreviewCoords] = useState({});

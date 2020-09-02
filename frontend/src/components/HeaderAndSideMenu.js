@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
-import Button from "../components/Button.js";
-import Modal from "../components/Modal";
-import IrcJoinableChannels from "../components/irc/IrcJoinableChannels";
-import PastServersList from "../components/PastServersList.js";
+import Button from "./Button.js";
+import Modal from "./Modal";
+import IrcJoinableChannels from "./irc/IrcChannel/IrcJoinableChannels";
+import PastServersList from "./PastServersList.js";
 import { GrabServerName } from "../helpers/IrcHelpers.js";
 
 const AppHeader = styled.header`

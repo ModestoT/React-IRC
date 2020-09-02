@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 import InputFieldWrapper from "../components/InputFieldWrapper.js";
-import IrcCurrentChannelChat from "../components/irc/IrcCurrentChannelChat.js";
+import IrcCurrentChannelChat from "../components/irc/IrcChannel/IrcCurrentChannelChat.js";
 import Button from "../components/Button.js";
 
 const ChatViewWrapper = styled.div`

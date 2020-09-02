@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUsers } from "@fortawesome/free-solid-svg-icons";
 
-import Button from "../Button.js";
+import Button from "../../Button.js";
 
 const TableRow = styled.tr`
 	display: flex;

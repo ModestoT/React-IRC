@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCommentAlt } from "@fortawesome/free-regular-svg-icons";
+
 import IrcPrivMsgs from "./IrcPrivMsgs";
 
 const PMbuttonwrapper = styled.button`

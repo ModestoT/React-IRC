@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import IrcInputField from "./irc/IrcInputfield.js";
-import IrcPrivMsgButton from "./irc/IrcPrivMsgButton.js";
+import IrcPrivMsgButton from "./irc/IrcPrivateMsgs/IrcPrivMsgButton.js";
 
 const IFwrapper = styled.div`
 	display: flex;

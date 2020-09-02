@@ -1,6 +1,6 @@
 import React from "react";
 
-import IrcChat from "./IrcChat.js";
+import IrcChat from "../IrcChat/IrcChat.js";
 
 const IrcCurrentChannelChat = ({
 	serverName,
