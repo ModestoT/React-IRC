@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCommentAlt } from "@fortawesome/free-regular-svg-icons";
-
-import IrcPrivMsg from "./IrcPrivMsg";
+import IrcPrivMsgs from "./IrcPrivMsgs";
 
 const PMbuttonwrapper = styled.button`
 	display: flex;
@@ -51,55 +50,8 @@ const UnreadMsgs = styled.span`
 	}
 `;
 
-const ReceivedMsgsWrapper = styled.div`
-	position: absolute;
-	width: 45%;
-	height: 40%;
-	background: ${(props) => props.theme.mainBg};
-	border: 1px solid ${(props) => props.theme.inputBg};
-	border-radius: 3px;
-	right: 1%;
-	bottom: 4%;
-
-	@media (min-width: 1024px) {
-		width: 20%;
-	}
-`;
-
-const PMHeader = styled.header`
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	background: ${(props) => props.theme.inputBg};
-	border: 1px solid grey;
-	border-top-left-radius: 3px;
-	border-top-right-radius: 3px;
-	height: 11%;
-`;
-
-const PrivMsgWrapper = styled.div`
-	display: flex;
-	align-items: center;
-	height: 12%;
-	padding: 0 3%;
-
-	p {
-		margin-left: 15px;
-	}
-`;
-
 const IrcPrivMsgButton = ({ privateMsgs, totalUnreadMessages, updateReadMessages }) => {
 	const [showMessages, setShowMessages] = useState(false);
-	const [userSelected, setUserSelected] = useState(null);
-
-	const handleSelectUser = (privMsg) => {
-		setUserSelected(privMsg);
-		updateReadMessages(privMsg.user, privMsg.unReadMessages);
-	};
-
-	const handleDeselectUser = () => {
-		setUserSelected(null);
-	};
 
 	return (
 		<>
@@ -108,29 +60,7 @@ const IrcPrivMsgButton = ({ privateMsgs, totalUnreadMessages, updateReadMessages
 				{totalUnreadMessages > 0 && <UnreadMsgs>{totalUnreadMessages}</UnreadMsgs>}
 			</PMbuttonwrapper>
 			{showMessages && (
-				<ReceivedMsgsWrapper>
-					<PMHeader>
-						<h3>{userSelected === null ? "Private Messages" : `${userSelected.user}`}</h3>
-					</PMHeader>
-					{userSelected === null
-						? privateMsgs.map((privMsg) => {
-								return (
-									<IrcPrivMsg
-										key={privMsg.user}
-										privMsg={privMsg}
-										handleSelectUser={handleSelectUser}
-									/>
-								);
-						  })
-						: userSelected.messages.map((msg, index) => {
-								return (
-									<PrivMsgWrapper key={index}>
-										<h4>{userSelected.user}</h4>
-										<p>{msg}</p>
-									</PrivMsgWrapper>
-								);
-						  })}
-				</ReceivedMsgsWrapper>
+				<IrcPrivMsgs privateMsgs={privateMsgs} updateReadMessages={updateReadMessages} />
 			)}
 		</>
 	);
