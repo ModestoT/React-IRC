@@ -249,7 +249,6 @@ export const IrcReducer = (state, action) => {
 		case CREATE_PERSONAL_MESSAGE:
 			return {
 				...state,
-				totalUnreadMessages: state.totalUnreadMessages + 1,
 				privateMsgs: [
 					...state.privateMsgs,
 					{
