@@ -10,6 +10,7 @@ import {
 	DELETE_SERVER_FROM_STORAGE,
 	DELETE_CHANNEL_FROM_STORAGE,
 	UPDATE_READ_MESSAGES,
+	CREATE_PERSONAL_MESSAGE,
 } from "./IrcReducer.js";
 
 import { IrcEventListeners } from "../../irc/IrcEventListeners.js";
@@ -92,7 +93,10 @@ export const useIrc = () => {
 
 	const sendPrivMsg = (data) => {
 		state.ircSocket.emit("msgChannel", data);
-		// dispatch({ type: CREATE_PRV_MSG_TAB, payload: target });
+		dispatch({
+			type: CREATE_PERSONAL_MESSAGE,
+			payload: { user: data.target, message: data.message },
+		});
 	};
 
 	const deleteServer = (id) => {

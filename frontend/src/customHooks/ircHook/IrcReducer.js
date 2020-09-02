@@ -19,6 +19,7 @@ export const GRABBING_CHANNEL_LIST_END = "GRABBING_CHANNEL_LIST_END";
 export const CHANNEL_PRV_MSG = "CHANNEL_PRV_MSG";
 export const UPDATE_USERS_LIST = "UPDATE_USERS_LIST";
 export const LEAVE_CHANNEL = "LEAVE_CHANNEL";
+export const CREATE_PERSONAL_MESSAGE = "CREATE_PERSONAL_MESSAGE";
 export const PERSONAL_MSG = "PERSONAL_MSG";
 export const UPDATE_READ_MESSAGES = "UPDATE_READ_MESSAGES";
 export const CONNECTION_TO_SERVER_MADE = "CONNECTION_TO_SERVER_MADE";
@@ -240,10 +241,25 @@ export const IrcReducer = (state, action) => {
 							user: action.payload.sentFrom,
 							messages: [action.payload.message],
 							unReadMessages: 1,
+							sentFrom: action.payload.sentFrom,
 						},
 					],
 				};
 			}
+		case CREATE_PERSONAL_MESSAGE:
+			return {
+				...state,
+				totalUnreadMessages: state.totalUnreadMessages + 1,
+				privateMsgs: [
+					...state.privateMsgs,
+					{
+						user: action.payload.user,
+						messages: [action.payload.message],
+						unReadMessages: 0,
+						sentFrom: state.nick,
+					},
+				],
+			};
 
 		case UPDATE_READ_MESSAGES:
 			return {
