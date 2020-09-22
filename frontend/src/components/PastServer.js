@@ -9,17 +9,12 @@ const PastServerWrapper = styled.li`
 	margin-bottom: 10%;
 `;
 
-const PastServerHeader = styled.header`
+const PastServerHeaderWrapper = styled.header`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding: 3%;
+	padding: 2%;
 	background: ${(props) => props.theme.inputBg};
-
-	h2 {
-		cursor: pointer;
-		margin: 0;
-	}
 
 	button {
 		cursor: pointer;
@@ -32,6 +27,29 @@ const PastServerHeader = styled.header`
 			background: red;
 			color: ${(props) => props.theme.mainText};
 		}
+	}
+`;
+
+const PastServerHeader = styled.div`
+	display: flex;
+	align-items: center;
+
+	.server-name {
+		cursor: pointer;
+	}
+
+	h3 {
+		padding-top: 1%;
+	}
+
+	span {
+		font-size: 1.5rem;
+		margin: 0 5%;
+	}
+
+	h2,
+	h3 {
+		margin: 0;
 	}
 `;
 
@@ -84,20 +102,39 @@ const PastServer = ({
 	setCurrentChannel,
 	disconnectFromIrc,
 	toggleModal,
+	currentNick,
 }) => {
 	const [isEditingChannels, setIsEditingChannels] = useState(false);
-	const { host, channels, id } = server;
-	const isConnected = currentServer.length > 0 ? host.includes(currentServer) : false;
+	const { host, channels, id, nick } = server;
+	// const isConnected = currentServer.length > 0 ? host.includes(currentServer) : false;
+
+	const isConnected = () => {
+		if (
+			currentServer.length > 0 &&
+			host.includes(currentServer) &&
+			nick.toLowerCase() === currentNick.toLowerCase()
+		) {
+			return true;
+		}
+
+		return false;
+	};
 	return (
 		<PastServerWrapper>
-			<PastServerHeader>
-				<h2 onClick={() => setCurrentChannel(GrabServerName(host))}>{GrabServerName(host)}</h2>
+			<PastServerHeaderWrapper>
+				<PastServerHeader>
+					<h2 className="server-name" onClick={() => setCurrentChannel(GrabServerName(host))}>
+						{GrabServerName(host)}
+					</h2>
+					<span>-</span>
+					<h3>{nick}</h3>
+				</PastServerHeader>
 				<button onClick={() => deleteServer(server.id)}>Delete</button>
-			</PastServerHeader>
-			{!isConnected ? (
+			</PastServerHeaderWrapper>
+			{!isConnected() ? (
 				<ConnectBtnWrapper>
 					<p>Not connected.</p>
-					<Button onClick={(e) => connectToIrc(e, server, false)} btnText="connect" />
+					<Button onClick={(e) => connectToIrc(e, server)} btnText="connect" />
 				</ConnectBtnWrapper>
 			) : (
 				<ConnectBtnWrapper>

@@ -25,7 +25,6 @@ const IrcLoginView = ({ connectToIrc }) => {
 		nick: "",
 		ssl: false,
 	});
-	// const [isSaveServer, setIsSaveServer] = useFormInput(false);
 
 	return (
 		<IrcLoginFormWrapper>
@@ -62,14 +61,6 @@ const IrcLoginView = ({ connectToIrc }) => {
 						handleInput({ ssl: !ircOptions.ssl, port: !ircOptions.ssl ? 6697 : 6667 })
 					}
 				/>
-				{/* <InputField
-					type="checkbox"
-					labelText="Save Config?"
-					id="irc-save-config"
-					checked={isSaveServer}
-					value="Save Config"
-					onChange={() => setIsSaveServer(!isSaveServer)}
-				/> */}
 				<Button btnText="Connect" />
 			</IrcLoginForm>
 		</IrcLoginFormWrapper>

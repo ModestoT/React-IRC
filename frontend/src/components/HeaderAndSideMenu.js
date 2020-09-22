@@ -68,7 +68,7 @@ const HeaderAndSideMenuView = ({
 	grabAvailableChannels,
 	joinIrcChannel,
 }) => {
-	const { serverName, pastServers, joinableChannels, isGrabbingChannels } = state;
+	const { serverName, pastServers, joinableChannels, isGrabbingChannels, nick } = state;
 
 	const [sideMenuOpen, setSideMenuOpen] = useState(false);
 	const [isToggled, setIsToggled] = useState(false);
@@ -102,12 +102,10 @@ const HeaderAndSideMenuView = ({
 	const connectToPastServerMobile = (e, server) => {
 		connectToIrc(e, server, true);
 		setSideMenuOpen(!sideMenuOpen);
-		// setCurrentChannel(GrabServerName(server.host));
 	};
 
 	const connectToPastServer = (e, server) => {
 		connectToIrc(e, server, true);
-		// setCurrentChannel(GrabServerName(server.host));
 	};
 
 	return (
@@ -130,6 +128,7 @@ const HeaderAndSideMenuView = ({
 							setCurrentChannel={setCurrentChannelMobile}
 							disconnectFromIrc={disconnectFromIrc}
 							toggleModal={toggleModal}
+							currentNick={nick}
 						/>
 					</MobileSideMenu>
 				) : (
@@ -144,6 +143,7 @@ const HeaderAndSideMenuView = ({
 							setCurrentChannel={setCurrentChannel}
 							disconnectFromIrc={disconnectFromIrc}
 							toggleModal={toggleModal}
+							currentNick={nick}
 						/>
 					</DesktopSideMenu>
 				)}
