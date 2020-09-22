@@ -104,9 +104,9 @@ const PastServer = ({
 	toggleModal,
 	currentNick,
 }) => {
+	// Add ability to collapse past server
 	const [isEditingChannels, setIsEditingChannels] = useState(false);
 	const { host, channels, id, nick } = server;
-	// const isConnected = currentServer.length > 0 ? host.includes(currentServer) : false;
 
 	const isConnected = () => {
 		if (
@@ -164,7 +164,7 @@ const PastServer = ({
 						setCurrentChannel={setCurrentChannel}
 					/>
 				))}
-				{isConnected && <AddChannelBtn onClick={() => toggleModal()}>+</AddChannelBtn>}
+				{isConnected() && <AddChannelBtn onClick={() => toggleModal()}>+</AddChannelBtn>}
 			</ChannelsList>
 		</PastServerWrapper>
 	);

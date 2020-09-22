@@ -18,12 +18,21 @@ export const FormatIntoMatrix = (arr, limit) => {
 	return res;
 };
 
-export const AddServerToStorage = server => {
+export const AddServerToStorage = (server) => {
 	const pastServers = JSON.parse(localStorage.getItem("past_servers"));
 	if (pastServers && pastServers.length > 0) {
 		console.log("running save Server");
-		pastServers.push({ id: pastServers[pastServers.length - 1].id + 1, ...server, channels: [] });
-		localStorage.setItem("past_servers", JSON.stringify(pastServers));
+
+		const alreadySaved = pastServers.find(
+			(savedServer) =>
+				savedServer.host === server.host &&
+				savedServer.nick.toLowerCase() === server.nick.toLowerCase()
+		);
+
+		if (!alreadySaved) {
+			pastServers.push({ id: pastServers[pastServers.length - 1].id + 1, ...server, channels: [] });
+			localStorage.setItem("past_servers", JSON.stringify(pastServers));
+		}
 	} else {
 		localStorage.setItem("past_servers", JSON.stringify([{ id: 1, ...server, channels: [] }]));
 	}
@@ -39,7 +48,7 @@ export const AddChannelToPastServers = (channel, serverName) => {
 		) {
 			pastServers[i] = {
 				...pastServers[i],
-				channels: UpdatePastServersChannels(pastServers[i].channels, channel)
+				channels: UpdatePastServersChannels(pastServers[i].channels, channel),
 			};
 			localStorage.setItem("past_servers", JSON.stringify(pastServers));
 			return pastServers;
@@ -48,9 +57,9 @@ export const AddChannelToPastServers = (channel, serverName) => {
 	return null;
 };
 
-export const DeleteServer = id => {
+export const DeleteServer = (id) => {
 	const pastServers = JSON.parse(localStorage.getItem("past_servers"));
-	const serverIndex = pastServers.findIndex(server => server.id === id);
+	const serverIndex = pastServers.findIndex((server) => server.id === id);
 
 	pastServers.splice(serverIndex, 1);
 
@@ -65,7 +74,7 @@ export const DeleteChannelFromServer = (channelName, serverId) => {
 	for (let i = 0; i < pastServers.length; i++) {
 		if (pastServers[i].id === serverId) {
 			pastServers[i].channels = pastServers[i].channels.filter(
-				channel => channel.toLowerCase() !== channelName.toLowerCase()
+				(channel) => channel.toLowerCase() !== channelName.toLowerCase()
 			);
 
 			break;
