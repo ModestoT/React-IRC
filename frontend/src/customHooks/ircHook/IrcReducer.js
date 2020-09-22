@@ -31,17 +31,17 @@ export const IrcReducer = (state, action) => {
 	let channel;
 	switch (action.type) {
 		case MAKING_CONNECTION:
-			let { host, nick, port, ssl } = action.payload.ircOptions;
-			let channelsToJoin = action.payload.ircOptions.channels || [];
-			const ircSocket = CreateIrcConnection({ host, nick, port, ssl }, action.payload.saveServer);
+			let { host, nick, port, ssl, savedServer, channels } = action.payload;
+			let channelsToJoin = channels || [];
+			const ircSocket = CreateIrcConnection({ host, nick, port, ssl }, savedServer);
 
 			return {
 				...state,
 				nick: nick,
 				serverName: GrabServerName(host),
-				pastServers: action.payload.saveServer
-					? JSON.parse(localStorage.getItem("past_servers"))
-					: state.pastServers,
+				pastServers: action.payload.savedServer
+					? state.pastServers
+					: JSON.parse(localStorage.getItem("past_servers")),
 				channelsToJoin,
 				ircSocket,
 			};

@@ -48,14 +48,14 @@ export const useIrc = () => {
 		}
 	}, [state.isConnectedToServer, state.channelsToJoin]);
 
-	const connectToIrc = (e, ircOptions, saveServer) => {
+	const connectToIrc = (e, ircOptions, savedServer) => {
 		e.preventDefault();
 
 		if (state.isConnected) {
 			dispatch({ type: CONNECTION_LOST });
 			state.ircSocket.close();
 		}
-		dispatch({ type: MAKING_CONNECTION, payload: { saveServer, ircOptions } });
+		dispatch({ type: MAKING_CONNECTION, payload: { ...ircOptions, savedServer } });
 	};
 
 	const disconnectFromIrc = () => {
@@ -101,7 +101,9 @@ export const useIrc = () => {
 
 	const deleteServer = (id) => {
 		dispatch({ type: DELETE_SERVER_FROM_STORAGE, payload: id });
-		disconnectFromIrc();
+		if (state.isConnected) {
+			disconnectFromIrc();
+		}
 	};
 
 	const deleteChannelFromPastServers = (channel, serverId) => {

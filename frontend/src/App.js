@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled, { ThemeProvider } from "styled-components";
 
 import { useIrc } from "./customHooks/ircHook/useIrc.js";
+import { GrabServerName } from "./helpers/IrcHelpers.js";
 import IrcChatView from "./views/IrcChatView.js";
 import IrcLoginView from "./views/IrcLoginView.js";
 import HeaderAndSideMenu from "./components/HeaderAndSideMenu.js";
@@ -53,11 +54,15 @@ function App() {
 		return () => window.removeEventListener("resize", updateWidth);
 	}, []);
 
+	const connectToIrcServer = (e, ircOptions, savedServer) => {
+		connectToIrc(e, ircOptions, savedServer);
+		setCurrentChannel(GrabServerName(ircOptions.host));
+	};
 	return (
 		<ThemeProvider theme={darkTheme}>
 			<AppWrapper>
 				<HeaderAndSideMenu
-					connectToIrc={connectToIrc}
+					connectToIrc={connectToIrcServer}
 					state={state}
 					deleteServer={deleteServer}
 					deleteChannelFromPastServers={deleteChannelFromPastServers}
@@ -84,7 +89,7 @@ function App() {
 							currentChannel={currentChannel}
 						/>
 					) : (
-						<IrcLoginView connectToIrc={connectToIrc} />
+						<IrcLoginView connectToIrc={connectToIrcServer} />
 					)}
 				</HeaderAndSideMenu>
 			</AppWrapper>

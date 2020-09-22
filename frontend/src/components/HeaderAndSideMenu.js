@@ -5,7 +5,6 @@ import Button from "./Button.js";
 import Modal from "./Modal";
 import IrcJoinableChannels from "./irc/IrcChannel/IrcJoinableChannels";
 import PastServersList from "./PastServersList.js";
-import { GrabServerName } from "../helpers/IrcHelpers.js";
 
 const AppHeader = styled.header`
 	width: 100%;
@@ -101,14 +100,14 @@ const HeaderAndSideMenuView = ({
 	};
 
 	const connectToPastServerMobile = (e, server) => {
-		connectToIrc(e, server, false);
+		connectToIrc(e, server, true);
 		setSideMenuOpen(!sideMenuOpen);
-		setCurrentChannel(GrabServerName(server.host));
+		// setCurrentChannel(GrabServerName(server.host));
 	};
 
 	const connectToPastServer = (e, server) => {
-		connectToIrc(e, server, false);
-		setCurrentChannel(GrabServerName(server.host));
+		connectToIrc(e, server, true);
+		// setCurrentChannel(GrabServerName(server.host));
 	};
 
 	return (
