@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
-import IrcPrivMsg from "./IrcPrivMsg";
+import { useFormInput } from "../../../customHooks/useFormInput.js";
+import IrcPrivMsgConvo from "./IrcPrivMsgConvo.js";
+import IrcPrivMsgPreview from "./IrcPrivMsgPreview.js";
 
 const IrcPrivMsgsWrapper = styled.div`
 	position: absolute;
@@ -29,17 +31,6 @@ const PMHeader = styled.header`
 	height: 11%;
 `;
 
-const PrivMsgWrapper = styled.div`
-	display: flex;
-	align-items: center;
-	height: 12%;
-	padding: 0 3%;
-
-	p {
-		margin-left: 15px;
-	}
-`;
-
 const DeselectUser = styled.span`
 	cursor: pointer;
 	font-size: 1.5rem;
@@ -58,8 +49,22 @@ const UserHeader = styled.h3`
 	}
 `;
 
-const IrcPrivMsgs = ({ privateMsgs, updateReadMessages }) => {
+const IrcPrivMsgs = ({ privateMsgs, updateReadMessages, sendPrivMsg }) => {
 	const [userSelected, setUserSelected] = useState(null);
+	const [privMsg, setPrivMsg] = useFormInput("");
+
+	useEffect(() => {
+		if (userSelected !== null) {
+			const userSelectedMsgs = privateMsgs.find(
+				(msg) => msg.user.toLowerCase() === userSelected.user.toLowerCase()
+			);
+			if (userSelected.messages.length !== userSelectedMsgs.messages.length) {
+				console.log("updating messages");
+				setUserSelected(userSelectedMsgs);
+				updateReadMessages(userSelectedMsgs.user, userSelectedMsgs.unReadMessages);
+			}
+		}
+	}, [userSelected, privateMsgs, updateReadMessages]);
 
 	const handleSelectUser = (privMsg) => {
 		setUserSelected(privMsg);
@@ -68,6 +73,12 @@ const IrcPrivMsgs = ({ privateMsgs, updateReadMessages }) => {
 
 	const handleDeselectUser = () => {
 		setUserSelected(null);
+	};
+
+	const handleSendPrivMsg = (e) => {
+		e.preventDefault();
+		sendPrivMsg({ target: userSelected.user, message: privMsg });
+		setPrivMsg("");
 	};
 
 	return (
@@ -85,7 +96,7 @@ const IrcPrivMsgs = ({ privateMsgs, updateReadMessages }) => {
 			{userSelected === null
 				? privateMsgs.map((privMsg) => {
 						return (
-							<IrcPrivMsg
+							<IrcPrivMsgPreview
 								key={privMsg.user}
 								privMsg={privMsg}
 								handleSelectUser={handleSelectUser}
@@ -93,13 +104,18 @@ const IrcPrivMsgs = ({ privateMsgs, updateReadMessages }) => {
 						);
 				  })
 				: userSelected.messages.map((msg, index) => {
-						return (
-							<PrivMsgWrapper key={index}>
-								<h4>{userSelected.sentFrom}</h4>
-								<p>{msg}</p>
-							</PrivMsgWrapper>
-						);
+						return <IrcPrivMsgConvo key={index} message={msg} />;
 				  })}
+			{userSelected !== null && (
+				<form onSubmit={(e) => handleSendPrivMsg(e)}>
+					<input
+						type="text"
+						value={privMsg}
+						onChange={(e) => setPrivMsg(e.target.value)}
+						placeholder={`Message ${userSelected.user}`}
+					/>
+				</form>
+			)}
 		</IrcPrivMsgsWrapper>
 	);
 };

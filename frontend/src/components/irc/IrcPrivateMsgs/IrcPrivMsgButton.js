@@ -51,7 +51,12 @@ const UnreadMsgs = styled.span`
 	}
 `;
 
-const IrcPrivMsgButton = ({ privateMsgs, totalUnreadMessages, updateReadMessages }) => {
+const IrcPrivMsgButton = ({
+	privateMsgs,
+	totalUnreadMessages,
+	updateReadMessages,
+	sendPrivMsg,
+}) => {
 	const [showMessages, setShowMessages] = useState(false);
 
 	return (
@@ -61,7 +66,11 @@ const IrcPrivMsgButton = ({ privateMsgs, totalUnreadMessages, updateReadMessages
 				{totalUnreadMessages > 0 && <UnreadMsgs>{totalUnreadMessages}</UnreadMsgs>}
 			</PMbuttonwrapper>
 			{showMessages && (
-				<IrcPrivMsgs privateMsgs={privateMsgs} updateReadMessages={updateReadMessages} />
+				<IrcPrivMsgs
+					privateMsgs={privateMsgs}
+					updateReadMessages={updateReadMessages}
+					sendPrivMsg={sendPrivMsg}
+				/>
 			)}
 		</>
 	);
