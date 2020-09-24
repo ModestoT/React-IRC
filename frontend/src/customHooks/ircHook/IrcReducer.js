@@ -19,7 +19,7 @@ export const GRABBING_CHANNEL_LIST_END = "GRABBING_CHANNEL_LIST_END";
 export const CHANNEL_PRV_MSG = "CHANNEL_PRV_MSG";
 export const UPDATE_USERS_LIST = "UPDATE_USERS_LIST";
 export const LEAVE_CHANNEL = "LEAVE_CHANNEL";
-export const CREATE_PERSONAL_MESSAGE = "CREATE_PERSONAL_MESSAGE";
+export const SEND_PERSONAL_MESSAGE = "SEND_PERSONAL_MESSAGE";
 export const PERSONAL_MSG = "PERSONAL_MSG";
 export const UPDATE_READ_MESSAGES = "UPDATE_READ_MESSAGES";
 export const CONNECTION_TO_SERVER_MADE = "CONNECTION_TO_SERVER_MADE";
@@ -210,22 +210,18 @@ export const IrcReducer = (state, action) => {
 			let findUser = state.privateMsgs.find(
 				(msg) => msg.user.toLowerCase() === action.payload.sentFrom.toLowerCase()
 			);
-
 			if (findUser) {
 				return {
 					...state,
-					totalUnreadMessages:
-						findUser.unReadMessages === 0
-							? state.totalUnreadMessages + 1
-							: state.privateMsgs.reduce(
-									(accumulator, currentValue) => accumulator + currentValue.unReadMessages,
-									state.totalUnreadMessages
-							  ),
+					totalUnreadMessages: state.totalUnreadMessages + 1,
 					privateMsgs: state.privateMsgs.map((msg) =>
 						msg.user.toLowerCase() === action.payload.sentFrom.toLowerCase()
 							? {
 									...msg,
-									messages: [...msg.messages, action.payload.message],
+									messages: [
+										...msg.messages,
+										{ msg: action.payload.message, sentFrom: action.payload.sentFrom },
+									],
 									unReadMessages: msg.unReadMessages + 1,
 							  }
 							: msg
@@ -239,26 +235,46 @@ export const IrcReducer = (state, action) => {
 						...state.privateMsgs,
 						{
 							user: action.payload.sentFrom,
-							messages: [action.payload.message],
+							messages: [{ msg: action.payload.message, sentFrom: action.payload.sentFrom }],
 							unReadMessages: 1,
-							sentFrom: action.payload.sentFrom,
 						},
 					],
 				};
 			}
-		case CREATE_PERSONAL_MESSAGE:
-			return {
-				...state,
-				privateMsgs: [
-					...state.privateMsgs,
-					{
-						user: action.payload.user,
-						messages: [action.payload.message],
-						unReadMessages: 0,
-						sentFrom: state.nick,
-					},
-				],
-			};
+		case SEND_PERSONAL_MESSAGE:
+			let prvMsg = state.privateMsgs.find(
+				(msg) => msg.user.toLowerCase() === action.payload.user.toLowerCase()
+			);
+
+			if (prvMsg) {
+				return {
+					...state,
+					privateMsgs: state.privateMsgs.map((msg) =>
+						msg.user.toLowerCase() === action.payload.user.toLowerCase()
+							? {
+									...msg,
+									messages: [
+										...msg.messages,
+										{ msg: action.payload.message, sentFrom: state.nick },
+									],
+									unReadMessages: msg.unReadMessages,
+							  }
+							: msg
+					),
+				};
+			} else {
+				return {
+					...state,
+					privateMsgs: [
+						...state.privateMsgs,
+						{
+							user: action.payload.user,
+							messages: [{ msg: action.payload.message, sentFrom: state.nick }],
+							unReadMessages: 0,
+						},
+					],
+				};
+			}
 
 		case UPDATE_READ_MESSAGES:
 			return {

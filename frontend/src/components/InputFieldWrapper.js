@@ -45,6 +45,7 @@ const InputFieldWrapper = ({
 				privateMsgs={privateMsgs}
 				totalUnreadMessages={totalUnreadMessages}
 				updateReadMessages={updateReadMessages}
+				sendPrivMsg={sendPrivMsg}
 			/>
 		</IFwrapper>
 	);
