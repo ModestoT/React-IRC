@@ -36,7 +36,7 @@ const IrcPrivMsg = ({ privMsg, handleSelectUser }) => {
 		<PrivMsgWrapper onClick={() => handleSelectUser(privMsg)}>
 			{unReadMessages > 0 && <UnreadMsgs>{unReadMessages}</UnreadMsgs>}
 			<h4>{user}</h4>
-			<p>{messages[messages.length - 1]}</p>
+			<p>{messages[messages.length - 1].msg}</p>
 		</PrivMsgWrapper>
 	);
 };
