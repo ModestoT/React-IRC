@@ -14,10 +14,27 @@ const PrivMsgWrapper = styled.div`
 	}
 `;
 
+const UnreadMsgs = styled.span`
+	background: red;
+	color: white;
+	border-radius: 50%;
+	font-size: 0.8rem;
+	right: 1%;
+	bottom: 2%;
+	padding: 1px 5px;
+	margin-right: 5px;
+
+	@media (min-width: 1024px) {
+		right: 0.5%;
+		bottom: 2.5%;
+	}
+`;
+
 const IrcPrivMsg = ({ privMsg, handleSelectUser }) => {
-	const { user, messages } = privMsg;
+	const { user, messages, unReadMessages } = privMsg;
 	return (
 		<PrivMsgWrapper onClick={() => handleSelectUser(privMsg)}>
+			{unReadMessages > 0 && <UnreadMsgs>{unReadMessages}</UnreadMsgs>}
 			<h4>{user}</h4>
 			<p>{messages[messages.length - 1]}</p>
 		</PrivMsgWrapper>
