@@ -5,12 +5,13 @@ const PrivMsgWrapper = styled.div`
 	cursor: pointer;
 	display: flex;
 	align-items: center;
-	height: 12%;
+	height: 15%;
 	border-bottom: 1px solid grey;
 	padding: 0 3%;
 
 	p {
 		margin-left: 15px;
+		overflow-wrap: anywhere;
 	}
 `;
 

@@ -3,12 +3,17 @@ import styled from "styled-components";
 
 const PrivMsgWrapper = styled.div`
 	display: flex;
-	align-items: center;
-	height: 12%;
+	align-items: baseline;
 	padding: 0 3%;
+	margin-top: 5px;
+
+	h4 {
+		margin: 0;
+	}
 
 	p {
-		margin-left: 15px;
+		margin: 0 0 0 15px;
+		width: 72%;
 	}
 `;
 

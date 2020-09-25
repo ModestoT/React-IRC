@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 
 import { useFormInput } from "../../../customHooks/useFormInput.js";
@@ -49,9 +49,35 @@ const UserHeader = styled.h3`
 	}
 `;
 
+const PrivMsgInput = styled.form`
+	display: flex;
+	justify-content: center;
+	width: 100%;
+
+	input {
+		background: ${(props) => props.theme.inputBg};
+		color: ${(props) => props.theme.mainText};
+		border-radius: 15px;
+		padding: 2%;
+		outline: none;
+		border: none;
+		text-ident: 5px;
+	}
+`;
+
+const PrivMsgWrapper = styled.div`
+	display: flex;
+	flex-direction: column;
+	height: 74%;
+	overflow: auto;
+	word-break: break-word;
+	margin-bottom: 10px;
+`;
+
 const IrcPrivMsgs = ({ privateMsgs, updateReadMessages, sendPrivMsg }) => {
 	const [userSelected, setUserSelected] = useState(null);
 	const [privMsg, setPrivMsg] = useFormInput("");
+	const divRef = useRef(null);
 
 	useEffect(() => {
 		if (userSelected !== null) {
@@ -64,6 +90,7 @@ const IrcPrivMsgs = ({ privateMsgs, updateReadMessages, sendPrivMsg }) => {
 				updateReadMessages(userSelectedMsgs.user, userSelectedMsgs.unReadMessages);
 			}
 		}
+		divRef.current.scrollTop = divRef.current.scrollHeight;
 	}, [userSelected, privateMsgs, updateReadMessages]);
 
 	const handleSelectUser = (privMsg) => {
@@ -93,28 +120,30 @@ const IrcPrivMsgs = ({ privateMsgs, updateReadMessages, sendPrivMsg }) => {
 					</>
 				)}
 			</PMHeader>
-			{userSelected === null
-				? privateMsgs.map((privMsg) => {
-						return (
-							<IrcPrivMsgPreview
-								key={privMsg.user}
-								privMsg={privMsg}
-								handleSelectUser={handleSelectUser}
-							/>
-						);
-				  })
-				: userSelected.messages.map((msg, index) => {
-						return <IrcPrivMsgConvo key={index} message={msg} />;
-				  })}
+			<PrivMsgWrapper ref={divRef}>
+				{userSelected === null
+					? privateMsgs.map((privMsg) => {
+							return (
+								<IrcPrivMsgPreview
+									key={privMsg.user}
+									privMsg={privMsg}
+									handleSelectUser={handleSelectUser}
+								/>
+							);
+					  })
+					: userSelected.messages.map((msg, index) => {
+							return <IrcPrivMsgConvo key={index} message={msg} />;
+					  })}
+			</PrivMsgWrapper>
 			{userSelected !== null && (
-				<form onSubmit={(e) => handleSendPrivMsg(e)}>
+				<PrivMsgInput onSubmit={(e) => handleSendPrivMsg(e)}>
 					<input
 						type="text"
 						value={privMsg}
 						onChange={(e) => setPrivMsg(e.target.value)}
 						placeholder={`Message ${userSelected.user}`}
 					/>
-				</form>
+				</PrivMsgInput>
 			)}
 		</IrcPrivMsgsWrapper>
 	);
