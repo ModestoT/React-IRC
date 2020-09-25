@@ -42,6 +42,7 @@ const DeselectUser = styled.span`
 `;
 
 const UserHeader = styled.h3`
+	text-overflow: ellipsis;
 	margin: 0 39% 0 23%;
 
 	@media (min-width: 1024px) {
@@ -61,7 +62,11 @@ const PrivMsgInput = styled.form`
 		padding: 2%;
 		outline: none;
 		border: none;
-		text-ident: 5px;
+		text-indent: 5px;
+
+		@media (min-width: 1024px) {
+			width: 90%;
+		}
 	}
 `;
 
@@ -72,6 +77,10 @@ const PrivMsgWrapper = styled.div`
 	overflow: auto;
 	word-break: break-word;
 	margin-bottom: 10px;
+
+	@media (min-width: 1024px) {
+		height: 77%;
+	}
 `;
 
 const IrcPrivMsgs = ({ privateMsgs, updateReadMessages, sendPrivMsg }) => {
@@ -89,8 +98,8 @@ const IrcPrivMsgs = ({ privateMsgs, updateReadMessages, sendPrivMsg }) => {
 				setUserSelected(userSelectedMsgs);
 				updateReadMessages(userSelectedMsgs.user, userSelectedMsgs.unReadMessages);
 			}
+			divRef.current.scrollTop = divRef.current.scrollHeight;
 		}
-		divRef.current.scrollTop = divRef.current.scrollHeight;
 	}, [userSelected, privateMsgs, updateReadMessages]);
 
 	const handleSelectUser = (privMsg) => {
