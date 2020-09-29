@@ -12,16 +12,11 @@ const PrivMsgWrapper = styled.div`
 	}
 
 	p {
-		margin: 0;
-		width: 72%;
+		margin: 3px 0 0 0;
 	}
 
 	@media (min-width: 1024px) {
 		margin-top: 10px;
-
-		p {
-			width: 80%;
-		}
 	}
 `;
 
