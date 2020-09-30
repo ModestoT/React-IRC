@@ -20,13 +20,13 @@ const InputWrapper = styled.div`
 		max-width: 100%;
 		margin: 5px;
 		padding: 1% 3%;
-		background: ${props => props.theme.inputBg};
-		color: ${props => props.theme.mainText};
-		border: 1px solid ${props => props.theme.mainText};
+		background: ${(props) => props.theme.inputBg};
+		color: ${(props) => props.theme.mainText};
+		border: 1px solid ${(props) => props.theme.mainText};
 		border-radius: 3px;
 
 		&:focus {
-			background: ${props => props.theme.mainBg};
+			background: ${(props) => props.theme.mainBg};
 		}
 	}
 
@@ -37,7 +37,7 @@ const InputWrapper = styled.div`
 
 const InputField = ({ id, labelText, type, value, onChange, checked }) => {
 	return (
-		<InputFieldWrapper>
+		<InputFieldWrapper id={`${id}-wrapper`}>
 			<LabelWrapper>
 				<label htmlFor={id}>{labelText}</label>
 			</LabelWrapper>

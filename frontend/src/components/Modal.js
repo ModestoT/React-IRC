@@ -54,6 +54,11 @@ const ModalHeader = styled.header`
 			transform: scale(1.5);
 		}
 	}
+
+	@media (min-width: 1024px) {
+		width: 99%;
+		padding: 9px;
+	}
 `;
 
 // showModal prop boolean value used to display contents within the modal component
@@ -63,7 +68,7 @@ const Modal = ({ children, showModal, toggleModal, headerVal }) => {
 		<>
 			{showModal ? (
 				<OverlayWrapper>
-					<ModalWrapper>
+					<ModalWrapper id="modalWrapper-id">
 						<ModalHeader>
 							{headerVal ? <h2>{headerVal}</h2> : null}
 							<button className="close-modal-btn" onClick={() => toggleModal()}>

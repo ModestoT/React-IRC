@@ -40,7 +40,7 @@ const PastServersList = ({
 			<h1>Saved Servers</h1>
 			{pastServers.length > 0 ? (
 				<PastServerListWrapper>
-					<SimpleBar style={{ maxHeight: "100%" }}>
+					<SimpleBar style={{ height: "100%" }}>
 						<PastServersUL>
 							{pastServers.map((server) => (
 								<PastServer

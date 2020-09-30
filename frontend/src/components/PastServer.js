@@ -10,6 +10,7 @@ const PastServerWrapper = styled.li`
 `;
 
 const PastServerHeaderWrapper = styled.header`
+	cursor: pointer;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -25,10 +26,6 @@ const PastServerHeader = styled.div`
 	display: flex;
 	align-items: center;
 	width: 65%;
-
-	.server-name {
-		cursor: pointer;
-	}
 
 	h3 {
 		padding-top: 1%;

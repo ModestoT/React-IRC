@@ -25,6 +25,16 @@ const AppContent = styled.div`
 	height: 100%;
 	overflow: hidden;
 	background: ${(props) => props.theme.mainBg};
+
+	@media (min-width: 1024px) {
+		#modalWrapper-id {
+			width: 25%;
+
+			header {
+				width: 96%;
+			}
+		}
+	}
 `;
 
 const ContentWrapper = styled.div`
@@ -180,6 +190,7 @@ const HeaderAndSideMenuView = ({
 					showModal={showServerModal}
 					toggleModal={setShowServerModal}
 					headerVal="Server Settings"
+					modalWidth={25}
 				>
 					<ServerSettings
 						server={currentServerSelected}

@@ -43,7 +43,7 @@ const IrcChat = ({ channel, showUsers }) => {
 	return (
 		<IrcChatWrapper showUsers={showUsers}>
 			<IrcChatWindow showUsers={showUsers}>
-				<Simplebar scrollableNodeProps={{ ref: divRef }} style={{ maxHeight: "100%" }}>
+				<Simplebar scrollableNodeProps={{ ref: divRef }} style={{ height: "100%" }}>
 					{messages.map((msg, index) => {
 						return <IrcChatMsg key={index} msg={msg} />;
 					})}

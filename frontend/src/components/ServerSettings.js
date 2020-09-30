@@ -23,6 +23,10 @@ const ServerSettingsWrapper = styled.div`
 	flex-direction: column;
 	align-items: center;
 	padding: 2%;
+
+	@media (min-width: 1024px) {
+		padding: 1%;
+	}
 `;
 
 const ServerSettings = ({ server, deleteServerFromStorage }) => {

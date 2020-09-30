@@ -11,6 +11,7 @@ import {
 	DELETE_CHANNEL_FROM_STORAGE,
 	UPDATE_READ_MESSAGES,
 	SEND_PERSONAL_MESSAGE,
+	UPDATE_USER_STATUS,
 } from "./IrcReducer.js";
 
 import { IrcEventListeners } from "../../irc/IrcEventListeners.js";
@@ -86,10 +87,12 @@ export const useIrc = () => {
 
 	const setUserAsAway = () => {
 		state.ircSocket.emit("set away");
+		dispatch({ type: UPDATE_USER_STATUS, payload: true });
 	};
 
 	const setUserAsBack = () => {
 		state.ircSocket.emit("set back");
+		dispatch({ type: UPDATE_USER_STATUS, payload: false });
 	};
 
 	const sendPrivMsg = (data) => {
