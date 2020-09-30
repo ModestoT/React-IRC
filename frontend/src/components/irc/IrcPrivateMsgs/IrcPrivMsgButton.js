@@ -11,9 +11,9 @@ const PMbuttonwrapper = styled.button`
 	cursor: pointer;
 	border: none;
 	background: none;
-	width: 9%;
+	width: 50px;
 	height: 80%;
-	padding: 1.1% 0%;
+	padding: 9px 5px;
 	font-size: 1.1rem;
 	color: ${(props) => props.theme.btnBg};
 
@@ -31,7 +31,7 @@ const PMbuttonwrapper = styled.button`
 		width: 3%;
 		font-size: 1.5rem;
 		height: 68%;
-		padding: 0.3% 0%;
+		padding: 5px;
 	}
 `;
 

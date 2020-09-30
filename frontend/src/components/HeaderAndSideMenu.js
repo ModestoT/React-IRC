@@ -27,12 +27,9 @@ const AppContent = styled.div`
 	background: ${(props) => props.theme.mainBg};
 
 	@media (min-width: 1024px) {
-		#modalWrapper-id {
+		#ServerSettingsWrapper-id {
 			width: 25%;
-
-			header {
-				width: 96%;
-			}
+			height: 65vh;
 		}
 	}
 `;
@@ -67,10 +64,14 @@ const MobileSideMenu = styled.div`
 const DesktopSideMenu = styled.div`
 	background: ${(props) => props.theme.secondaryBg};
 	height: 100%;
-	width: 17%;
+	width: 32%;
 
 	h1 {
 		text-align: center;
+	}
+
+	@media (min-width: 1440px) {
+		width: 18%;
 	}
 `;
 
@@ -143,6 +144,7 @@ const HeaderAndSideMenuView = ({
 		deleteChannelFromPastServers(channel, serverId);
 		setCurrentChannel(state.userChannels[state.userChannels.length - 2].channelName);
 	};
+
 	return (
 		<>
 			<AppHeader>
@@ -195,7 +197,7 @@ const HeaderAndSideMenuView = ({
 					showModal={showServerModal}
 					toggleModal={setShowServerModal}
 					headerVal="Server Settings"
-					modalWidth={25}
+					id="ServerSettingsWrapper-id"
 				>
 					<ServerSettings
 						server={currentServerSelected}

@@ -14,6 +14,7 @@ const IrcPrivMsgsWrapper = styled.div`
 	border-radius: 3px;
 	right: 1%;
 	bottom: 4%;
+	z-index: 5;
 
 	@media (min-width: 1024px) {
 		width: 20%;

@@ -41,8 +41,8 @@ const UserWrapper = styled.div`
 const UserStatusWrapper = styled.div`
 	background: ${(props) => props.theme.secondaryBg};
 	position: absolute;
-	top: 89%;
-	right: 62%;
+	top: 92%;
+	left: 0;
 	width: 139px;
 	height: 55px;
 	border: 1px solid ${(props) => props.theme.inputBg};
@@ -50,7 +50,6 @@ const UserStatusWrapper = styled.div`
 	padding: 8px;
 
 	@media (min-width: 1024px) {
-		top: 92%;
 		right: 91%;
 	}
 `;

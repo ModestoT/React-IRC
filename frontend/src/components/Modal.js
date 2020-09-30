@@ -34,7 +34,6 @@ const ModalWrapper = styled.div`
 
 const ModalHeader = styled.header`
 	display: flex;
-	width: 100%;
 	justify-content: space-between;
 	border-bottom: 1px solid lightgrey;
 
@@ -56,19 +55,18 @@ const ModalHeader = styled.header`
 	}
 
 	@media (min-width: 1024px) {
-		width: 99%;
 		padding: 9px;
 	}
 `;
 
 // showModal prop boolean value used to display contents within the modal component
 // toggleModal function prop to change the showModal state
-const Modal = ({ children, showModal, toggleModal, headerVal }) => {
+const Modal = ({ children, showModal, toggleModal, headerVal, id }) => {
 	return (
 		<>
 			{showModal ? (
 				<OverlayWrapper>
-					<ModalWrapper id="modalWrapper-id">
+					<ModalWrapper id={id}>
 						<ModalHeader>
 							{headerVal ? <h2>{headerVal}</h2> : null}
 							<button className="close-modal-btn" onClick={() => toggleModal()}>
