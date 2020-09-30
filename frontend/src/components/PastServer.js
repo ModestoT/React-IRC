@@ -17,16 +17,7 @@ const PastServerHeaderWrapper = styled.header`
 	background: ${(props) => props.theme.inputBg};
 
 	button {
-		cursor: pointer;
-		border: 1px solid transparent;
-		background: indianred;
-		color: white;
-		padding: 4px 8px;
-
-		&:hover {
-			background: red;
-			color: ${(props) => props.theme.mainText};
-		}
+		font-size: 1rem;
 	}
 `;
 
@@ -131,7 +122,12 @@ const PastServer = ({
 						{GrabServerName(host)}
 					</h2>
 				</PastServerHeader>
-				<button onClick={() => setIsCollapsed(!isCollapsed)}>-</button>
+				<Button
+					onClick={() => setIsCollapsed(!isCollapsed)}
+					btnText="-"
+					padding={[1, 9]}
+					margin={7}
+				/>
 			</PastServerHeaderWrapper>
 			{!isConnected() ? (
 				<ConnectBtnWrapper>

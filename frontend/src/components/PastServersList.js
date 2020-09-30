@@ -1,11 +1,16 @@
 import React from "react";
 import styled from "styled-components";
+import SimpleBar from "simplebar-react";
+import "simplebar/dist/simplebar.min.css";
 
 import PastServer from "./PastServer.js";
 
 const PastServerListWrapper = styled.div`
 	height: 89%;
-	overflow: auto;
+
+	@media (min-width: 1024px) {
+		height: 93%;
+	}
 `;
 
 const PastServersUL = styled.ul`
@@ -35,23 +40,25 @@ const PastServersList = ({
 			<h1>Saved Servers</h1>
 			{pastServers.length > 0 ? (
 				<PastServerListWrapper>
-					<PastServersUL>
-						{pastServers.map((server) => (
-							<PastServer
-								key={server.id}
-								server={server}
-								connectToIrc={connectToIrc}
-								currentServer={currentServer}
-								deleteChannelFromPastServers={deleteChannelFromPastServers}
-								currentChannel={currentChannel}
-								setCurrentChannel={setCurrentChannel}
-								disconnectFromIrc={disconnectFromIrc}
-								toggleModal={toggleModal}
-								currentNick={currentNick}
-								setShowServerModal={setShowServerModal}
-							/>
-						))}
-					</PastServersUL>
+					<SimpleBar style={{ maxHeight: "100%" }}>
+						<PastServersUL>
+							{pastServers.map((server) => (
+								<PastServer
+									key={server.id}
+									server={server}
+									connectToIrc={connectToIrc}
+									currentServer={currentServer}
+									deleteChannelFromPastServers={deleteChannelFromPastServers}
+									currentChannel={currentChannel}
+									setCurrentChannel={setCurrentChannel}
+									disconnectFromIrc={disconnectFromIrc}
+									toggleModal={toggleModal}
+									currentNick={currentNick}
+									setShowServerModal={setShowServerModal}
+								/>
+							))}
+						</PastServersUL>
+					</SimpleBar>
 				</PastServerListWrapper>
 			) : (
 				<h4>No Saved Servers yet</h4>
