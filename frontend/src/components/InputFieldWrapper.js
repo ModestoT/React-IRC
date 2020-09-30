@@ -81,7 +81,7 @@ const UserStatus = styled.div`
 const InputFieldWrapper = ({
 	currentChannel,
 	sendMessageToChannel,
-	handleJoinIrcChannel,
+	joinIrcChannel,
 	nick,
 	away,
 	setUserAsAway,
@@ -130,7 +130,7 @@ const InputFieldWrapper = ({
 			<IrcInputField
 				currentChannel={currentChannel}
 				sendMessageToChannel={sendMessageToChannel}
-				joinIrcChannel={handleJoinIrcChannel}
+				joinIrcChannel={joinIrcChannel}
 				nick={nick}
 				setUserAsAway={setUserAsAway}
 				setUserAsBack={setUserAsBack}

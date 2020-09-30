@@ -138,6 +138,11 @@ const HeaderAndSideMenuView = ({
 		setShowServerModal(false);
 		deleteServer(id);
 	};
+
+	const deleteChannel = (channel, serverId) => {
+		deleteChannelFromPastServers(channel, serverId);
+		setCurrentChannel(state.userChannels[state.userChannels.length - 2].channelName);
+	};
 	return (
 		<>
 			<AppHeader>
@@ -152,7 +157,7 @@ const HeaderAndSideMenuView = ({
 							connectToIrc={connectToPastServerMobile}
 							currentServer={serverName}
 							pastServers={pastServers}
-							deleteChannelFromPastServers={deleteChannelFromPastServers}
+							deleteChannelFromPastServers={deleteChannel}
 							currentChannel={currentChannel}
 							setCurrentChannel={setCurrentChannelMobile}
 							disconnectFromIrc={disconnectFromIrc}
@@ -167,7 +172,7 @@ const HeaderAndSideMenuView = ({
 							connectToIrc={connectToPastServer}
 							currentServer={serverName}
 							pastServers={pastServers}
-							deleteChannelFromPastServers={deleteChannelFromPastServers}
+							deleteChannelFromPastServers={deleteChannel}
 							currentChannel={currentChannel}
 							setCurrentChannel={setCurrentChannel}
 							disconnectFromIrc={disconnectFromIrc}
