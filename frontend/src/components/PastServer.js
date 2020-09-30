@@ -33,6 +33,7 @@ const PastServerHeaderWrapper = styled.header`
 const PastServerHeader = styled.div`
 	display: flex;
 	align-items: center;
+	width: 65%;
 
 	.server-name {
 		cursor: pointer;
@@ -56,6 +57,8 @@ const PastServerHeader = styled.div`
 const ChannelsList = styled.ul`
 	padding: 0 3%;
 	margin: 2% 0;
+	height: ${(props) => (props.isCollapsed ? "0" : "initial")};
+	overflow: hidden;
 `;
 
 const ChannelsListHeader = styled.header`
@@ -103,9 +106,11 @@ const PastServer = ({
 	disconnectFromIrc,
 	toggleModal,
 	currentNick,
+	setShowServerModal,
 }) => {
 	// Add ability to collapse past server
 	const [isEditingChannels, setIsEditingChannels] = useState(false);
+	const [isCollapsed, setIsCollapsed] = useState(false);
 	const { host, channels, id, nick } = server;
 
 	const isConnected = () => {
@@ -122,14 +127,12 @@ const PastServer = ({
 	return (
 		<PastServerWrapper>
 			<PastServerHeaderWrapper>
-				<PastServerHeader>
+				<PastServerHeader onClick={() => setShowServerModal(true)}>
 					<h2 className="server-name" onClick={() => setCurrentChannel(GrabServerName(host))}>
 						{GrabServerName(host)}
 					</h2>
-					<span>-</span>
-					<h3>{nick}</h3>
 				</PastServerHeader>
-				<button onClick={() => deleteServer(server.id)}>Delete</button>
+				<button onClick={() => setIsCollapsed(!isCollapsed)}>-</button>
 			</PastServerHeaderWrapper>
 			{!isConnected() ? (
 				<ConnectBtnWrapper>
@@ -144,7 +147,7 @@ const PastServer = ({
 					</button>
 				</ConnectBtnWrapper>
 			)}
-			<ChannelsList>
+			<ChannelsList isCollapsed={isCollapsed}>
 				<ChannelsListHeader>
 					<h4>Channels</h4>
 					{isEditingChannels ? (
