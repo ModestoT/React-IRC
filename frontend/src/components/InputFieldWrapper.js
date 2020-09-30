@@ -10,19 +10,38 @@ const IFwrapper = styled.div`
 	height: 5%;
 `;
 
-// NEXT STEPS: Implement private messaging with new navigation design
-// create a message notification button near the text input field
-// need an array to keep track of amount of private messages a user has
-// show length of the array on the button
-// when button is clicked shows the private messages, when a message is selected
-// the small window turns into a small chat window for the private messages
-// Similar to twitch design
+const StatusDot = styled.span`
+	height: 15px;
+	width: 15px;
+	background-color: ${(props) => (props.away ? "red" : "green")};
+	border-radius: 50%;
+	margin-right: 5px;
+`;
+
+const UserWrapper = styled.div`
+	cursor: pointer;
+	display: flex;
+	aling-items: center;
+	padding: 4px;
+	border: 1px solid ${(props) => props.theme.inputBg};
+	border-radius: 5px;
+	margin: 0 5px;
+
+	p {
+		margin: 0;
+	}
+
+	&:hover {
+		border: 1px solid ${(props) => props.theme.mainText};
+	}
+`;
 
 const InputFieldWrapper = ({
 	currentChannel,
 	sendMessageToChannel,
 	handleJoinIrcChannel,
 	nick,
+	away,
 	setUserAsAway,
 	setUserAsBack,
 	sendPrivMsg,
@@ -32,6 +51,10 @@ const InputFieldWrapper = ({
 }) => {
 	return (
 		<IFwrapper>
+			<UserWrapper>
+				<StatusDot away={away} />
+				<p>{nick}</p>
+			</UserWrapper>
 			<IrcInputField
 				currentChannel={currentChannel}
 				sendMessageToChannel={sendMessageToChannel}

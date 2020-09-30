@@ -19,6 +19,7 @@ export const useIrc = () => {
 	const [state, dispatch] = useReducer(IrcReducer, {
 		nick: "",
 		serverName: "",
+		away: false,
 		serverMsgs: [],
 		userChannels: [],
 		joinableChannels: {

@@ -26,6 +26,7 @@ export const CONNECTION_TO_SERVER_MADE = "CONNECTION_TO_SERVER_MADE";
 export const JOIN_CHANNELS = "JOIN_CHANNELS";
 export const DELETE_SERVER_FROM_STORAGE = "DELETE_SERVER_FROM_STORAGE";
 export const DELETE_CHANNEL_FROM_STORAGE = "DELETE_CHANNEL_FROM_STORAGE";
+export const UPDATE_USER_STATUS = "UPDATE_USER_STATUS";
 
 export const IrcReducer = (state, action) => {
 	let channel;
@@ -285,6 +286,11 @@ export const IrcReducer = (state, action) => {
 						? { ...msg, unReadMessages: 0 }
 						: msg
 				),
+			};
+		case UPDATE_USER_STATUS:
+			return {
+				...state,
+				away: action.payload,
 			};
 		default:
 			return state;
