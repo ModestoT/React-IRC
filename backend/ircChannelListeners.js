@@ -58,18 +58,6 @@ module.exports = SetUpChannelListeners = (client, socket, userChannels) => {
 				...event,
 				nick: baseNick(event.nick),
 			});
-			// if (event.target.toLowerCase() === this.channelName.toLowerCase()) {
-			//   const foundUser = this.users.find(
-			//     (user) => baseNick(user.nick.toLowerCase()) === event.nick.toLowerCase()
-			//   );
-
-			//   if (foundUser) {
-			//     this.webSocket.emit("channel prv msg", {
-			//       ...event,
-			//       nick: foundUser.nick,
-			//     });
-			//   }
-			// }
 		})
 		.on("away", (event) => {
 			let channel = null;

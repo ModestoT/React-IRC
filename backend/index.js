@@ -42,6 +42,11 @@ io.on("connection", (socket) => {
 			const { target, message } = data;
 			ircClient.say(target, message);
 		})
+		.on("get status", () => {
+			ircClient.who(ircClient.user.nick, (res) => {
+				socket.emit("status", res.users[0].away);
+			});
+		})
 		.on("set away", () => {
 			ircClient.emit("away", { nick: ircClient.user.nick });
 		})
