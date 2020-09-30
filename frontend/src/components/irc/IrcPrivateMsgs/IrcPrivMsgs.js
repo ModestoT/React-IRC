@@ -71,8 +71,6 @@ const PrivMsgInput = styled.form`
 `;
 
 const PrivMsgWrapper = styled.div`
-	display: flex;
-	flex-direction: column;
 	height: 74%;
 	overflow: auto;
 	word-break: break-word;
