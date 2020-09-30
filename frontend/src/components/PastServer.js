@@ -99,7 +99,6 @@ const PastServer = ({
 	server,
 	connectToIrc,
 	currentServer,
-	deleteServer,
 	deleteChannelFromPastServers,
 	currentChannel,
 	setCurrentChannel,
@@ -127,7 +126,7 @@ const PastServer = ({
 	return (
 		<PastServerWrapper>
 			<PastServerHeaderWrapper>
-				<PastServerHeader onClick={() => setShowServerModal(true)}>
+				<PastServerHeader onClick={() => setShowServerModal(server)}>
 					<h2 className="server-name" onClick={() => setCurrentChannel(GrabServerName(host))}>
 						{GrabServerName(host)}
 					</h2>

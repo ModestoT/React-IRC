@@ -96,3 +96,16 @@ const UpdatePastServersChannels = (channels, newChannel) => {
 
 	return channels;
 };
+
+export const UpdatePastServerInfo = (id, newVal) => {
+	let savedServers = JSON.parse(localStorage.getItem("past_servers"));
+
+	for (let i = 0; i < savedServers.length; i++) {
+		if (savedServers[i].id === id) {
+			savedServers[i] = newVal;
+			break;
+		}
+	}
+
+	localStorage.setItem("past_servers", JSON.stringify(savedServers));
+};

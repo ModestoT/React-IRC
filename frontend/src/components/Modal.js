@@ -11,7 +11,7 @@ const OverlayWrapper = styled.div`
 	bottom: 0;
 	right: 0;
 	left: 0;
-	z-index: 1;
+	z-index: 100;
 `;
 
 const ModalWrapper = styled.div`
@@ -39,7 +39,8 @@ const ModalHeader = styled.header`
 	border-bottom: 1px solid lightgrey;
 
 	h2 {
-		font-size: 3rem;
+		font-size: 2rem;
+		margin-left: 5px;
 	}
 
 	.close-modal-btn {
@@ -47,7 +48,6 @@ const ModalHeader = styled.header`
 		font-size: 2rem;
 		background-color: inherit;
 		border: none;
-		padding: 1%;
 		color: ${(props) => props.theme.mainText};
 
 		&:hover {

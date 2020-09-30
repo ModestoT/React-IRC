@@ -3,10 +3,14 @@ import styled from "styled-components";
 
 import PastServer from "./PastServer.js";
 
-const PastServersListWrapper = styled.ul`
+const PastServerListWrapper = styled.div`
+	height: 89%;
+	overflow: auto;
+`;
+
+const PastServersUL = styled.ul`
 	list-style-type: none;
 	padding: 0;
-	overflow: auto;
 
 	h1,
 	h4 {
@@ -25,30 +29,36 @@ const PastServersList = ({
 	disconnectFromIrc,
 	toggleModal,
 	currentNick,
+	setShowServerModal,
 }) => {
 	return (
-		<PastServersListWrapper>
+		<>
 			<h1>Saved Servers</h1>
 			{pastServers.length > 0 ? (
-				pastServers.map((server) => (
-					<PastServer
-						key={server.id}
-						server={server}
-						connectToIrc={connectToIrc}
-						currentServer={currentServer}
-						deleteServer={deleteServer}
-						deleteChannelFromPastServers={deleteChannelFromPastServers}
-						currentChannel={currentChannel}
-						setCurrentChannel={setCurrentChannel}
-						disconnectFromIrc={disconnectFromIrc}
-						toggleModal={toggleModal}
-						currentNick={currentNick}
-					/>
-				))
+				<PastServerListWrapper>
+					<PastServersUL>
+						{pastServers.map((server) => (
+							<PastServer
+								key={server.id}
+								server={server}
+								connectToIrc={connectToIrc}
+								currentServer={currentServer}
+								deleteServer={deleteServer}
+								deleteChannelFromPastServers={deleteChannelFromPastServers}
+								currentChannel={currentChannel}
+								setCurrentChannel={setCurrentChannel}
+								disconnectFromIrc={disconnectFromIrc}
+								toggleModal={toggleModal}
+								currentNick={currentNick}
+								setShowServerModal={setShowServerModal}
+							/>
+						))}
+					</PastServersUL>
+				</PastServerListWrapper>
 			) : (
 				<h4>No Saved Servers yet</h4>
 			)}
-		</PastServersListWrapper>
+		</>
 	);
 };
 

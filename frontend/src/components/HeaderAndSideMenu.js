@@ -5,6 +5,7 @@ import Button from "./Button.js";
 import Modal from "./Modal";
 import IrcJoinableChannels from "./irc/IrcChannel/IrcJoinableChannels";
 import PastServersList from "./PastServersList.js";
+import ServerSettings from "./ServerSettings.js";
 
 const AppHeader = styled.header`
 	width: 100%;
@@ -47,12 +48,20 @@ const MobileSideMenu = styled.div`
 	transform: translate(${(props) => (props.sideMenuOpen ? "0" : "-100%")});
 	transition: 0.5s ease-in-out;
 	z-index: 5;
+
+	h1 {
+		text-align: center;
+	}
 `;
 
 const DesktopSideMenu = styled.div`
 	background: ${(props) => props.theme.secondaryBg};
 	height: 100%;
-	width: 15%;
+	width: 17%;
+
+	h1 {
+		text-align: center;
+	}
 `;
 
 const HeaderAndSideMenuView = ({
@@ -71,7 +80,9 @@ const HeaderAndSideMenuView = ({
 	const { serverName, pastServers, joinableChannels, isGrabbingChannels, nick } = state;
 
 	const [sideMenuOpen, setSideMenuOpen] = useState(false);
+	const [showServerModal, setShowServerModal] = useState(false);
 	const [isToggled, setIsToggled] = useState(false);
+	const [currentServerSelected, setCurrentServerSelected] = useState({});
 
 	useEffect(() => {
 		if (windowWidthSize > 1024) setSideMenuOpen(false);
@@ -108,6 +119,11 @@ const HeaderAndSideMenuView = ({
 		connectToIrc(e, server, true);
 	};
 
+	const openServerSettings = (server) => {
+		setCurrentServerSelected(server);
+		setShowServerModal(true);
+	};
+
 	return (
 		<>
 			<AppHeader>
@@ -129,6 +145,7 @@ const HeaderAndSideMenuView = ({
 							disconnectFromIrc={disconnectFromIrc}
 							toggleModal={toggleModal}
 							currentNick={nick}
+							setShowServerModal={openServerSettings}
 						/>
 					</MobileSideMenu>
 				) : (
@@ -144,17 +161,25 @@ const HeaderAndSideMenuView = ({
 							disconnectFromIrc={disconnectFromIrc}
 							toggleModal={toggleModal}
 							currentNick={nick}
+							setShowServerModal={openServerSettings}
 						/>
 					</DesktopSideMenu>
 				)}
 				<ContentWrapper sideMenuOpen={sideMenuOpen}>{children}</ContentWrapper>
 
-				<Modal showModal={isToggled} toggleModal={setIsToggled}>
+				<Modal showModal={isToggled} toggleModal={setIsToggled} headerVal="Channels">
 					<IrcJoinableChannels
 						joinableChannels={state.joinableChannels}
 						joinIrcChannel={handleJoinIrcChannel}
 						isGrabbingChannels={isGrabbingChannels}
 					/>
+				</Modal>
+				<Modal
+					showModal={showServerModal}
+					toggleModal={setShowServerModal}
+					headerVal="Server Settings"
+				>
+					<ServerSettings server={currentServerSelected} deleteServer={deleteServer} />
 				</Modal>
 			</AppContent>
 		</>
