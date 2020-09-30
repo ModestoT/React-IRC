@@ -22,7 +22,6 @@ const PastServersList = ({
 	connectToIrc,
 	currentServer,
 	pastServers,
-	deleteServer,
 	deleteChannelFromPastServers,
 	currentChannel,
 	setCurrentChannel,
@@ -43,7 +42,6 @@ const PastServersList = ({
 								server={server}
 								connectToIrc={connectToIrc}
 								currentServer={currentServer}
-								deleteServer={deleteServer}
 								deleteChannelFromPastServers={deleteChannelFromPastServers}
 								currentChannel={currentChannel}
 								setCurrentChannel={setCurrentChannel}

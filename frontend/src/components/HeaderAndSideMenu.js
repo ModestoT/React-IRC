@@ -124,6 +124,10 @@ const HeaderAndSideMenuView = ({
 		setShowServerModal(true);
 	};
 
+	const deleteServerFromStorage = (id) => {
+		setShowServerModal(false);
+		deleteServer(id);
+	};
 	return (
 		<>
 			<AppHeader>
@@ -138,7 +142,6 @@ const HeaderAndSideMenuView = ({
 							connectToIrc={connectToPastServerMobile}
 							currentServer={serverName}
 							pastServers={pastServers}
-							deleteServer={deleteServer}
 							deleteChannelFromPastServers={deleteChannelFromPastServers}
 							currentChannel={currentChannel}
 							setCurrentChannel={setCurrentChannelMobile}
@@ -154,7 +157,6 @@ const HeaderAndSideMenuView = ({
 							connectToIrc={connectToPastServer}
 							currentServer={serverName}
 							pastServers={pastServers}
-							deleteServer={deleteServer}
 							deleteChannelFromPastServers={deleteChannelFromPastServers}
 							currentChannel={currentChannel}
 							setCurrentChannel={setCurrentChannel}
@@ -179,7 +181,10 @@ const HeaderAndSideMenuView = ({
 					toggleModal={setShowServerModal}
 					headerVal="Server Settings"
 				>
-					<ServerSettings server={currentServerSelected} deleteServer={deleteServer} />
+					<ServerSettings
+						server={currentServerSelected}
+						deleteServerFromStorage={deleteServerFromStorage}
+					/>
 				</Modal>
 			</AppContent>
 		</>

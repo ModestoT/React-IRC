@@ -25,7 +25,7 @@ const ServerSettingsWrapper = styled.div`
 	padding: 2%;
 `;
 
-const ServerSettings = ({ server, deleteServer }) => {
+const ServerSettings = ({ server, deleteServerFromStorage }) => {
 	const { id } = server;
 
 	const [serverInfo, setServerInfo] = useFormInput({ ...server });
@@ -50,7 +50,7 @@ const ServerSettings = ({ server, deleteServer }) => {
 				value={serverInfo.nick}
 				onChange={(e) => setServerInfo({ nick: e.target.value })}
 			/>
-			<DeleteServerBtn onClick={() => deleteServer()}>Delete</DeleteServerBtn>
+			<DeleteServerBtn onClick={() => deleteServerFromStorage(id)}>Delete</DeleteServerBtn>
 		</ServerSettingsWrapper>
 	);
 };
