@@ -1,6 +1,7 @@
 import io from "socket.io-client";
 
 import { AddServerToStorage } from "../helpers/GeneralHelpers.js";
+
 const backend = process.env.REACT_APP_BACKEND;
 
 const ConnectToIrc = (ircOptions) => {
@@ -18,9 +19,9 @@ const ConnectToIrc = (ircOptions) => {
 	return socket;
 };
 
-const CreateIrcConnection = (ircOptions, saveServer) => {
-	if (saveServer) {
-		AddServerToStorage({ ...ircOptions, saveServer });
+const CreateIrcConnection = (ircOptions, savedServer) => {
+	if (!savedServer) {
+		AddServerToStorage(ircOptions);
 	}
 
 	return ConnectToIrc(ircOptions);

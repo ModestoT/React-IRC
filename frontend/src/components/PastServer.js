@@ -9,35 +9,44 @@ const PastServerWrapper = styled.li`
 	margin-bottom: 10%;
 `;
 
-const PastServerHeader = styled.header`
+const PastServerHeaderWrapper = styled.header`
+	cursor: pointer;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding: 3%;
+	padding: 2%;
 	background: ${(props) => props.theme.inputBg};
 
-	h2 {
-		cursor: pointer;
-		margin: 0;
+	button {
+		font-size: 1rem;
+	}
+`;
+
+const PastServerHeader = styled.div`
+	display: flex;
+	align-items: center;
+	width: 65%;
+
+	h3 {
+		padding-top: 1%;
 	}
 
-	button {
-		cursor: pointer;
-		border: 1px solid transparent;
-		background: indianred;
-		color: white;
-		padding: 4px 8px;
+	span {
+		font-size: 1.5rem;
+		margin: 0 5%;
+	}
 
-		&:hover {
-			background: red;
-			color: ${(props) => props.theme.mainText};
-		}
+	h2,
+	h3 {
+		margin: 0;
 	}
 `;
 
 const ChannelsList = styled.ul`
 	padding: 0 3%;
 	margin: 2% 0;
+	height: ${(props) => (props.isCollapsed ? "0" : "initial")};
+	overflow: hidden;
 `;
 
 const ChannelsListHeader = styled.header`
@@ -78,26 +87,48 @@ const PastServer = ({
 	server,
 	connectToIrc,
 	currentServer,
-	deleteServer,
 	deleteChannelFromPastServers,
 	currentChannel,
 	setCurrentChannel,
 	disconnectFromIrc,
 	toggleModal,
+	currentNick,
+	setShowServerModal,
 }) => {
 	const [isEditingChannels, setIsEditingChannels] = useState(false);
-	const { host, channels, id } = server;
-	const isConnected = currentServer.length > 0 ? host.includes(currentServer) : false;
+	const [isCollapsed, setIsCollapsed] = useState(false);
+	const { host, channels, id, nick } = server;
+
+	const isConnected = () => {
+		if (
+			currentServer.length > 0 &&
+			host.includes(currentServer) &&
+			nick.toLowerCase() === currentNick.toLowerCase()
+		) {
+			return true;
+		}
+
+		return false;
+	};
 	return (
 		<PastServerWrapper>
-			<PastServerHeader>
-				<h2 onClick={() => setCurrentChannel(GrabServerName(host))}>{GrabServerName(host)}</h2>
-				<button onClick={() => deleteServer(server.id)}>Delete</button>
-			</PastServerHeader>
-			{!isConnected ? (
+			<PastServerHeaderWrapper>
+				<PastServerHeader onClick={() => setShowServerModal(server)}>
+					<h2 className="server-name" onClick={() => setCurrentChannel(GrabServerName(host))}>
+						{GrabServerName(host)}
+					</h2>
+				</PastServerHeader>
+				<Button
+					onClick={() => setIsCollapsed(!isCollapsed)}
+					btnText="-"
+					padding={[1, 9]}
+					margin={7}
+				/>
+			</PastServerHeaderWrapper>
+			{!isConnected() ? (
 				<ConnectBtnWrapper>
 					<p>Not connected.</p>
-					<Button onClick={(e) => connectToIrc(e, server, false)} btnText="connect" />
+					<Button onClick={(e) => connectToIrc(e, server)} btnText="connect" />
 				</ConnectBtnWrapper>
 			) : (
 				<ConnectBtnWrapper>
@@ -107,7 +138,7 @@ const PastServer = ({
 					</button>
 				</ConnectBtnWrapper>
 			)}
-			<ChannelsList>
+			<ChannelsList isCollapsed={isCollapsed}>
 				<ChannelsListHeader>
 					<h4>Channels</h4>
 					{isEditingChannels ? (
@@ -127,7 +158,7 @@ const PastServer = ({
 						setCurrentChannel={setCurrentChannel}
 					/>
 				))}
-				{isConnected && <AddChannelBtn onClick={() => toggleModal()}>+</AddChannelBtn>}
+				{isConnected() && <AddChannelBtn onClick={() => toggleModal()}>+</AddChannelBtn>}
 			</ChannelsList>
 		</PastServerWrapper>
 	);

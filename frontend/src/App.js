@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 import styled, { ThemeProvider } from "styled-components";
 
 import { useIrc } from "./customHooks/ircHook/useIrc.js";
+import { GrabServerName } from "./helpers/IrcHelpers.js";
 import IrcChatView from "./views/IrcChatView.js";
 import IrcLoginView from "./views/IrcLoginView.js";
-import HeaderAndSideMenuView from "./views/HeaderAndSideMenuView.js";
+import HeaderAndSideMenu from "./components/HeaderAndSideMenu.js";
+import Button from "./components/Button.js";
 
 const darkTheme = {
 	mainBg: "#2B2B28",
@@ -24,6 +26,30 @@ const AppWrapper = styled.div`
 	color: ${(props) => props.theme.mainText};
 `;
 
+const ErrorMsgWrapper = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: fixed;
+	background-color: rgba(0, 0, 0, 0.4);
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	z-index: 100;
+`;
+
+const ErrorMsg = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 1%;
+	background: ${(props) => props.theme.mainBg};
+	border: 1px solid ${(props) => props.theme.btnBg};
+	border-radius: 3px;
+	color: ${(props) => props.theme.mainText};
+`;
+
 function App() {
 	const {
 		state,
@@ -35,9 +61,11 @@ function App() {
 		sendMessageToChannel,
 		setUserAsAway,
 		setUserAsBack,
-		createPrvMsgTab,
+		sendPrivMsg,
 		deleteServer,
 		deleteChannelFromPastServers,
+		updateReadMessages,
+		ResetErr,
 	} = useIrc();
 
 	const [windowWidthSize, setwindowWidthSize] = useState(window.innerWidth);
@@ -52,16 +80,15 @@ function App() {
 		return () => window.removeEventListener("resize", updateWidth);
 	}, []);
 
-	const handleCreatePrvMsg = (target) => {
-		createPrvMsgTab(target);
-		setCurrentChannel(target);
+	const connectToIrcServer = (e, ircOptions, savedServer) => {
+		connectToIrc(e, ircOptions, savedServer);
+		setCurrentChannel(GrabServerName(ircOptions.host));
 	};
-
 	return (
 		<ThemeProvider theme={darkTheme}>
 			<AppWrapper>
-				<HeaderAndSideMenuView
-					connectToIrc={connectToIrc}
+				<HeaderAndSideMenu
+					connectToIrc={connectToIrcServer}
 					state={state}
 					deleteServer={deleteServer}
 					deleteChannelFromPastServers={deleteChannelFromPastServers}
@@ -82,14 +109,23 @@ function App() {
 							sendMessageToChannel={sendMessageToChannel}
 							setUserAsAway={setUserAsAway}
 							setUserAsBack={setUserAsBack}
-							handleCreatePrvMsg={handleCreatePrvMsg}
+							sendPrivMsg={sendPrivMsg}
+							updateReadMessages={updateReadMessages}
 							windowWidthSize={windowWidthSize}
 							currentChannel={currentChannel}
 						/>
 					) : (
-						<IrcLoginView connectToIrc={connectToIrc} />
+						<IrcLoginView connectToIrc={connectToIrcServer} />
 					)}
-				</HeaderAndSideMenuView>
+				</HeaderAndSideMenu>
+				{state.error !== "" && (
+					<ErrorMsgWrapper>
+						<ErrorMsg>
+							<p>{state.error}</p>
+							<Button btnText="Ok" onClick={() => ResetErr()} />
+						</ErrorMsg>
+					</ErrorMsgWrapper>
+				)}
 			</AppWrapper>
 		</ThemeProvider>
 	);

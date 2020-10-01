@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import { SearchChannelMatrix } from "../../helpers/IrcHelpers.js";
+import { SearchChannelMatrix } from "../../../helpers/IrcHelpers.js";
 import IrcChannelsTable from "./IrcChannelsTable.js";
-import ChangePageButtons from "../ChangePageButtons.js";
+import ChangePageButtons from "../../ChangePageButtons.js";
 
 const ServerListWrapper = styled.div`
 	height: 85%;

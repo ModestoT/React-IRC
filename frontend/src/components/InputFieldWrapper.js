@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCommentAlt } from "@fortawesome/free-regular-svg-icons";
+import InputField from "./InputField.js";
 
 import IrcInputField from "./irc/IrcInputfield.js";
+import IrcPrivMsgButton from "./irc/IrcPrivateMsgs/IrcPrivMsgButton.js";
 
 const IFwrapper = styled.div`
 	display: flex;
@@ -11,58 +11,136 @@ const IFwrapper = styled.div`
 	height: 5%;
 `;
 
-const PMwrapper = styled.button`
+const StatusDot = styled.span`
+	display: block;
+	height: 15px;
+	width: 15px;
+	background-color: ${(props) => (props.away ? "red" : "green")};
+	border-radius: 50%;
+	margin-right: 5px;
+`;
+
+const UserWrapper = styled.div`
 	cursor: pointer;
-	border: none;
-	background: none;
-	width: 10%;
-	padding: 0;
-	font-size: 1.1rem;
-	color: ${(props) => props.theme.btnBg};
+	display: flex;
+	aling-items: center;
+	padding: 4px;
+	border: 1px solid ${(props) => props.theme.inputBg};
+	border-radius: 5px;
+	margin: 0 5px;
+
+	p {
+		margin: 0;
+	}
 
 	&:hover {
-		background: #808075;
-		border-radius: 4px;
-		color: white;
-	}
-
-	@media (min-width: 1024px) {
-		width: 2.5%;
-		font-size: 1.5rem;
-		height: 68%;
+		border: 1px solid ${(props) => props.theme.mainText};
 	}
 `;
-// NEXT STEPS: Implement private messaging with new navigation design
-// create a message notification button near the text input field
-// need an array to keep track of amount of private messages a user has
-// show length of the array on the button
-// when button is clicked shows the private messages, when a message is selected
-// the small window turns into a small chat window for the private messages
-// Similar to twitch design
+
+const UserStatusWrapper = styled.div`
+	background: ${(props) => props.theme.secondaryBg};
+	position: absolute;
+	top: 92%;
+	left: 0;
+	width: 139px;
+	height: 55px;
+	border: 1px solid ${(props) => props.theme.inputBg};
+	border-radius: 3px;
+	padding: 8px;
+
+	@media (min-width: 1024px) {
+		right: 91%;
+	}
+`;
+
+const CloseStatusWrapper = styled.div`
+	display: flex;
+	width: 100%;
+	justify-content: space-between;
+	margin-bottom: 5px;
+
+	span {
+		cursor: pointer;
+
+		&:hover {
+			transform: scale(1.3);
+		}
+	}
+`;
+
+const UserStatus = styled.div`
+	display: flex;
+
+	p {
+		margin: 0;
+	}
+`;
 
 const InputFieldWrapper = ({
 	currentChannel,
 	sendMessageToChannel,
-	handleJoinIrcChannel,
+	joinIrcChannel,
 	nick,
+	away,
 	setUserAsAway,
 	setUserAsBack,
-	handleCreatePrvMsg,
+	sendPrivMsg,
+	privateMsgs,
+	totalUnreadMessages,
+	updateReadMessages,
 }) => {
+	const [showUserStatus, setShowUserStatus] = useState(false);
+
+	const changeUserStatus = (e) => {
+		e.preventDefault();
+		if (away === false) {
+			console.log("running");
+			setUserAsAway();
+		} else {
+			setUserAsBack();
+		}
+	};
 	return (
 		<IFwrapper>
+			<UserWrapper onClick={() => setShowUserStatus(true)}>
+				<StatusDot away={away} />
+				<p>{nick}</p>
+			</UserWrapper>
+			{showUserStatus && (
+				<UserStatusWrapper>
+					<CloseStatusWrapper>
+						<UserStatus>
+							<StatusDot away={away} />
+							<p>{nick}</p>
+						</UserStatus>
+						<span onClick={() => setShowUserStatus(false)}>X</span>
+					</CloseStatusWrapper>
+					<InputField
+						id="awayStatus"
+						type="checkbox"
+						labelText="Away"
+						value="Away status"
+						checked={away}
+						onChange={(e) => changeUserStatus(e)}
+					/>
+				</UserStatusWrapper>
+			)}
 			<IrcInputField
 				currentChannel={currentChannel}
 				sendMessageToChannel={sendMessageToChannel}
-				joinIrcChannel={handleJoinIrcChannel}
+				joinIrcChannel={joinIrcChannel}
 				nick={nick}
 				setUserAsAway={setUserAsAway}
 				setUserAsBack={setUserAsBack}
-				createPrvMsgTab={handleCreatePrvMsg}
+				sendPrivMsg={sendPrivMsg}
 			/>
-			<PMwrapper>
-				<FontAwesomeIcon icon={faCommentAlt} />
-			</PMwrapper>
+			<IrcPrivMsgButton
+				privateMsgs={privateMsgs}
+				totalUnreadMessages={totalUnreadMessages}
+				updateReadMessages={updateReadMessages}
+				sendPrivMsg={sendPrivMsg}
+			/>
 		</IFwrapper>
 	);
 };

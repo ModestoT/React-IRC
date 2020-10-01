@@ -19,28 +19,32 @@ export const GRABBING_CHANNEL_LIST_END = "GRABBING_CHANNEL_LIST_END";
 export const CHANNEL_PRV_MSG = "CHANNEL_PRV_MSG";
 export const UPDATE_USERS_LIST = "UPDATE_USERS_LIST";
 export const LEAVE_CHANNEL = "LEAVE_CHANNEL";
+export const SEND_PERSONAL_MESSAGE = "SEND_PERSONAL_MESSAGE";
 export const PERSONAL_MSG = "PERSONAL_MSG";
-export const CREATE_PRV_MSG_TAB = "CREATE_PRV_MSG_TAB";
+export const UPDATE_READ_MESSAGES = "UPDATE_READ_MESSAGES";
 export const CONNECTION_TO_SERVER_MADE = "CONNECTION_TO_SERVER_MADE";
 export const JOIN_CHANNELS = "JOIN_CHANNELS";
 export const DELETE_SERVER_FROM_STORAGE = "DELETE_SERVER_FROM_STORAGE";
 export const DELETE_CHANNEL_FROM_STORAGE = "DELETE_CHANNEL_FROM_STORAGE";
+export const UPDATE_USER_STATUS = "UPDATE_USER_STATUS";
+export const DISPLAY_ERROR = "DISPLAY_ERROR";
+export const RESET_ERROR = "RESET_ERROR";
 
 export const IrcReducer = (state, action) => {
 	let channel;
 	switch (action.type) {
 		case MAKING_CONNECTION:
-			let { host, nick, port, ssl } = action.payload.ircOptions;
-			let channelsToJoin = action.payload.ircOptions.channels || [];
-			const ircSocket = CreateIrcConnection({ host, nick, port, ssl }, action.payload.saveServer);
+			let { host, nick, port, ssl, savedServer, channels } = action.payload;
+			let channelsToJoin = channels || [];
+			const ircSocket = CreateIrcConnection({ host, nick, port, ssl }, savedServer);
 
 			return {
 				...state,
 				nick: nick,
 				serverName: GrabServerName(host),
-				pastServers: action.payload.saveServer
-					? JSON.parse(localStorage.getItem("past_servers"))
-					: state.pastServers,
+				pastServers: action.payload.savedServer
+					? state.pastServers
+					: JSON.parse(localStorage.getItem("past_servers")),
 				channelsToJoin,
 				ircSocket,
 			};
@@ -206,50 +210,100 @@ export const IrcReducer = (state, action) => {
 				),
 			};
 		case PERSONAL_MSG:
-			channel = state.userChannels.find(
-				({ channelName }) => channelName.toLowerCase() === action.payload.sentFrom.toLowerCase()
+			let findUser = state.privateMsgs.find(
+				(msg) => msg.user.toLowerCase() === action.payload.sentFrom.toLowerCase()
 			);
-
-			if (channel) {
+			if (findUser) {
 				return {
 					...state,
-					userChannels: state.userChannels.map((c) => {
-						let { messages, messagesCount } = CheckIfOverMessageLimit(c, 500);
-						return c.channelName.toLowerCase() === action.payload.sentFrom.toLowerCase()
+					totalUnreadMessages: state.totalUnreadMessages + 1,
+					privateMsgs: state.privateMsgs.map((msg) =>
+						msg.user.toLowerCase() === action.payload.sentFrom.toLowerCase()
 							? {
-									...c,
-									messages: [...messages, `<${action.payload.sentFrom}> ${action.payload.message}`],
-									messagesCount: messagesCount + 1,
+									...msg,
+									messages: [
+										...msg.messages,
+										{ msg: action.payload.message, sentFrom: action.payload.sentFrom },
+									],
+									unReadMessages: msg.unReadMessages + 1,
 							  }
-							: c;
-					}),
+							: msg
+					),
 				};
 			} else {
 				return {
 					...state,
-					userChannels: [
-						...state.userChannels,
+					totalUnreadMessages: state.totalUnreadMessages + 1,
+					privateMsgs: [
+						...state.privateMsgs,
 						{
-							channelName: action.payload.sentFrom,
-							messages: [`<${action.payload.sentFrom}> ${action.payload.message}`],
-							userList: [],
-							messagesCount: 1,
+							user: action.payload.sentFrom,
+							messages: [{ msg: action.payload.message, sentFrom: action.payload.sentFrom }],
+							unReadMessages: 1,
 						},
 					],
 				};
 			}
-		case CREATE_PRV_MSG_TAB:
+		case SEND_PERSONAL_MESSAGE:
+			let prvMsg = state.privateMsgs.find(
+				(msg) => msg.user.toLowerCase() === action.payload.user.toLowerCase()
+			);
+
+			if (prvMsg) {
+				return {
+					...state,
+					privateMsgs: state.privateMsgs.map((msg) =>
+						msg.user.toLowerCase() === action.payload.user.toLowerCase()
+							? {
+									...msg,
+									messages: [
+										...msg.messages,
+										{ msg: action.payload.message, sentFrom: state.nick },
+									],
+									unReadMessages: msg.unReadMessages,
+							  }
+							: msg
+					),
+				};
+			} else {
+				return {
+					...state,
+					privateMsgs: [
+						...state.privateMsgs,
+						{
+							user: action.payload.user,
+							messages: [{ msg: action.payload.message, sentFrom: state.nick }],
+							unReadMessages: 0,
+						},
+					],
+				};
+			}
+
+		case UPDATE_READ_MESSAGES:
 			return {
 				...state,
-				userChannels: [
-					...state.userChannels,
-					{
-						channelName: action.payload,
-						messages: [],
-						userList: [],
-						messagesCount: 0,
-					},
-				],
+				totalUnreadMessages: state.totalUnreadMessages - action.payload.unReadMessageCount,
+				privateMsgs: state.privateMsgs.map((msg) =>
+					msg.user.toLowerCase() === action.payload.user.toLowerCase()
+						? { ...msg, unReadMessages: 0 }
+						: msg
+				),
+			};
+		case UPDATE_USER_STATUS:
+			return {
+				...state,
+				away: action.payload,
+			};
+
+		case DISPLAY_ERROR:
+			return {
+				...state,
+				error: action.payload,
+			};
+		case RESET_ERROR:
+			return {
+				...state,
+				error: "",
 			};
 		default:
 			return state;

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
-import Button from "../components/Button.js";
-import Modal from "../components/Modal";
-import IrcJoinableChannels from "../components/irc/IrcJoinableChannels";
-import PastServersList from "../components/PastServersList.js";
-import { GrabServerName } from "../helpers/IrcHelpers.js";
+import Button from "./Button.js";
+import Modal from "./Modal";
+import IrcJoinableChannels from "./irc/IrcChannel/IrcJoinableChannels";
+import PastServersList from "./PastServersList.js";
+import ServerSettings from "./ServerSettings.js";
 
 const AppHeader = styled.header`
 	width: 100%;
@@ -25,6 +25,13 @@ const AppContent = styled.div`
 	height: 100%;
 	overflow: hidden;
 	background: ${(props) => props.theme.mainBg};
+
+	@media (min-width: 1024px) {
+		#ServerSettingsWrapper-id {
+			width: 25%;
+			height: 65vh;
+		}
+	}
 `;
 
 const ContentWrapper = styled.div`
@@ -48,12 +55,24 @@ const MobileSideMenu = styled.div`
 	transform: translate(${(props) => (props.sideMenuOpen ? "0" : "-100%")});
 	transition: 0.5s ease-in-out;
 	z-index: 5;
+
+	h1 {
+		text-align: center;
+	}
 `;
 
 const DesktopSideMenu = styled.div`
 	background: ${(props) => props.theme.secondaryBg};
 	height: 100%;
-	width: 15%;
+	width: 32%;
+
+	h1 {
+		text-align: center;
+	}
+
+	@media (min-width: 1440px) {
+		width: 18%;
+	}
 `;
 
 const HeaderAndSideMenuView = ({
@@ -69,10 +88,12 @@ const HeaderAndSideMenuView = ({
 	grabAvailableChannels,
 	joinIrcChannel,
 }) => {
-	const { serverName, pastServers, joinableChannels, isGrabbingChannels } = state;
+	const { serverName, pastServers, joinableChannels, isGrabbingChannels, nick } = state;
 
 	const [sideMenuOpen, setSideMenuOpen] = useState(false);
+	const [showServerModal, setShowServerModal] = useState(false);
 	const [isToggled, setIsToggled] = useState(false);
+	const [currentServerSelected, setCurrentServerSelected] = useState({});
 
 	useEffect(() => {
 		if (windowWidthSize > 1024) setSideMenuOpen(false);
@@ -101,14 +122,27 @@ const HeaderAndSideMenuView = ({
 	};
 
 	const connectToPastServerMobile = (e, server) => {
-		connectToIrc(e, server, false);
+		connectToIrc(e, server, true);
 		setSideMenuOpen(!sideMenuOpen);
-		setCurrentChannel(GrabServerName(server.host));
 	};
 
 	const connectToPastServer = (e, server) => {
-		connectToIrc(e, server, false);
-		setCurrentChannel(GrabServerName(server.host));
+		connectToIrc(e, server, true);
+	};
+
+	const openServerSettings = (server) => {
+		setCurrentServerSelected(server);
+		setShowServerModal(true);
+	};
+
+	const deleteServerFromStorage = (id) => {
+		setShowServerModal(false);
+		deleteServer(id);
+	};
+
+	const deleteChannel = (channel, serverId) => {
+		deleteChannelFromPastServers(channel, serverId);
+		setCurrentChannel(state.userChannels[state.userChannels.length - 2].channelName);
 	};
 
 	return (
@@ -125,12 +159,13 @@ const HeaderAndSideMenuView = ({
 							connectToIrc={connectToPastServerMobile}
 							currentServer={serverName}
 							pastServers={pastServers}
-							deleteServer={deleteServer}
-							deleteChannelFromPastServers={deleteChannelFromPastServers}
+							deleteChannelFromPastServers={deleteChannel}
 							currentChannel={currentChannel}
 							setCurrentChannel={setCurrentChannelMobile}
 							disconnectFromIrc={disconnectFromIrc}
 							toggleModal={toggleModal}
+							currentNick={nick}
+							setShowServerModal={openServerSettings}
 						/>
 					</MobileSideMenu>
 				) : (
@@ -139,22 +174,34 @@ const HeaderAndSideMenuView = ({
 							connectToIrc={connectToPastServer}
 							currentServer={serverName}
 							pastServers={pastServers}
-							deleteServer={deleteServer}
-							deleteChannelFromPastServers={deleteChannelFromPastServers}
+							deleteChannelFromPastServers={deleteChannel}
 							currentChannel={currentChannel}
 							setCurrentChannel={setCurrentChannel}
 							disconnectFromIrc={disconnectFromIrc}
 							toggleModal={toggleModal}
+							currentNick={nick}
+							setShowServerModal={openServerSettings}
 						/>
 					</DesktopSideMenu>
 				)}
 				<ContentWrapper sideMenuOpen={sideMenuOpen}>{children}</ContentWrapper>
 
-				<Modal showModal={isToggled} toggleModal={setIsToggled}>
+				<Modal showModal={isToggled} toggleModal={setIsToggled} headerVal="Channels">
 					<IrcJoinableChannels
 						joinableChannels={state.joinableChannels}
 						joinIrcChannel={handleJoinIrcChannel}
 						isGrabbingChannels={isGrabbingChannels}
+					/>
+				</Modal>
+				<Modal
+					showModal={showServerModal}
+					toggleModal={setShowServerModal}
+					headerVal="Server Settings"
+					id="ServerSettingsWrapper-id"
+				>
+					<ServerSettings
+						server={currentServerSelected}
+						deleteServerFromStorage={deleteServerFromStorage}
 					/>
 				</Modal>
 			</AppContent>

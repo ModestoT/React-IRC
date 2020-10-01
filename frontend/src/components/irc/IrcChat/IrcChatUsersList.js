@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import Simplebar from "simplebar-react";
+import "simplebar/dist/simplebar.min.css";
+
 import IrcChatUser from "./IrcChatUser";
-import Button from "../Button.js";
+import Button from "../../Button.js";
 
 const UsersList = styled.ul`
 	position: absolute;
@@ -12,7 +15,6 @@ const UsersList = styled.ul`
 	transition: 0.4s ease-in-out;
 	margin: 0;
 	padding: 2%;
-	overflow-x: hidden;
 	z-index: 5;
 
 	@media (min-width: 1024px) {
@@ -68,6 +70,7 @@ const PreviewClose = styled.span`
 	}
 `;
 
+// TODO: optimize userlist loading. Only load part of the list then load more as user scrolls down
 const IrcChatUsersList = ({ userList, showUsers, windowWidthSize }) => {
 	const [currentUserSelected, setCurrentUserSelected] = useState("");
 	const [previewCoords, setPreviewCoords] = useState({});
@@ -81,9 +84,11 @@ const IrcChatUsersList = ({ userList, showUsers, windowWidthSize }) => {
 		return (
 			<>
 				<UsersList showUsers={showUsers}>
-					{userList.map((user, index) => {
-						return <IrcChatUser key={index} user={user} showPreviewCard={showPreviewCard} />;
-					})}
+					<Simplebar style={{ maxHeight: "100%" }}>
+						{userList.map((user, index) => {
+							return <IrcChatUser key={index} user={user} showPreviewCard={showPreviewCard} />;
+						})}
+					</Simplebar>
 				</UsersList>
 				{currentUserSelected !== "" && (
 					<UserPreview yCoord={previewCoords.y}>

@@ -21,9 +21,6 @@ io.on("connection", (socket) => {
 			const channel = ircClient.channel(channelName);
 
 			userChannels.push(channel);
-			// channel.updateUsers((updated) => {
-			// 	userChannels.push(updated);
-			// });
 		})
 		.on("grab channel list", () => {
 			ircClient.list();
@@ -41,6 +38,11 @@ io.on("connection", (socket) => {
 		.on("msgChannel", (data) => {
 			const { target, message } = data;
 			ircClient.say(target, message);
+		})
+		.on("get status", () => {
+			ircClient.who(ircClient.user.nick, (res) => {
+				socket.emit("status", res.users[0].away);
+			});
 		})
 		.on("set away", () => {
 			ircClient.emit("away", { nick: ircClient.user.nick });

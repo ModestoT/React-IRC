@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 import InputFieldWrapper from "../components/InputFieldWrapper.js";
-import IrcCurrentChannelChat from "../components/irc/IrcCurrentChannelChat.js";
+import IrcCurrentChannelChat from "../components/irc/IrcChannel/IrcCurrentChannelChat.js";
 import Button from "../components/Button.js";
 
 const ChatViewWrapper = styled.div`
@@ -31,11 +31,20 @@ const IrcChatView = ({
 	sendMessageToChannel,
 	setUserAsAway,
 	setUserAsBack,
-	handleCreatePrvMsg,
+	sendPrivMsg,
 	currentChannel,
 	windowWidthSize,
+	updateReadMessages,
 }) => {
-	const { serverName, serverMsgs, userChannels, nick } = state;
+	const {
+		serverName,
+		serverMsgs,
+		userChannels,
+		nick,
+		away,
+		privateMsgs,
+		totalUnreadMessages,
+	} = state;
 
 	const [currentTab, setCurrentTab] = useState(serverName);
 	const [showUsers, setShowUsers] = useState(false);
@@ -44,11 +53,6 @@ const IrcChatView = ({
 		joinIrcChannel(channelName);
 		setCurrentTab(channelName);
 	};
-
-	// const handleCreatePrvMsgTab = (target) => {
-	// 	createPrvMsgTab(target);
-	// 	setCurrentTab(target);
-	// };
 
 	return (
 		<ChatViewWrapper>
@@ -71,9 +75,13 @@ const IrcChatView = ({
 				sendMessageToChannel={sendMessageToChannel}
 				joinIrcChannel={handleJoinIrcChannel}
 				nick={nick}
+				away={away}
 				setUserAsAway={setUserAsAway}
 				setUserAsBack={setUserAsBack}
-				createPrvMsgTab={handleCreatePrvMsg}
+				sendPrivMsg={sendPrivMsg}
+				privateMsgs={privateMsgs}
+				totalUnreadMessages={totalUnreadMessages}
+				updateReadMessages={updateReadMessages}
 			/>
 		</ChatViewWrapper>
 	);

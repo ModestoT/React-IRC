@@ -12,6 +12,8 @@ import {
 	UPDATE_USERS_LIST,
 	PERSONAL_MSG,
 	CONNECTION_TO_SERVER_MADE,
+	UPDATE_USER_STATUS,
+	DISPLAY_ERROR,
 } from "../customHooks/ircHook/IrcReducer.js";
 import { ParseForChannelName } from "../helpers/IrcHelpers.js";
 
@@ -22,6 +24,7 @@ export const IrcEventListeners = (socket, dispatch) => {
 		})
 		.on("connected to server", () => {
 			dispatch({ type: CONNECTION_TO_SERVER_MADE });
+			socket.emit("get status");
 		})
 		.on("disconnect", (reason) => {
 			dispatch({ type: CONNECTION_LOST });
@@ -75,5 +78,12 @@ export const IrcEventListeners = (socket, dispatch) => {
 		})
 		.on("personal msg", (data) => {
 			dispatch({ type: PERSONAL_MSG, payload: data });
+		})
+		.on("status", (status) => {
+			dispatch({ type: UPDATE_USER_STATUS, payload: status });
+		})
+		.on("errMsg", (err) => {
+			socket.close();
+			dispatch({ type: DISPLAY_ERROR, payload: err });
 		});
 };

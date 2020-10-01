@@ -6,10 +6,13 @@ import {
 	MAKING_CONNECTION,
 	LEAVE_CHANNEL,
 	CHANNEL_PRV_MSG,
-	CREATE_PRV_MSG_TAB,
 	JOIN_CHANNELS,
 	DELETE_SERVER_FROM_STORAGE,
 	DELETE_CHANNEL_FROM_STORAGE,
+	UPDATE_READ_MESSAGES,
+	SEND_PERSONAL_MESSAGE,
+	UPDATE_USER_STATUS,
+	RESET_ERROR,
 } from "./IrcReducer.js";
 
 import { IrcEventListeners } from "../../irc/IrcEventListeners.js";
@@ -18,6 +21,7 @@ export const useIrc = () => {
 	const [state, dispatch] = useReducer(IrcReducer, {
 		nick: "",
 		serverName: "",
+		away: false,
 		serverMsgs: [],
 		userChannels: [],
 		joinableChannels: {
@@ -27,11 +31,13 @@ export const useIrc = () => {
 		},
 		channelsToJoin: [],
 		privateMsgs: [],
+		totalUnreadMessages: 0,
 		pastServers: JSON.parse(localStorage.getItem("past_servers")) || [],
 		isConnected: false,
 		isConnectedToServer: false,
 		isGrabbingChannels: false,
 		ircSocket: null,
+		error: "",
 	});
 
 	useEffect(() => {
@@ -46,14 +52,14 @@ export const useIrc = () => {
 		}
 	}, [state.isConnectedToServer, state.channelsToJoin]);
 
-	const connectToIrc = (e, ircOptions, saveServer) => {
+	const connectToIrc = (e, ircOptions, savedServer) => {
 		e.preventDefault();
 
 		if (state.isConnected) {
 			dispatch({ type: CONNECTION_LOST });
 			state.ircSocket.close();
 		}
-		dispatch({ type: MAKING_CONNECTION, payload: { saveServer, ircOptions } });
+		dispatch({ type: MAKING_CONNECTION, payload: { ...ircOptions, savedServer } });
 	};
 
 	const disconnectFromIrc = () => {
@@ -83,19 +89,27 @@ export const useIrc = () => {
 
 	const setUserAsAway = () => {
 		state.ircSocket.emit("set away");
+		dispatch({ type: UPDATE_USER_STATUS, payload: true });
 	};
 
 	const setUserAsBack = () => {
 		state.ircSocket.emit("set back");
+		dispatch({ type: UPDATE_USER_STATUS, payload: false });
 	};
 
-	const createPrvMsgTab = (target) => {
-		dispatch({ type: CREATE_PRV_MSG_TAB, payload: target });
+	const sendPrivMsg = (data) => {
+		state.ircSocket.emit("msgChannel", data);
+		dispatch({
+			type: SEND_PERSONAL_MESSAGE,
+			payload: { user: data.target, message: data.message },
+		});
 	};
 
 	const deleteServer = (id) => {
 		dispatch({ type: DELETE_SERVER_FROM_STORAGE, payload: id });
-		disconnectFromIrc();
+		if (state.isConnected) {
+			disconnectFromIrc();
+		}
 	};
 
 	const deleteChannelFromPastServers = (channel, serverId) => {
@@ -103,6 +117,13 @@ export const useIrc = () => {
 		leaveIrcChannel(channel);
 	};
 
+	const updateReadMessages = (user, unReadMessageCount) => {
+		dispatch({ type: UPDATE_READ_MESSAGES, payload: { user, unReadMessageCount } });
+	};
+
+	const ResetErr = () => {
+		dispatch({ type: RESET_ERROR });
+	};
 	return {
 		state,
 		connectToIrc,
@@ -113,8 +134,10 @@ export const useIrc = () => {
 		sendMessageToChannel,
 		setUserAsAway,
 		setUserAsBack,
-		createPrvMsgTab,
+		sendPrivMsg,
 		deleteServer,
 		deleteChannelFromPastServers,
+		updateReadMessages,
+		ResetErr,
 	};
 };

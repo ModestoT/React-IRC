@@ -16,7 +16,7 @@ const IrcTextBox = styled.form`
 	}
 
 	input {
-		width: 95%;
+		width: 79%;
 		background: ${(props) => props.theme.inputBg};
 		color: ${(props) => props.theme.mainText};
 		border-radius: 15px;
@@ -25,8 +25,13 @@ const IrcTextBox = styled.form`
 		outline: none;
 
 		@media (min-width: 1024px) {
+			width: 95%;
 			padding: 0.5%;
 		}
+	}
+
+	button {
+		margin-left: 10px;
 	}
 `;
 
@@ -37,7 +42,7 @@ const IrcInputField = ({
 	nick,
 	setUserAsAway,
 	setUserAsBack,
-	createPrvMsgTab,
+	sendPrivMsg,
 }) => {
 	const [message, setMessage] = useFormInput("");
 
@@ -59,7 +64,8 @@ const IrcInputField = ({
 					setUserAsBack();
 					break;
 				case "/message":
-					createPrvMsgTab(action[1]);
+					const data = { target: action[1], message: action.slice(2).join(" ") };
+					sendPrivMsg(data);
 					break;
 				default:
 					return null;
@@ -79,7 +85,7 @@ const IrcInputField = ({
 				spellCheck="true"
 				placeholder={`Send message to ${currentChannel}`}
 			/>
-			<Button btnText="Send" margin={5} padding={[5, 8]} />
+			<Button btnText="Send" margin={2} padding={[5, 8]} />
 		</IrcTextBox>
 	);
 };

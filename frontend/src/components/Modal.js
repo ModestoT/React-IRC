@@ -11,7 +11,7 @@ const OverlayWrapper = styled.div`
 	bottom: 0;
 	right: 0;
 	left: 0;
-	z-index: 1;
+	z-index: 100;
 `;
 
 const ModalWrapper = styled.div`
@@ -34,12 +34,12 @@ const ModalWrapper = styled.div`
 
 const ModalHeader = styled.header`
 	display: flex;
-	width: 100%;
 	justify-content: space-between;
 	border-bottom: 1px solid lightgrey;
 
 	h2 {
-		font-size: 3rem;
+		font-size: 2rem;
+		margin-left: 5px;
 	}
 
 	.close-modal-btn {
@@ -47,23 +47,26 @@ const ModalHeader = styled.header`
 		font-size: 2rem;
 		background-color: inherit;
 		border: none;
-		padding: 1%;
 		color: ${(props) => props.theme.mainText};
 
 		&:hover {
 			transform: scale(1.5);
 		}
 	}
+
+	@media (min-width: 1024px) {
+		padding: 9px;
+	}
 `;
 
 // showModal prop boolean value used to display contents within the modal component
 // toggleModal function prop to change the showModal state
-const Modal = ({ children, showModal, toggleModal, headerVal }) => {
+const Modal = ({ children, showModal, toggleModal, headerVal, id }) => {
 	return (
 		<>
 			{showModal ? (
 				<OverlayWrapper>
-					<ModalWrapper>
+					<ModalWrapper id={id}>
 						<ModalHeader>
 							{headerVal ? <h2>{headerVal}</h2> : null}
 							<button className="close-modal-btn" onClick={() => toggleModal()}>
