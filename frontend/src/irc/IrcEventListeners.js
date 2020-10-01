@@ -13,6 +13,7 @@ import {
 	PERSONAL_MSG,
 	CONNECTION_TO_SERVER_MADE,
 	UPDATE_USER_STATUS,
+	DISPLAY_ERROR,
 } from "../customHooks/ircHook/IrcReducer.js";
 import { ParseForChannelName } from "../helpers/IrcHelpers.js";
 
@@ -80,5 +81,9 @@ export const IrcEventListeners = (socket, dispatch) => {
 		})
 		.on("status", (status) => {
 			dispatch({ type: UPDATE_USER_STATUS, payload: status });
+		})
+		.on("errMsg", (err) => {
+			socket.close();
+			dispatch({ type: DISPLAY_ERROR, payload: err });
 		});
 };

@@ -6,6 +6,7 @@ import { GrabServerName } from "./helpers/IrcHelpers.js";
 import IrcChatView from "./views/IrcChatView.js";
 import IrcLoginView from "./views/IrcLoginView.js";
 import HeaderAndSideMenu from "./components/HeaderAndSideMenu.js";
+import Button from "./components/Button.js";
 
 const darkTheme = {
 	mainBg: "#2B2B28",
@@ -25,6 +26,30 @@ const AppWrapper = styled.div`
 	color: ${(props) => props.theme.mainText};
 `;
 
+const ErrorMsgWrapper = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: fixed;
+	background-color: rgba(0, 0, 0, 0.4);
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	z-index: 100;
+`;
+
+const ErrorMsg = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 1%;
+	background: ${(props) => props.theme.mainBg};
+	border: 1px solid ${(props) => props.theme.btnBg};
+	border-radius: 3px;
+	color: ${(props) => props.theme.mainText};
+`;
+
 function App() {
 	const {
 		state,
@@ -40,6 +65,7 @@ function App() {
 		deleteServer,
 		deleteChannelFromPastServers,
 		updateReadMessages,
+		ResetErr,
 	} = useIrc();
 
 	const [windowWidthSize, setwindowWidthSize] = useState(window.innerWidth);
@@ -92,6 +118,14 @@ function App() {
 						<IrcLoginView connectToIrc={connectToIrcServer} />
 					)}
 				</HeaderAndSideMenu>
+				{state.error !== "" && (
+					<ErrorMsgWrapper>
+						<ErrorMsg>
+							<p>{state.error}</p>
+							<Button btnText="Ok" onClick={() => ResetErr()} />
+						</ErrorMsg>
+					</ErrorMsgWrapper>
+				)}
 			</AppWrapper>
 		</ThemeProvider>
 	);

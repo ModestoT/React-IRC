@@ -12,6 +12,7 @@ import {
 	UPDATE_READ_MESSAGES,
 	SEND_PERSONAL_MESSAGE,
 	UPDATE_USER_STATUS,
+	RESET_ERROR,
 } from "./IrcReducer.js";
 
 import { IrcEventListeners } from "../../irc/IrcEventListeners.js";
@@ -36,6 +37,7 @@ export const useIrc = () => {
 		isConnectedToServer: false,
 		isGrabbingChannels: false,
 		ircSocket: null,
+		error: "",
 	});
 
 	useEffect(() => {
@@ -119,6 +121,9 @@ export const useIrc = () => {
 		dispatch({ type: UPDATE_READ_MESSAGES, payload: { user, unReadMessageCount } });
 	};
 
+	const ResetErr = () => {
+		dispatch({ type: RESET_ERROR });
+	};
 	return {
 		state,
 		connectToIrc,
@@ -133,5 +138,6 @@ export const useIrc = () => {
 		deleteServer,
 		deleteChannelFromPastServers,
 		updateReadMessages,
+		ResetErr,
 	};
 };

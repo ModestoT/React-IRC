@@ -27,6 +27,8 @@ export const JOIN_CHANNELS = "JOIN_CHANNELS";
 export const DELETE_SERVER_FROM_STORAGE = "DELETE_SERVER_FROM_STORAGE";
 export const DELETE_CHANNEL_FROM_STORAGE = "DELETE_CHANNEL_FROM_STORAGE";
 export const UPDATE_USER_STATUS = "UPDATE_USER_STATUS";
+export const DISPLAY_ERROR = "DISPLAY_ERROR";
+export const RESET_ERROR = "RESET_ERROR";
 
 export const IrcReducer = (state, action) => {
 	let channel;
@@ -291,6 +293,17 @@ export const IrcReducer = (state, action) => {
 			return {
 				...state,
 				away: action.payload,
+			};
+
+		case DISPLAY_ERROR:
+			return {
+				...state,
+				error: action.payload,
+			};
+		case RESET_ERROR:
+			return {
+				...state,
+				error: "",
 			};
 		default:
 			return state;
