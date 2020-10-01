@@ -6,7 +6,7 @@ import "simplebar/dist/simplebar.min.css";
 import PastServer from "./PastServer.js";
 
 const PastServerListWrapper = styled.div`
-	height: 89%;
+	height: 85%;
 
 	@media (min-width: 1024px) {
 		height: 93%;

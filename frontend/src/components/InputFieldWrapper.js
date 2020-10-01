@@ -24,7 +24,7 @@ const UserWrapper = styled.div`
 	cursor: pointer;
 	display: flex;
 	aling-items: center;
-	padding: 4px;
+	padding: 2px;
 	border: 1px solid ${(props) => props.theme.inputBg};
 	border-radius: 5px;
 	margin: 0 5px;
@@ -35,6 +35,10 @@ const UserWrapper = styled.div`
 
 	&:hover {
 		border: 1px solid ${(props) => props.theme.mainText};
+	}
+
+	@media (min-width: 1024px) {
+		padding: 4px;
 	}
 `;
 

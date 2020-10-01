@@ -13,7 +13,7 @@ const PMbuttonwrapper = styled.button`
 	background: none;
 	width: 50px;
 	height: 80%;
-	padding: 9px 5px;
+	padding: 3px 5px;
 	font-size: 1.1rem;
 	color: ${(props) => props.theme.btnBg};
 
