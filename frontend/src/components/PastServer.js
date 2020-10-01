@@ -156,6 +156,7 @@ const PastServer = ({
 						isEditing={isEditingChannels}
 						currentChannel={currentChannel}
 						setCurrentChannel={setCurrentChannel}
+						isConnected={isConnected}
 					/>
 				))}
 				{isConnected() && <AddChannelBtn onClick={() => toggleModal()}>+</AddChannelBtn>}

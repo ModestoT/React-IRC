@@ -35,6 +35,7 @@ const IrcChatView = ({
 	currentChannel,
 	windowWidthSize,
 	updateReadMessages,
+	setCurrentChannel,
 }) => {
 	const {
 		serverName,
@@ -46,12 +47,12 @@ const IrcChatView = ({
 		totalUnreadMessages,
 	} = state;
 
-	const [currentTab, setCurrentTab] = useState(serverName);
+	// const [currentTab, setCurrentTab] = useState(serverName);
 	const [showUsers, setShowUsers] = useState(false);
 
 	const handleJoinIrcChannel = (channelName) => {
 		joinIrcChannel(channelName);
-		setCurrentTab(channelName);
+		setCurrentChannel(channelName);
 	};
 
 	return (
@@ -71,7 +72,7 @@ const IrcChatView = ({
 				currentChannel={currentChannel}
 			/>
 			<InputFieldWrapper
-				currentChannel={currentTab}
+				currentChannel={currentChannel}
 				sendMessageToChannel={sendMessageToChannel}
 				joinIrcChannel={handleJoinIrcChannel}
 				nick={nick}

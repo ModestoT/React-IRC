@@ -113,6 +113,7 @@ function App() {
 							updateReadMessages={updateReadMessages}
 							windowWidthSize={windowWidthSize}
 							currentChannel={currentChannel}
+							setCurrentChannel={setCurrentChannel}
 						/>
 					) : (
 						<IrcLoginView connectToIrc={connectToIrcServer} />

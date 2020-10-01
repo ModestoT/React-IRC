@@ -25,7 +25,8 @@ const ChannelWrapper = styled.div`
 const Channel = styled.p`
 	cursor: pointer;
 	margin: 2% 0;
-	text-decoration: ${(props) => (props.currentChannel === props.channel ? "underline" : "none")};
+	text-decoration: ${(props) =>
+		props.currentChannel === props.channel && props.isConnected() ? "underline" : "none"};
 `;
 
 const PastServerChannel = ({
@@ -35,6 +36,7 @@ const PastServerChannel = ({
 	isEditing,
 	currentChannel,
 	setCurrentChannel,
+	isConnected,
 }) => {
 	return (
 		<ChannelWrapper>
@@ -42,6 +44,7 @@ const PastServerChannel = ({
 				onClick={() => setCurrentChannel(channel)}
 				channel={channel}
 				currentChannel={currentChannel}
+				isConnected={isConnected}
 			>
 				{channel}
 			</Channel>

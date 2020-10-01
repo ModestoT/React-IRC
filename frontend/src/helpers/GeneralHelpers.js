@@ -38,14 +38,16 @@ export const AddServerToStorage = (server) => {
 	}
 };
 
-export const AddChannelToPastServers = (channel, serverName) => {
+export const AddChannelToPastServers = (channel, serverName, nick) => {
+	console.log("running save chanel", channel, serverName);
 	const pastServers = JSON.parse(localStorage.getItem("past_servers"));
 
 	for (let i = 0; i < pastServers.length; i++) {
 		if (
-			pastServers[i].saveServer &&
+			pastServers[i].nick.toLowerCase() === nick.toLowerCase() &&
 			GrabServerName(pastServers[i].host.toLowerCase()) === serverName.toLowerCase()
 		) {
+			console.log(pastServers[i]);
 			pastServers[i] = {
 				...pastServers[i],
 				channels: UpdatePastServersChannels(pastServers[i].channels, channel),
@@ -55,6 +57,17 @@ export const AddChannelToPastServers = (channel, serverName) => {
 		}
 	}
 	return null;
+};
+
+const UpdatePastServersChannels = (channels, newChannel) => {
+	for (let i = 0; i < channels.length; i++) {
+		if (channels[i].toLowerCase() === newChannel.toLowerCase()) {
+			return channels;
+		}
+	}
+	channels.push(newChannel);
+
+	return channels;
 };
 
 export const DeleteServer = (id) => {
@@ -84,17 +97,6 @@ export const DeleteChannelFromServer = (channelName, serverId) => {
 	localStorage.setItem("past_servers", JSON.stringify(pastServers));
 
 	return pastServers;
-};
-
-const UpdatePastServersChannels = (channels, newChannel) => {
-	for (let i = 0; i < channels.length; i++) {
-		if (channels[i].toLowerCase() === newChannel.toLowerCase()) {
-			return channels;
-		}
-	}
-	channels.push(newChannel);
-
-	return channels;
 };
 
 export const UpdatePastServerInfo = (id, newVal) => {

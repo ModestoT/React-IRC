@@ -163,7 +163,11 @@ export const IrcReducer = (state, action) => {
 				};
 			} else {
 				//channel not in array yet so create a channel object for the new channel
-				const updatePastServers = AddChannelToPastServers(action.payload.channel, state.serverName);
+				const updatePastServers = AddChannelToPastServers(
+					action.payload.channel,
+					state.serverName,
+					state.nick
+				);
 
 				return {
 					...state,

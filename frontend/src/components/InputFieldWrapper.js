@@ -45,7 +45,7 @@ const UserWrapper = styled.div`
 const UserStatusWrapper = styled.div`
 	background: ${(props) => props.theme.secondaryBg};
 	position: absolute;
-	top: 92%;
+	bottom: 0;
 	left: 0;
 	width: 139px;
 	height: 55px;
