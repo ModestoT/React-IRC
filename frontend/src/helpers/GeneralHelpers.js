@@ -47,7 +47,6 @@ export const AddChannelToPastServers = (channel, serverName, nick) => {
 			pastServers[i].nick.toLowerCase() === nick.toLowerCase() &&
 			GrabServerName(pastServers[i].host.toLowerCase()) === serverName.toLowerCase()
 		) {
-			console.log(pastServers[i]);
 			pastServers[i] = {
 				...pastServers[i],
 				channels: UpdatePastServersChannels(pastServers[i].channels, channel),
