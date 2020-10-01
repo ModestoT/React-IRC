@@ -95,7 +95,6 @@ const PastServer = ({
 	currentNick,
 	setShowServerModal,
 }) => {
-	// Add ability to collapse past server
 	const [isEditingChannels, setIsEditingChannels] = useState(false);
 	const [isCollapsed, setIsCollapsed] = useState(false);
 	const { host, channels, id, nick } = server;
