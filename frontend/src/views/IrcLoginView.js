@@ -43,6 +43,7 @@ const IrcLoginView = ({ connectToIrc }) => {
 					id="irc-hostname"
 					value={ircOptions.host}
 					onChange={(e) => handleInput({ host: e.target.value })}
+					placeholder="irc.freenode.net"
 				/>
 				<InputField
 					type="number"

@@ -35,14 +35,21 @@ const InputWrapper = styled.div`
 	}
 `;
 
-const InputField = ({ id, labelText, type, value, onChange, checked }) => {
+const InputField = ({ id, labelText, type, value, onChange, checked, placeholder }) => {
 	return (
 		<InputFieldWrapper id={`${id}-wrapper`}>
 			<LabelWrapper>
 				<label htmlFor={id}>{labelText}</label>
 			</LabelWrapper>
 			<InputWrapper>
-				<input id={id} type={type} value={value} onChange={onChange} checked={checked} />
+				<input
+					id={id}
+					type={type}
+					value={value}
+					onChange={onChange}
+					checked={checked}
+					placeholder={placeholder}
+				/>
 			</InputWrapper>
 		</InputFieldWrapper>
 	);
