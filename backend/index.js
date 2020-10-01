@@ -21,9 +21,6 @@ io.on("connection", (socket) => {
 			const channel = ircClient.channel(channelName);
 
 			userChannels.push(channel);
-			// channel.updateUsers((updated) => {
-			// 	userChannels.push(updated);
-			// });
 		})
 		.on("grab channel list", () => {
 			ircClient.list();
